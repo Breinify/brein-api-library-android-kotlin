@@ -16,10 +16,6 @@ class BreinHolidayResult(private val result: Map<String, Any>?) {
         NATIONAL_FEDERAL, STATE_FEDERAL, LEGAL, CIVIC, SPECIAL_DAY, EDUCATIONAL, HALLMARK, CULTURAL, RELIGIOUS
     }
 
-    /**
-     * Contains the Holiday result
-     * @param result Map
-     */
     init {
         if (this.result == null || this.result.isEmpty()) {
             this.types = emptyList()

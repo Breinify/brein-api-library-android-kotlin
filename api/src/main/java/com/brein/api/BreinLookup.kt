@@ -64,7 +64,6 @@ class BreinLookup : BreinBase(), ISecretStrategy, IAsyncExecutable<BreinResult?>
      * Creates the signature for lookup
      *
      * @param config      BreinConfig configuration object
-     * @param requestData Map containing the data
      * @return            String containing the signature
      */
     override fun createSignature(config: BreinConfig): String {

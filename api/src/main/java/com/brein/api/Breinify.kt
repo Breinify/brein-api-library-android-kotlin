@@ -169,31 +169,20 @@ class Breinify {
         }
 
         /**
-         * returns user's email as part of BreinifyManager
-         *
-         * @return String email
-         */
-        /**
          * Service method to set the email property that is part of the
          * BreinifyManager instance
          *
-         * @param email String contains the email
          */
         var email: String?
             get() = BreinifyManager.userEmail
             set(email) {
                 BreinifyManager.userEmail = email
             }
-        /**
-         * returns userId as part of BreinifyManager
-         *
-         * @return String userId
-         */
+
         /**
          * Service method to set the userId property that is part of the
          * BreinifyManager instance
          *
-         * @param userId String contains the userId
          */
         var userId: String?
             get() = BreinifyManager.userId
@@ -208,7 +197,6 @@ class Breinify {
         /**
          * sets the pushDeviceToken
          *
-         * @param token String contains the token
          */
         var pushDeviceRegistration: String?
             get() = BreinifyManager.pushDeviceRegistration
@@ -336,15 +324,7 @@ class Breinify {
             }
             activity(breinActivity, null)
         }
-        /**
-         * Method to send an activity asynchronous.
-         *
-         * @param activity BreinActivity the `BreinActivity` to be sent
-         * @param callback ICallback callback to get informed whenever the activity was sent, the callback retrieves the `BreinResult`
-         * @see BreinActivity
-         *
-         * @see BreinResult
-         */
+
         /**
          * Method to send an activity asynchronous.
          *

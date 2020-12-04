@@ -16,11 +16,6 @@ class BreinEventResult(private val result: Map<String, Any?>?) {
         CONCERT, COMEDY, OTHERSHOW, POLITICAL, SPORTS, EDUCATIONAL, FITNESS, UNKNOWN
     }
 
-
-    /**
-     * Contains the result of the Event request
-     * @param result Map containing the result data
-     */
     init {
         name = JsonHelper.getOr(result, NAME_KEY, null).toString()
         start = JsonHelper.getOrLong(result, START_KEY)!!
@@ -28,11 +23,14 @@ class BreinEventResult(private val result: Map<String, Any?>?) {
         val innerSize: Long? = JsonHelper.getOrLong(result, SIZE_KEY)
         size =
             if (innerSize == null || innerSize == -1L) null else BreinUtil.safeLongToInt(innerSize)
+
         val categoryName: String? = JsonHelper.getOrString(result as MutableMap<String, Any?>?, CATEGORY_KEY)
 
         categoryName?.replace("eventCategory", "")
         categoryName?.toUpperCase(Locale.getDefault())
+
         var tmpCategory = EventCategory.UNKNOWN
+
         for (eventCategory in EventCategory.values()) {
             val str = eventCategory.toString()
             if (str.compareTo(categoryName.toString(), ignoreCase = true) == 0) {

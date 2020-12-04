@@ -90,7 +90,6 @@ class BreinRecommendation : BreinBase(), IAsyncExecutable<BreinResult?> {
      * Generates the signature for the request
      *
      * @param config       BreinConfig contains the configuration
-     * @param requestData  Map String - Object
      * @return             String full signature
      */
     override fun createSignature(config: BreinConfig): String {

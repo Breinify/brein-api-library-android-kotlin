@@ -43,7 +43,6 @@ class BreinActivity : BreinBase(), ISecretStrategy, IAsyncExecutable<BreinResult
     /**
      * sets brein category
      *
-     * @param category object
      *
      * @return self
      */
