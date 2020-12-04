@@ -1,11 +1,11 @@
 package com.brein.domain
 
+import android.app.Application
 import com.brein.api.BreinInvalidConfigurationException
 import com.brein.api.BreinifyManager
 import com.brein.engine.BreinEngine
 import com.brein.engine.BreinEngineType
 import com.brein.util.BreinUtil
-import android.app.Application
 
 /**
  * Contains Breinify Endpoint configuration
@@ -37,11 +37,6 @@ class BreinConfig {
      * contains the activity endpoint (default = ACTIVITY_ENDPOINT)
      */
     var activityEndpoint = DEFAULT_ACTIVITY_ENDPOINT
-    /**
-     * retrieves the lookup endpoint
-     *
-     * @return String lookup endpoint
-     */
 
     /**
      * contains the lookup endpoint (default = LOOKUP_ENDPOINT)
@@ -61,9 +56,7 @@ class BreinConfig {
     /**
      * set the connection timeout
      *
-     * @param connectionTimeout long value
      */
-
     var connectionTimeout = DEFAULT_CONNECTION_TIMEOUT
 
     /**
@@ -74,7 +67,6 @@ class BreinConfig {
     /**
      * set the socket timeout
      *
-     * @param socketTimeout long value
      */
     var socketTimeout = DEFAULT_SOCKET_TIMEOUT
 
