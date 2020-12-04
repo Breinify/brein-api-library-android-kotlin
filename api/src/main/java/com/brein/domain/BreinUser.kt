@@ -416,7 +416,7 @@ class BreinUser(private var email: String?) {
 
             if (detectedIpAddress != null) {
                 if (detectedIpAddress.isNotEmpty()){
-                    setIpAddress(detectedIpAddress!!)
+                    setIpAddress(detectedIpAddress)
                 }
             }
 
