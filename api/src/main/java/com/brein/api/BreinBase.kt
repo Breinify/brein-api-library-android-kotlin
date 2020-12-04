@@ -4,7 +4,6 @@ import com.brein.domain.BreinConfig
 import com.brein.domain.BreinUser
 import com.brein.util.BreinUtil
 import com.google.gson.Gson
-import java.util.*
 
 /**
  * Base Class for activity and lookup operations.
