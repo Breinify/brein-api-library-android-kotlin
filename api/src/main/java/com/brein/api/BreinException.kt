@@ -7,9 +7,7 @@ import android.util.Log
  * BreinException
  */
 class BreinException : RuntimeException {
-    /*
-     * Exception methods...
-     */
+
     constructor(e: Throwable) : super(e) {
         Log.d(TAG, EXCEPTION_IS + e.message)
     }
