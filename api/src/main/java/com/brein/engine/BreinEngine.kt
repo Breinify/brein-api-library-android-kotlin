@@ -1,6 +1,9 @@
 package com.brein.engine
 
-import com.brein.api.*
+import com.brein.api.BreinActivity
+import com.brein.api.BreinBase
+import com.brein.api.BreinLookup
+import com.brein.api.ICallback
 import com.brein.domain.BreinConfig
 import com.brein.domain.BreinResult
 
@@ -10,11 +13,6 @@ import com.brein.domain.BreinResult
  * invoke activity and lookup calls
  */
 class BreinEngine {
-    /**
-     * returns the brein com.brein.engine
-     *
-     * @return com.brein.engine itself
-     */
     /**
      * creation of rest com.brein.engine.
      */
@@ -61,7 +59,11 @@ class BreinEngine {
         return BreinEngineType.HTTP_URL_CONNECTION_ENGINE
     }
 
-    operator fun invoke(config: BreinConfig?, data: BreinBase?, callback: ICallback<BreinResult?>?) {
+    operator fun invoke(
+        config: BreinConfig?,
+        data: BreinBase?,
+        callback: ICallback<BreinResult?>?
+    ) {
         getEngine()!!.invokeRequest(config, data, callback)
     }
 
