@@ -5,7 +5,6 @@ import com.google.firebase.messaging.FirebaseMessagingService
 
 class BreinNotificationIdService : FirebaseMessagingService() {
 
-
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         sendRegistrationToServer(token)

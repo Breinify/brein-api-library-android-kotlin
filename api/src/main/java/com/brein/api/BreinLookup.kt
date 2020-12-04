@@ -4,11 +4,6 @@ import com.brein.domain.BreinConfig
 import com.brein.domain.BreinDimension
 import com.brein.domain.BreinResult
 import com.brein.util.BreinUtil
-import com.brein.util.BreinUtil.containsValue
-import com.google.gson.FieldNamingPolicy
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonArray
-import com.google.gson.JsonObject
 
 
 /**
@@ -57,7 +52,6 @@ class BreinLookup : BreinBase(), ISecretStrategy, IAsyncExecutable<BreinResult?>
 
     override fun prepareRequestData(config: BreinConfig?, requestData: MutableMap<String, Any?>) {
         // todo
-
     }
 
     /**

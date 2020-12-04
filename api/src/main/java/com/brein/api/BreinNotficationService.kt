@@ -17,7 +17,6 @@ class BreinNotficationService : FirebaseMessagingService() {
         super.onNewToken(p0)
 
         // todo
-
     }
 
     /**
@@ -75,9 +74,7 @@ class BreinNotficationService : FirebaseMessagingService() {
         val notificationManager: NotificationManager? =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
 
-        if (notificationManager != null) {
-            notificationManager.notify(0 , notification)
-        }
+        notificationManager?.notify(0 , notification)
     }
 
     companion object {
