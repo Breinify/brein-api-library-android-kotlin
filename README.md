@@ -62,7 +62,6 @@ Whenever the library is used, it needs to be configured, i.e., the configuration
 // create the configuration object
 Breinify.configure("938D-3120-64DD-413F-BB55-6573-90CE-473A", "utakxp7sm6weo5gvk7cytw==")
 
-
 ```
 
 The Breinify class is now configured with a valid configuration object.
@@ -100,29 +99,29 @@ Breinify.activity(
          BreinActivityType.LOGIN,
          BreinCategoryType.HOME,
          "Login-Description")
-
 ```
 
 
 
-### Sending readArticle
+### Sending an Activity
 
 Instead of sending an activity utilizing the `Breinify.activity(...)` method, it is also possible to create an instance of a `BreinActivity` add the appropriate properties and execute the request later on by using the `Breinify.activity(...)` method.
 
-```Java
+```kotlin
 // create a user you're interested in
-final BreinUser breinUser = new BreinUser("user.anywhere@email.com")
+let appUser = Breinify.getUser()
+      .setEmail("user.anywhere@email.com")
       .setFirstName("User")
       .setLastName("Anyhere");
 
 // create activity object and collect data        
-final BreinActivity breinActivity = new BreinActivity()
-      .setUser(breinUser)
-      .setActivityType("readArticle")
+let breinActivity = Breinify.getActivity()
+      .setCategory(BreinCategoryType.HOME)
+      .setActivityType(BreinActivityType.LOGIN)
       .setDescription("A Homebody Persident Sits Out His Honeymoon Period");
         
-// invoke activity call when appropriate
-Breinify.sendActivity(breinActivity);
+// send the activity
+Breinify.sendActivity(breinActivity)
 ```
 
 
@@ -138,23 +137,18 @@ Sometimes it is necessary to get some more information about the user of an appl
 to handle time-dependent data correctly, to add geo-based services, or increase quality of service. The client's information can be retrieved easily 
 by calling the `/temporaldata` endpoint utilizing the `Breinify.temporalData(...)` method or by executing a `BreinTemporalData` instance, i.e.,:
 
-```java
-breinTemporalData.execute(new ICallback() {
-   @Override
-   public void callback(final BreinResult data) {
-      final BreinTemporalDataResult temporalDataResult = new BreinTemporalDataResult(data);
-      if (temporalDataResult.hasWeather()) {
-         final BreinWeatherResult weatherResult = temporalDataResult.getWeather();
-      }
-      if (temporalDataResult.hasEvents()) {
-         final List<BreinEventResult> eventResults = temporalDataResult.getEvents();
-      } 
-      if (temporalDataResult.hasHolidays()) {
-         final List<BreinHolidayResult> holidayResults = temporalDataResult.getHolidays();
-      }
-   }
-});
-
+```kotlin
+breinTemporalData.execute(object : ICallback<BreinResult?> {
+            override fun callback(data: BreinResult?) {
+                val locationResult = BreinLocationResult(data?.map)
+                val lat = locationResult.lat
+                val lon = locationResult.lon
+                val country = locationResult.country
+                val state = locationResult.state
+                val city = locationResult.city
+                val granu = locationResult.granularity
+            }
+        })
 ```
 
 The returned result contains detailed information about the time, the location, the weather, holidays, and events at the time and the location. A detailed
@@ -173,22 +167,20 @@ structured and even partly unstructured, e.g., the textual representation `the B
 whereby a structured location would be, e.g., `{ city: 'Seattle', state: 'Washington', country: 'USA' }`. It is also possible
 to pass in partial information and let the system try to resolve/complete the location, e.g., `{ city: 'New York', country: 'USA' }`.
 
-```java
-final BreinTemporalData breinTemporalData = new BreinTemporalData()
-                .setLocation("The Big Apple");
-
-breinTemporalData.execute(new ICallback() {
-   @Override
-   public void callback(final BreinResult data) {
-
-   final BreinLocationResult locationResult = new BreinLocationResult(data.getMap());
-   final double lat = locationResult.getLat();
-   final double lon = locationResult.getLon();
-   final String country = locationResult.getCountry();
-   final String state = locationResult.getState();
-   final String city = locationResult.getCity();
-   }
-});
+```kotlin
+val breinTemporalData = BreinTemporalData()
+            .setLocation("The Big Apple")
+        
+        breinTemporalData.execute(object : ICallback<BreinResult?> {
+            override fun callback(data: BreinResult?) {
+                val locationResult = BreinLocationResult(data?.map)
+                println("Latitude is: " + locationResult.lat)
+                println("Longitude is: " + locationResult.lon)
+                println("Country is: " + locationResult.country)
+                println("State is: " + locationResult.state)
+                println("City is: " + locationResult.city)
+            }
+        })
 ```
 
 This will lead to the following result:
@@ -215,22 +207,21 @@ to a specific city or neighborhood (i.e., names of neighborhood, city, state, co
 
 A possible request if you're interesed in events might look like this:
 
-```java
-final BreinTemporalData breinTemporalData = new BreinTemporalData()
-    .setLatitude(37.7609295)
-    .setLongitude(-122.4194155)
-    .addShapeTypes("CITY", "NEIGHBORHOOD");
+```kotlin
+val breinTemporalData = BreinTemporalData()
+            .setLatitude(37.7609295)
+            .setLongitude(-122.4194155)
+            .setShapeTypes("CITY", "NEIGHBORHOOD")
+        
+        breinTemporalData?.execute(object : ICallback<BreinResult?> {
+            override fun callback(data: BreinResult?) {
+                val temporalDataResult = BreinTemporalDataResult(data!!)
 
-breinTemporalData.execute(new ICallback() {
-    @Override
-    public void callback(final BreinResult data) {
-        final BreinTemporalDataResult temporalDataResult = new BreinTemporalDataResult(data);
-                
-        // access the geoJson instances for the CITY and the NEIGHBORHOOD
-        temporalDataResult.getLocation().getGeoJson("CITY");
-        temporalDataResult.getLocation().getGeoJson("NEIGHBORHOOD");
-    }
-});
+                // access the geoJson instances for the CITY and the NEIGHBORHOOD
+                temporalDataResult.getLocation().getGeoJson("CITY")
+                temporalDataResult.getLocation().getGeoJson("NEIGHBORHOOD")
+            }
+        })
 ```
 
 ## PushNotifications: Selected Usage Example
