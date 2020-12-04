@@ -86,19 +86,18 @@ The example shows, how to send a login activity, reading the data from an reques
 
 ```kotlin
 // get User and set additional user data
-val breinUser = Breinify.getUser()
-
-breinUser.setEmail("elvis.presley@gmail.com")
-         .setFirstName("Elvis")
-         .setLastName("Presley")
+val appUser = Breinify.getUser()
+      .setEmail("elvis.presley@gmail.com")
+      .setFirstName("Elvis")
+      .setLastName("Presley")
                
 // invoke an activity that the user has logged in
-
-Breinify.activity(
-         breinUser,
-         BreinActivityType.LOGIN,
-         BreinCategoryType.HOME,
-         "Login-Description")
+val breinActivity = Breinify.getActivity()
+      .setCategory(BreinCategoryType.HOME)
+      .setActivityType(BreinActivityType.LOGIN)
+        
+// send the activity
+Breinify.sendActivity(breinActivity)
 ```
 
 
@@ -109,15 +108,15 @@ Instead of sending an activity utilizing the `Breinify.activity(...)` method, it
 
 ```kotlin
 // create a user you're interested in
-let appUser = Breinify.getUser()
+val appUser = Breinify.getUser()
       .setEmail("user.anywhere@email.com")
       .setFirstName("User")
       .setLastName("Anyhere");
 
 // create activity object and collect data        
-let breinActivity = Breinify.getActivity()
+val breinActivity = Breinify.getActivity()
       .setCategory(BreinCategoryType.HOME)
-      .setActivityType(BreinActivityType.LOGIN)
+      .setActivityType("readArticle")
       .setDescription("A Homebody Persident Sits Out His Honeymoon Period");
         
 // send the activity
