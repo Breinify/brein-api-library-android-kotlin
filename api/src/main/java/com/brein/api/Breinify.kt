@@ -221,16 +221,6 @@ class Breinify {
         /**
          * Delegate to send activities
          *
-         * @param activityType      String contains the type of activity
-         * @param additionalContent Map contains optional additional content
-         */
-//        fun sendActivity(activityType: String?, additionalContent: MutableMap<String, Any?>?) {
-//            BreinifyManager.sendActivity(activityType, additionalContent)
-//        }
-
-        /**
-         * Delegate to send activities
-         *
          * @param activity        Contains the activity object
          * @param callback        Contains the callback object
          */
