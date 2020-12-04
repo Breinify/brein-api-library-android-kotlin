@@ -149,7 +149,6 @@ object BreinifyManager {
 
         // send the user identification to the backend
         sendIdentifyInfo()
-
     }
 
     /**

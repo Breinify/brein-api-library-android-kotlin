@@ -44,7 +44,6 @@ class BreinifyLifecycle : Application.ActivityLifecycleCallbacks {
 
             // app is now in background
 
-
             // todo convert long to string
             Log.d(TAG, "app is now in background. Time in App was: " + java.lang.Long.toString(timeInApp))
             BreinifyManager.appIsInBackground()
