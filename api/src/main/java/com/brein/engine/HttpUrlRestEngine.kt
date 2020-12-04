@@ -1,21 +1,16 @@
 package com.brein.engine
 
 import android.util.Log
-import com.brein.api.BreinActivity
-import com.brein.api.BreinBase
+import com.brein.api.*
 import com.brein.domain.BreinConfig
 import com.brein.domain.BreinResult
-import com.google.gson.Gson
-import com.brein.api.BreinLookup
-import com.brein.api.Breinify
-import com.brein.api.ICallback
 import com.brein.util.BreinUtil
+import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.PrintWriter
 import java.net.HttpURLConnection
 import java.net.URL
 import java.nio.charset.Charset
-import java.nio.charset.StandardCharsets
 
 class HttpUrlRestEngine : IRestEngine {
 
@@ -40,12 +35,14 @@ class HttpUrlRestEngine : IRestEngine {
             try {
                 val url = URL(fullUrl)
                 val conn = url.openConnection() as HttpURLConnection
+
                 conn.readTimeout = readTimeout
                 conn.connectTimeout = connectionTimeout
                 conn.requestMethod = POST_METHOD
                 conn.doInput = true
                 conn.doOutput = true
                 Log.d(TAG, "Outputstream is: " + conn.outputStream)
+
                 val out = PrintWriter(conn.outputStream)
                 out.print(requestBody)
                 out.close()
@@ -78,16 +75,19 @@ class HttpUrlRestEngine : IRestEngine {
             try {
                 val url = URL(fullUrl)
                 val conn = url.openConnection() as HttpURLConnection
+
                 conn.readTimeout = readTimeout
                 conn.connectTimeout = connectionTimeout
                 conn.requestMethod = POST_METHOD
                 conn.doInput = true
                 conn.doOutput = true
                 Log.d(TAG, "Outputstream is: " + conn.outputStream)
+
                 val out = PrintWriter(conn.outputStream)
                 out.print(requestBody)
                 out.close()
                 conn.connect()
+
                 val response = conn.responseCode
                 if (response == HttpURLConnection.HTTP_OK) {
                     val sb = StringBuilder()
@@ -142,12 +142,12 @@ class HttpUrlRestEngine : IRestEngine {
         try {
             val url = URL(fullUrl)
             val bytes = requestBody.toByteArray(Charset.forName("utf-8"))
-
             val conn = url.openConnection() as HttpURLConnection
 
             if (readTimeout != null) {
                 conn.readTimeout = readTimeout
             }
+
             if (connectionTimeout != null) {
                 conn.connectTimeout = connectionTimeout
             }
@@ -170,6 +170,7 @@ class HttpUrlRestEngine : IRestEngine {
                 val jsonResponse = StringBuilder()
                 val mInputStream = conn.inputStream
                 var i: Int
+
                 while (mInputStream.read().also { i = it } != -1) {
                     jsonResponse.append(i.toChar())
                 }
