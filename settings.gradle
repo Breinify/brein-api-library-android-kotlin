@@ -1,0 +1,2 @@
+include ':api'
+rootProject.name = "brein-api-library-android-kotlin"
