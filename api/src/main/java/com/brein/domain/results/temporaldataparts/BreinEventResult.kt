@@ -2,7 +2,7 @@ package com.brein.domain.results.temporaldataparts
 
 import com.brein.util.BreinUtil
 import com.brein.util.JsonHelper
-import java.util.Locale
+import java.util.*
 
 class BreinEventResult(private val result: Map<String, Any?>?) {
 

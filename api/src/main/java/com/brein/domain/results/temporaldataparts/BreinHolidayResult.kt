@@ -1,6 +1,6 @@
 package com.brein.domain.results.temporaldataparts
 
-import java.util.Locale
+import java.util.*
 
 class BreinHolidayResult(private val result: Map<String, Any>?) {
 
