@@ -1,20 +1,16 @@
 package com.brein.util
 
-import com.brein.domain.BreinConfig
 import com.brein.api.BreinBase
 import com.brein.api.BreinException
 import com.brein.api.Breinify
+import com.brein.domain.BreinConfig
 import com.brein.domain.BreinIpInfo
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
-import java.nio.charset.Charset
 import java.security.InvalidKeyException
-import java.security.NoSuchAlgorithmException
 import java.security.SecureRandom
 import java.util.*
-import javax.crypto.Mac
-import javax.crypto.spec.SecretKeySpec
 
 /**
  * Utility class
