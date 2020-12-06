@@ -38,7 +38,6 @@ class TestUtil {
         }
     }
 
-
    @Test
    fun testActivitySecret() {
        val expected = "WbHv67OJ5LPSCJu7kfh9QOX8b7wkuLiTmE6OTyPqT0g="
@@ -64,7 +63,6 @@ class TestUtil {
        } catch (e: Exception) {
            fail()
        }
-
    }
 
     @Test
