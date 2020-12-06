@@ -161,7 +161,7 @@ class BreinActivity : BreinBase(), ISecretStrategy, IAsyncExecutable<BreinResult
         if (this.activityMap.isNotEmpty()) {
             // loop a Map
             for ((key, value) in this.activityMap) {
-                if (BreinUtil.containsValue(value)) {
+                if (containsValue(value)) {
                     activityRequestData[key] = value
                 }
             }
@@ -199,7 +199,7 @@ class BreinActivity : BreinBase(), ISecretStrategy, IAsyncExecutable<BreinResult
         return this
     }
 
-    fun getTagsMap(): MutableMap<String, Any?>? {
+    fun getTagsMap(): MutableMap<String, Any?> {
         return tagsMap
     }
 
