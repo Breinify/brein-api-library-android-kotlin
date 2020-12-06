@@ -554,11 +554,12 @@ class TestApi {
 
     @Test
     fun testForDocTemporalDataGeocoding() {
-//        val breinConfig = BreinConfig(VALID_SECRET_API_KEY, VALID_SECRET)
         val breinConfig = BreinConfig(VALID_API_KEY, VALID_SECRET)
         Breinify.setConfig(breinConfig)
+
         val breinTemporalData = BreinTemporalData()
             .setLocation("The Big Apple")
+
         breinTemporalData.execute(object : ICallback<BreinResult?> {
             override fun callback(data: BreinResult?) {
                 val locationResult = BreinLocationResult(data?.map)
@@ -574,20 +575,19 @@ class TestApi {
 
     @Test
     fun testForDocTemporalDataReverseGeoCoding() {
-//        val breinConfig = BreinConfig(VALID_SECRET_API_KEY, VALID_SECRET)
         val breinConfig = BreinConfig(VALID_API_KEY, VALID_SECRET)
         Breinify.setConfig(breinConfig)
+
         val breinTemporalData = BreinTemporalData()
             .setLatitude(37.7609295)
             .setLongitude(-122.4194155)
             .setShapeTypes("CITY", "NEIGHBORHOOD")
+
         breinTemporalData?.execute(object : ICallback<BreinResult?> {
             override fun callback(data: BreinResult?) {
                 val temporalDataResult = BreinTemporalDataResult(data!!)
 
                 // access the geoJson instances for the CITY and the NEIGHBORHOOD
-
-                // todo
 //                temporalDataResult.getLocation().getGeoJson("CITY")
 //                temporalDataResult.getLocation().getGeoJson("NEIGHBORHOOD")
             }

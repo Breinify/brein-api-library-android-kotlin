@@ -12,8 +12,10 @@ class TestForDocumentation {
     @Test
     fun testGeocoding() {
         Breinify.setConfig(breinConfig)
+
         val breinTemporalData = BreinTemporalData()
             .setLocation("The Big Apple")
+
         breinTemporalData.execute(object : ICallback<BreinResult?> {
             override fun callback(data: BreinResult?) {
                 val locationResult = BreinLocationResult(data?.map)

@@ -51,6 +51,7 @@ class TestHttpUrlConnectionApi {
         Breinify.setConfig(breinConfig)
         breinUser.setFirstName("Marco")
         breinUser.setLastName("Recchioni")
+
         Breinify.activity(
             breinUser,
             BreinActivityType.LOGIN,
@@ -67,9 +68,11 @@ class TestHttpUrlConnectionApi {
     fun testLoginWithNullApiKey() {
         val description = "Login-Description"
         val config = BreinConfig(null, VALID_SECRET)
+
         Breinify.setConfig(config)
         breinUser.setFirstName("Marco")
         breinUser.setLastName("Recchioni")
+
         Breinify.activity(
             breinUser,
             BreinActivityType.LOGIN,
@@ -86,9 +89,11 @@ class TestHttpUrlConnectionApi {
     fun testLoginWithoutSecret() {
         val description = "Login-Description"
         val config = BreinConfig(VALID_API_KEY, null)
+
         Breinify.setConfig(config)
         breinUser.setFirstName("Marco")
         breinUser.setLastName("Recchioni")
+
         Breinify.activity(
             breinUser,
             BreinActivityType.LOGIN,
@@ -107,14 +112,17 @@ class TestHttpUrlConnectionApi {
         val description = "Login-Description"
         val sign = false
         var config: BreinConfig? = null
+
         try {
             config = BreinConfig(VALID_API_KEY, VALID_SECRET, BreinEngineType.NO_ENGINE)
         } catch (e: Exception) {
             e.printStackTrace()
         }
+
         Breinify.setConfig(config)
         breinUser.setFirstName("Marco")
         breinUser.setLastName("Recchioni")
+
         Breinify.activity(
             breinUser,
             BreinActivityType.LOGIN,
@@ -131,8 +139,10 @@ class TestHttpUrlConnectionApi {
     fun testWithWrongEndPoint() {
         val description = "Login-Description"
         val config = BreinConfig(VALID_API_KEY, VALID_SECRET)
+
         config.activityEndpoint = "/wrongEndPoint"
         Breinify.setConfig(config)
+
         breinUser.setFirstName("Marco")
         breinUser.setLastName("Recchioni")
         Breinify.activity(
@@ -161,7 +171,9 @@ class TestHttpUrlConnectionApi {
     fun testLogout() {
         val description = "Logout-Description"
         Breinify.setConfig(breinConfig)
+
         breinUser.setDateOfBirth("12")
+
         Breinify.activity(
             breinUser,
             BreinActivityType.LOGOUT,
@@ -207,6 +219,7 @@ class TestHttpUrlConnectionApi {
     fun testRemoveFromCart() {
         val description = "RemoveFromCart-Description"
         Breinify.setConfig(breinConfig)
+
         Breinify.activity(
             breinUser,
             BreinActivityType.REMOVE_FROM_CART,
@@ -222,6 +235,7 @@ class TestHttpUrlConnectionApi {
     fun testSelectProduct() {
         val description = "Select-Product-Description"
         Breinify.setConfig(breinConfig)
+
         Breinify.activity(
             breinUser,
             BreinActivityType.SELECT_PRODUCT,
@@ -237,6 +251,7 @@ class TestHttpUrlConnectionApi {
     fun testOther() {
         val description = "Other-Description"
         Breinify.setConfig(breinConfig)
+
         Breinify.activity(
             breinUser,
             BreinActivityType.OTHER,
