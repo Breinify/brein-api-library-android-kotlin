@@ -16,7 +16,7 @@ class TestEngine {
      * This should run some tests for the jersey client api...
      */
     @Test
-    fun testJerseyRestEngine() {
+    fun testRestEngine() {
     }
 
     companion object {
