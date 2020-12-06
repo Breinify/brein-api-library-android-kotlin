@@ -447,7 +447,7 @@ class BreinUser(private var email: String?) {
      */
     override fun toString(): String {
         val config = BreinConfig(null)
-        val requestData = mutableMapOf<String, Any?>()
+        val requestData = HashMap<String, Any?>()
 
         prepareRequestData(config, requestData)
 
