@@ -163,7 +163,7 @@ class HttpUrlRestEngine : IRestEngine {
             conn.outputStream.flush()
 
             val response = conn.responseCode
-            Log.d(TAG, "InvokeRequest - response is:  " + response)
+            Log.d(TAG, "InvokeRequest - response is:  $response")
 
             var breinResponse: BreinResult? = null
             if (response == HttpURLConnection.HTTP_OK) {
