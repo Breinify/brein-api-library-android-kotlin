@@ -41,28 +41,6 @@ class BreinTemporalData : BreinBase(), ISecretStrategy, IAsyncExecutable<BreinRe
      * }
     </pre> *
      *
-     * @param timezone TimeZone the value to be set
-     *
-     * @return `this`
-     */
-    fun setTimezone(timezone: TimeZone?): BreinTemporalData {
-        return setTimezone(timezone?.id)
-    }
-
-    /**
-     * Sets the timezone within the request, i.e.:
-     *
-     *
-     * <pre>
-     * {
-     * user: {
-     * additional: {
-     * 'timezone': timezone
-     * }
-     * }
-     * }
-    </pre> *
-     *
      * @param timezone String the value to be set
      *
      * @return `this`
@@ -302,16 +280,16 @@ class BreinTemporalData : BreinBase(), ISecretStrategy, IAsyncExecutable<BreinRe
     @Suppress("UNCHECKED_CAST")
     fun setLocation(key: String, value: Any?): BreinTemporalData {
 
-        var lloc = getUser()?.getAdditional(LOCATION_FIELD)
+        val lloc = getUser()?.getAdditional(LOCATION_FIELD)
         if (lloc != null) {
-            val loc: MutableMap<String, Any?>? =
+            val loc: MutableMap<String, Any?> =
                 getUser()?.getAdditional(LOCATION_FIELD) as MutableMap<String, Any?>
-            if (loc == null) {
+            if (loc.isNotEmpty()) {
                 val newLoc = HashMap<String, Any>()
                 getUser()?.setAdditional(LOCATION_FIELD, newLoc)
             }
 
-            loc?.set(key, value)
+            loc[key] = value
         }
         return this
     }
