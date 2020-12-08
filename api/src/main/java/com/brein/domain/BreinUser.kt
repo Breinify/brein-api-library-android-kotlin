@@ -144,7 +144,7 @@ class BreinUser(private var email: String?) {
      *
      * @return  String user agent
      */
-    var userAgent: String = ""
+    private var userAgent: String = ""
 
     /**
      * contains the ipAddress (additional part)
@@ -173,16 +173,6 @@ class BreinUser(private var email: String?) {
         return this.timezone
     }
 
-    private var deviceToken: String = ""
-    fun setDeviceToken(deviceToken: String): BreinUser {
-        this.deviceToken = deviceToken
-        return this
-    }
-
-    fun getDeviceToken(): String {
-        return this.deviceToken
-    }
-
     /**
      * contains the additional url
      *
@@ -208,7 +198,11 @@ class BreinUser(private var email: String?) {
      *
      * @return    String the deviceRegistration token
      */
-    var pushDeviceRegistration: String = ""
+    private var pushDeviceRegistration: String = ""
+
+    fun getPushDeviceRegistration(): String {
+        return this.pushDeviceRegistration
+    }
 
     fun setEmail(e: String): BreinUser {
         this.email = e
@@ -218,13 +212,13 @@ class BreinUser(private var email: String?) {
 
     fun setIpAddress(s: String): BreinUser {
         this.ipAddress = s
-        this.userMap["ipAddress"] = this.ipAddress
+        this.additionalMap["ipAddress"] = this.ipAddress
         return this
     }
 
     fun setUserAgent(s: String): BreinUser {
         this.userAgent = s
-        this.userMap["userAgent"] = this.userAgent
+        this.additionalMap["userAgent"] = this.userAgent
         return this
     }
 
@@ -256,13 +250,13 @@ class BreinUser(private var email: String?) {
 
     fun setUrl(s: String): BreinUser {
         this.url = s
-        this.userMap["url"] = this.url
+        this.additionalMap["url"] = this.url
         return this
     }
 
     fun setReferrer(s: String): BreinUser {
         this.referrer = s
-        this.userMap["referrer"] = this.referrer
+        this.additionalMap["referrer"] = this.referrer
         return this
     }
 
@@ -292,13 +286,25 @@ class BreinUser(private var email: String?) {
 
     fun setTimezone(timezone: String): BreinUser {
         this.timezone = timezone
-        this.userMap["timezone"] = this.timezone
+        this.additionalMap["timezone"] = this.timezone
         return this
     }
 
     fun setLocalDateTime(localDateTime: String): BreinUser {
         this.localDateTime = localDateTime
-        this.userMap["localDateTime"] = this.localDateTime
+        this.additionalMap["localDateTime"] = this.localDateTime
+        return this
+    }
+
+    fun setPushDeviceRegistration(deviceToken: String?): BreinUser {
+        if (deviceToken != null) {
+            this.pushDeviceRegistration = deviceToken
+            val identifierMap = HashMap<String, Any?>()
+
+            identifierMap["androidPushDeviceRegistration"] = this.pushDeviceRegistration
+            this.additionalMap["identifiers"] = identifierMap
+        }
+
         return this
     }
 
@@ -528,7 +534,7 @@ class BreinUser(private var email: String?) {
      */
     @Suppress("UNUSED_PARAMETER")
     fun prepareRequestData(config: BreinConfig?, requestData: MutableMap<String, Any?>) {
-        val userRequestData = mutableMapOf<String, Any?>()
+        val userRequestData = HashMap<String, Any?>()
 
         requestData["user"] = userRequestData
 
@@ -549,40 +555,6 @@ class BreinUser(private var email: String?) {
         // check or create userAgent
         generateUserAgent()
 
-        val referrerValue = getReferrer()
-        if (referrerValue.isNotEmpty()) {
-            this.additionalMap["referrer"] = referrerValue
-        }
-
-        val urlValue = url
-        if (urlValue.isNotEmpty()) {
-            this.additionalMap["url"] = urlValue
-        }
-
-        /// use the one that may be defined
-        val localDateTimeValue = getLocalDateTime()
-        if (localDateTimeValue.isNotEmpty()) {
-            this.additionalMap["localDateTime"] = localDateTimeValue
-        }
-
-        val timezoneValue = getTimezone()
-        if (timezoneValue.isNotEmpty()) {
-            this.additionalMap["timezone"] = timezoneValue
-        }
-
-        // deviceToken for pushNotifications
-        val devToken = getDeviceToken()
-        if (devToken.isNotEmpty()) {
-            val identifierData = mutableMapOf<String, Any?>()
-            identifierData["androidPushDeviceRegistration"] = devToken
-            this.additionalMap["identifiers"] = identifierData
-        }
-
-        // ipAddress
-        val additionalIpAddress = getIpAddress()
-        if (additionalIpAddress.isNotEmpty()) {
-            this.additionalMap["ipAddress"] = additionalIpAddress
-        }
 
         // add the additional-data, if there is any
         if (this.additionalMap.isNotEmpty()) {
