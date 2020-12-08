@@ -38,6 +38,7 @@ class Breinify {
         }
 
         fun configure(apiKey: String?, secret: String?) {
+
             if (apiKey.isNullOrEmpty()) {
                 throw BreinException(BreinException.API_KEY_NOT_SET)
             }
@@ -147,7 +148,7 @@ class Breinify {
         fun initWithDeviceToken(deviceToken: String?) {
             BreinifyManager.configureDeviceToken(deviceToken)
             if (deviceToken != null) {
-                getUser().setDeviceToken(deviceToken)
+                getUser().setPushDeviceRegistration(deviceToken)
             }
         }
         /**
