@@ -118,7 +118,6 @@ object BreinifyManager {
 
         // invoke ipAddress detection now
 
-        // todo check how to invoke
         // BreinIpInfo.instance
     }
 
@@ -148,7 +147,7 @@ object BreinifyManager {
         configureSession()
 
         // send the user identification to the backend
-        sendIdentifyInfo()
+        // sendIdentifyInfo()
     }
 
     /**
@@ -331,6 +330,8 @@ object BreinifyManager {
 
         // save device registration
         saveUserDefaultValue(BREIN_PUSH_DEVICE_REGISTRATION, deviceToken)
+
+        saveUserDefaults()
 
         // send Identify
         sendIdentifyInfo()

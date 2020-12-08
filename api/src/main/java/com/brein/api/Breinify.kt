@@ -145,12 +145,34 @@ class Breinify {
          *
          * @param deviceToken String contains the deviceToken
          */
-        fun initWithDeviceToken(deviceToken: String?) {
-            BreinifyManager.configureDeviceToken(deviceToken)
+        fun initWithDeviceToken(deviceToken: String?, userInfoMap: HashMap<String, String>?) {
+
+            userInfoMap?.let {
+                val firstName: String = userInfoMap[BreinUser.UserInfo.FIRST_NAME] ?: ""
+                val lastName: String = userInfoMap[BreinUser.UserInfo.LAST_NAME] ?: ""
+                val phone: String = userInfoMap[BreinUser.UserInfo.PHONE_NUMBER] ?: ""
+                val email: String = userInfoMap[BreinUser.UserInfo.EMAIL] ?: ""
+
+                setUserInfo(firstName, lastName, phone, email)
+            }
+
             if (deviceToken != null) {
                 getUser().setPushDeviceRegistration(deviceToken)
             }
+            BreinifyManager.configureDeviceToken(deviceToken)
+
         }
+
+        private fun setUserInfo(firstName: String, lastName: String, phone: String, email: String) {
+            val appUser = getBreinUser()
+            appUser.setFirstName(firstName)
+                .setLastName(lastName)
+                .setPhone(phone)
+                .setEmail(email)
+
+            BreinifyManager.userEmail = email
+        }
+
         /**
          * gets the config
          *
