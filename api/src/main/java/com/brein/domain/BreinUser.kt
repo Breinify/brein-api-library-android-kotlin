@@ -33,6 +33,13 @@ import java.nio.ByteOrder
  */
 class BreinUser(private var email: String?) {
 
+    enum class UserInfo {
+        FIRST_NAME,
+        LAST_NAME,
+        PHONE_NUMBER,
+        EMAIL
+    }
+
     /*
      * contains further fields in the user section
      */
