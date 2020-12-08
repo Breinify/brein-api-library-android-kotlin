@@ -51,7 +51,7 @@ object BreinifyManager {
         this.pushDeviceRegistration = pushDeviceRegistration
 
         // set user as well -> necessary for correct request
-        Breinify.getUser().pushDeviceRegistration = pushDeviceRegistration
+        Breinify.getUser().setPushDeviceRegistration(pushDeviceRegistration)
     }
 
     /**
@@ -142,7 +142,7 @@ object BreinifyManager {
         readAndInitUserDefaults()
 
         // configure the background processing
-        initBackgroundHandler(backgroundInterval)
+        // initBackgroundHandler(backgroundInterval)
 
         // configure the session
         configureSession()
@@ -175,7 +175,6 @@ object BreinifyManager {
      */
     fun initBackgroundHandler(backgroundInterval: Long) {
         Log.d(TAG, "initBackgroundHandler invoked with duration: $backgroundInterval")
-
 
         Timer().schedule(object : TimerTask() {
             override fun run() {
@@ -231,11 +230,13 @@ object BreinifyManager {
     }
 
     /**
-     * send an identify information ony if token is given
+     * send an identify information only if token is given
      */
     fun sendIdentifyInfo() {
         Log.d(TAG, "sendIdentifyInfo invoked")
         if (BreinUtil.containsValue(pushDeviceRegistration)) {
+            val appUser = Breinify.getBreinUser()
+            appUser.setPushDeviceRegistration(this.pushDeviceRegistration)
             sendActivity("identify", null)
         }
     }
