@@ -6,17 +6,19 @@ import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
 import android.net.Uri
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
+import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
 class BreinNotficationService : FirebaseMessagingService() {
 
-    override fun onNewToken(p0: String) {
-        super.onNewToken(p0)
-
-        // todo
+    override fun onNewToken(token: String) {
+        super.onNewToken(token)
+        Breinify.configureDeviceToken(token)
     }
 
     /**
@@ -30,6 +32,8 @@ class BreinNotficationService : FirebaseMessagingService() {
         for ((key, value) in dataMap) {
             Log.d(TAG, "Key : $key Value : $value")
         }
+
+        handleNow(remoteMessage)
         sendNotification(remoteMessage)
     }
 
@@ -75,6 +79,21 @@ class BreinNotficationService : FirebaseMessagingService() {
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
 
         notificationManager?.notify(0 , notification)
+    }
+
+    private fun handleNow(remoteMessage: RemoteMessage) {
+        val handler = Handler(Looper.getMainLooper())
+
+        handler.post {
+//            Toast.makeText(baseContext, getString(R.string.handle_notification_now), Toast.LENGTH_LONG).show()
+            Toast.makeText(baseContext, "Breinify", Toast.LENGTH_LONG).show()
+
+            remoteMessage.notification?.let {
+                val intent = Intent("MyData")
+                intent.putExtra("message", remoteMessage.data["text"])
+//                broadcaster?.sendBroadcast(intent)
+            }
+        }
     }
 
     companion object {
