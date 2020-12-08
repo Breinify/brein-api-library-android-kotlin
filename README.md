@@ -104,13 +104,11 @@ Breinify.sendActivity(breinActivity)
 
 ## TemporalData: Selected Usage Examples
 
-The `/temporalData` endpoint is used to transform your temporal data into temporal information, i.e., enrich your temporal data with information like 
-*current weather*, *upcoming holidays*, *regional and global events*, and *time-zones*, as well as geocoding and reverse geocoding.
+The `/temporalData` endpoint is used to transform your temporal data into temporal information, i.e., enrich your temporal data with information like *current weather*, *upcoming holidays*, *regional and global events*, and *time-zones*, as well as geocoding and reverse geocoding.
 
 ### Getting User Information
 
-Sometimes it is necessary to get some more information about the user of an application, e.g., to increase usability and enhance the user experience, 
-to handle time-dependent data correctly, to add geo-based services, or increase quality of service. The client's information can be retrieved easily 
+Sometimes it is necessary to get some more information about the user of an application, e.g., to increase usability and enhance the user experience, to handle time-dependent data correctly, to add geo-based services, or increase quality of service. The client's information can be retrieved easily 
 by calling the `/temporaldata` endpoint utilizing the `Breinify.temporalData(...)` method or by executing a `BreinTemporalData` instance, i.e.,:
 
 ```kotlin
@@ -127,8 +125,7 @@ breinTemporalData.execute(object : ICallback<BreinResult?> {
         })
 ```
 
-The returned result contains detailed information about the time, the location, the weather, holidays, and events at the time and the location. A detailed
-example of the returned values can be found <a target="_blank" href="https://www.breinify.com/documentation">here</a>.
+The returned result contains detailed information about the time, the location, the weather, holidays, and events at the time and the location. A detailed example of the returned values can be found <a target="_blank" href="https://www.breinify.com/documentation">here</a>.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/Breinify/brein-api-library-java/master/documentation/img/sample-user-information.png" alt="Sample output of the user information." width="500"><br/>
@@ -138,10 +135,9 @@ example of the returned values can be found <a target="_blank" href="https://www
 
 ### Geocoding (resolve Free-Text to Locations)
 
-Sometimes it is necessary to resolve a textual representation to a specific geo-location. The textual representation can be
-structured and even partly unstructured, e.g., the textual representation `the Big Apple` is considered to be unstructured,
-whereby a structured location would be, e.g., `{ city: 'Seattle', state: 'Washington', country: 'USA' }`. It is also possible
-to pass in partial information and let the system try to resolve/complete the location, e.g., `{ city: 'New York', country: 'USA' }`.
+Sometimes it is necessary to resolve a textual representation to a specific geo-location. The textual representation can be structured and even partly unstructured, e.g., the textual representation `the Big Apple` is considered to be unstructured, whereby a structured location would be, e.g., `{ city: 'Seattle', state: 'Washington', country: 'USA' }`. 
+
+It is also possible to pass in partial information and let the system try to resolve/complete the location, e.g., `{ city: 'New York', country: 'USA' }`.
 
 ```kotlin
 val breinTemporalData = BreinTemporalData()
@@ -178,8 +174,7 @@ Or shown as an Apple Map result:
 
 ### Reverse Geocoding (retrieve GeoJsons for, e.g., Cities, Neighborhoods, or Zip-Codes)
 
-The library also offers the feature of reverse geocoding. Having a specific geo-location and resolving the coordinates
-to a specific city or neighborhood (i.e., names of neighborhood, city, state, country, and optionally GeoJson shapes). 
+The library also offers the feature of reverse geocoding. Having a specific geo-location and resolving the coordinates to a specific city or neighborhood (i.e., names of neighborhood, city, state, country, and optionally GeoJson shapes). 
 
 A possible request if you're interesed in events might look like this:
 
