@@ -176,7 +176,7 @@ abstract class BreinBase : ISecretStrategy {
      * @return the created request body (JSON)
      */
     open fun prepareRequestData(config: BreinConfig): String {
-        val requestData = mutableMapOf<String, Any?>()
+        val requestData = HashMap<String, Any?>()
 
         requestData[API_KEY_FIELD] = config.apiKey
 
@@ -188,12 +188,7 @@ abstract class BreinBase : ISecretStrategy {
                 }
             }
         }
-        if (!requestData.containsValue(IP_ADDRESS)) {
-            val ipDetected: String = BreinUtil.detectIpAddress()
-            if (BreinUtil.containsValue(ipDetected)) {
-                requestData[IP_ADDRESS] = ipDetected
-            }
-        }
+
         var timestamp = this.unixTimestamp
         if (timestamp == -1L) {
             timestamp = System.currentTimeMillis() / 1000L
