@@ -139,61 +139,61 @@ class HttpUrlRestEngine : IRestEngine {
         val readTimeout = Breinify.config?.socketTimeout
 
         Thread {
-        try {
-            val url = URL(fullUrl)
-            val bytes = requestBody.toByteArray(Charset.forName("utf-8"))
-            val conn = url.openConnection() as HttpURLConnection
+            try {
+                val url = URL(fullUrl)
+                val bytes = requestBody.toByteArray(Charset.forName("utf-8"))
+                val conn = url.openConnection() as HttpURLConnection
 
-            if (readTimeout != null) {
-                conn.readTimeout = readTimeout
-            }
-
-            if (connectionTimeout != null) {
-                conn.connectTimeout = connectionTimeout
-            }
-
-            conn.requestMethod = POST_METHOD
-            conn.doInput = true
-            conn.doOutput = true
-            conn.setRequestProperty("Content-Type", "application/json")
-            conn.setRequestProperty("Content-Length", bytes.size.toString())
-            conn.setRequestProperty("charset", "utf-8")
-            conn.setFixedLengthStreamingMode(bytes.size)
-            conn.outputStream.write(bytes, 0, bytes.size)
-            conn.outputStream.flush()
-
-            val response = conn.responseCode
-            Log.d(TAG, "InvokeRequest - response is:  $response")
-
-            var breinResponse: BreinResult? = null
-            if (response == HttpURLConnection.HTTP_OK) {
-                val jsonResponse = StringBuilder()
-                val mInputStream = conn.inputStream
-                var i: Int
-
-                while (mInputStream.read().also { i = it } != -1) {
-                    jsonResponse.append(i.toChar())
+                if (readTimeout != null) {
+                    conn.readTimeout = readTimeout
                 }
 
-                val mapResponse: MutableMap<String, Any?> =
-                    Gson().fromJson(
-                        jsonResponse.toString(),
-                        object : TypeToken<Map<String, Any?>>() {}.type
-                    )
+                if (connectionTimeout != null) {
+                    conn.connectTimeout = connectionTimeout
+                }
 
-                breinResponse = BreinResult(mapResponse)
-            } else {
-                val res = mutableMapOf<String, Any?>()
-                res["code"] = response
-                breinResponse = BreinResult(res)
+                conn.requestMethod = POST_METHOD
+                conn.doInput = true
+                conn.doOutput = true
+                conn.setRequestProperty("Content-Type", "application/json")
+                conn.setRequestProperty("Content-Length", bytes.size.toString())
+                conn.setRequestProperty("charset", "utf-8")
+                conn.setFixedLengthStreamingMode(bytes.size)
+                conn.outputStream.write(bytes, 0, bytes.size)
+                conn.outputStream.flush()
+
+                val response = conn.responseCode
+                Log.d(TAG, "InvokeRequest - response is:  $response")
+
+                var breinResponse: BreinResult? = null
+                if (response == HttpURLConnection.HTTP_OK) {
+                    val jsonResponse = StringBuilder()
+                    val mInputStream = conn.inputStream
+                    var i: Int
+
+                    while (mInputStream.read().also { i = it } != -1) {
+                        jsonResponse.append(i.toChar())
+                    }
+
+                    val mapResponse: MutableMap<String, Any?> =
+                        Gson().fromJson(
+                            jsonResponse.toString(),
+                            object : TypeToken<Map<String, Any?>>() {}.type
+                        )
+
+                    breinResponse = BreinResult(mapResponse)
+                } else {
+                    val res = mutableMapOf<String, Any?>()
+                    res["code"] = response
+                    breinResponse = BreinResult(res)
+                }
+                conn.disconnect()
+                callback?.callback(breinResponse)
+
+            } catch (e: Exception) {
+                Log.d(TAG, "HttpUrlRestEngine exception is: $e")
+                // throw new BreinException("REST rest call exception");
             }
-            conn.disconnect()
-            callback?.callback(breinResponse)
-
-        } catch (e: Exception) {
-            Log.d(TAG, "HttpUrlRestEngine exception is: $e")
-            // throw new BreinException("REST rest call exception");
-        }
         }.start()
     }
 
