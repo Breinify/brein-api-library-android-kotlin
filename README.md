@@ -25,7 +25,6 @@ The goal of utilizing Breinify’s Time-Driven push notifications is to send hig
 
 First of all, you need a valid API-key, which you can get for free at [https://www.breinify.com](https://www.breinify.com). In the examples, we assume you have the following api-key:
 
-
 **938D-3120-64DD-413F-BB55-6573-90CE-473A**
 
 
@@ -55,13 +54,14 @@ dependencies {
 
 ### Configuring the Library
 
-Whenever the library is used, it needs to be configured, i.e., the configuration defines which API key and which secret 
-(if signed messages are enabled, i.e., `Verification Signature` is checked) to use.
+Whenever the library is used, it needs to be configured, i.e., the configuration defines API key and secret 
+(if signed messages are enabled, i.e., `Verification Signature` is checked) to be used.
 
 ```kotlin
-// create the configuration object
-Breinify.configure("938D-3120-64DD-413F-BB55-6573-90CE-473A", "utakxp7sm6weo5gvk7cytw==")
+val kValidApiKey = "938D-3120-64DD-413F-BB55-6573-90CE-473A"
+val kValidSecret = "**utakxp7sm6weo5gvk7cytw==**"
 
+Breinify.initialize(this.application, this, kValidApiKey, kValidSecret)
 ```
 
 The Breinify class is now configured with a valid configuration object.
@@ -80,7 +80,7 @@ Breinify.shutdown()
 
 The `/activity` endpoint is used to track the usage of, e.g., an application, an app, or a web-site. There are several libraries available to be used for different system (e.g.,  [Node.js](https://github.com/Breinify/brein-api-library-node), [iOS](https://github.com/Breinify/brein-api-library-ios), [Java](https://github.com/Breinify/brein-api-library-java), [JavaScript](https://github.com/Breinify/brein-api-library-javascript-browser), [Ruby](https://github.com/Breinify/brein-api-library-ruby), [PHP](https://github.com/Breinify/brein-api-library-php), [Python](https://github.com/Breinify/brein-api-library-python)).
 
-### Sending Login 
+### Sending an Activity 
 
 The example shows, how to send a login activity, reading the data from an request. In general, activities are added to the interesting measure points within your applications process (e.g., `login`, `addToCart`, `readArticle`). The endpoint offers analytics and insights through Breinify's dashboard.
 
@@ -95,29 +95,6 @@ val appUser = Breinify.getUser()
 val breinActivity = Breinify.getActivity()
       .setCategory(BreinCategoryType.HOME)
       .setActivityType(BreinActivityType.LOGIN)
-        
-// send the activity
-Breinify.sendActivity(breinActivity)
-```
-
-
-
-### Sending an Activity
-
-Instead of sending an activity utilizing the `Breinify.activity(...)` method, it is also possible to create an instance of a `BreinActivity` add the appropriate properties and execute the request later on by using the `Breinify.activity(...)` method.
-
-```kotlin
-// create a user you're interested in
-val appUser = Breinify.getUser()
-      .setEmail("user.anywhere@email.com")
-      .setFirstName("User")
-      .setLastName("Anyhere");
-
-// create activity object and collect data        
-val breinActivity = Breinify.getActivity()
-      .setCategory(BreinCategoryType.HOME)
-      .setActivityType("readArticle")
-      .setDescription("A Homebody Persident Sits Out His Honeymoon Period");
         
 // send the activity
 Breinify.sendActivity(breinActivity)
@@ -228,29 +205,61 @@ val breinTemporalData = BreinTemporalData()
 
 Let's integrate Breinify's PushNotifications within an Android App using [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging/). 
 
-### Integration
+### 1. Initialization
 
 
 Using Breinify Push Notifications in Android apps is straightforward. 
 
-The Breinify SDK integrates smoothly within the Android Application Lifecycle. Add in your MainActivity the initialization of the Breinify SDK:
+The Breinify SDK integrates smoothly within the Android Application Lifecycle. Add in your MainActivity the initialization of the Breinify SDK the initialization and device token functionality.
 
-```java
-@Override
-protected void onCreate(Bundle savedInstanceState) {
-   super.onCreate(savedInstanceState);
-   setContentView(R.layout.activity_main);
+```kotlin
+override fun onCreate(savedInstanceState: Bundle?) {
+     super.onCreate(savedInstanceState)
+     setContentView(R.layout.activity_main)
+     setSupportActionBar(findViewById(R.id.toolbar))
 
-	// we come to this later
-   checkAppPermission();
-   
-   final String kValidApiKey = "5ACB-F8B8-B6BD-46EF-B959-1536-64D2-3F38";
-   final String kValidSecret = "/ss906aixyii8f6mi8xb3g==";
-
-   Breinify.initialize(this.getApplication(), this, kValidApiKey, kValidSecret);
+     findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
+         Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                 .setAction("Action", null).show()
+     }
+ 			
+     initBreinify()
+     initToken()
 }
+
+private fun initBreinify() {
+     val kValidApiKey = "938D-3120-64DD-413F-BB55-6573-90CE-473A"
+     val kValidSecret = "**utakxp7sm6weo5gvk7cytw==**"
+
+     Breinify.initialize(this.application, this, kValidApiKey, kValidSecret)
+}
+
+private fun initToken() {
+     Firebase.messaging.getToken().addOnCompleteListener(OnCompleteListener { task ->
+     if (!task.isSuccessful) {
+         Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+         return@OnCompleteListener
+     }
+
+     // Get new FCM registration token
+     val token = task.result
+                                                                 
+     // Possible to provide already some user info                                                                                                                                     
+     val userInfoMap = HashMap<String, String>()
+     userInfoMap["firstName"] = "Elvis"
+     userInfoMap["lastName"] = "Presley"
+     userInfoMap["phone"] = "0123456789"
+     userInfoMap["email"] = "elvis.presly@mail.com"
+
+     Breinify.initWithDeviceToken(token, userInfoMap)                                                                          
+     })
+ }
    
 ```
+
+
+
+### 2. Permission
 
 The Breinify SDK needs some permission in order to retrieve the appropriate information. In your `AndroidManifest.xml` file you have to add the following permissions:
 
@@ -291,15 +300,14 @@ private void checkAppPermission() {
 }
 ```
 
-Furthermore `AndroidManifest.xml` needs to contain the following additional services to handle the PushNotification:
+
+
+### 3. Notification Configuration
+
+Add notification message event handling to  `AndroidManifest.xml` like this:
 
 ```xml
    ...
-   <service android:name="com.brein.api.BreinNotificationIdService">
-         <intent-filter>
-             <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-         </intent-filter>
-   </service>
 
    <service android:name="com.brein.api.BreinNotficationService">
          <intent-filter>
@@ -308,6 +316,8 @@ Furthermore `AndroidManifest.xml` needs to contain the following additional serv
    </service>
    ...
 ```
+
+
 
 When sending a Push Notification it will appear like this:
 
