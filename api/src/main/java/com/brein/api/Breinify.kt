@@ -148,10 +148,10 @@ class Breinify {
         fun initWithDeviceToken(deviceToken: String?, userInfoMap: HashMap<String, String>?) {
 
             userInfoMap?.let {
-                val firstName: String = userInfoMap[BreinUser.UserInfo.FIRST_NAME] ?: ""
-                val lastName: String = userInfoMap[BreinUser.UserInfo.LAST_NAME] ?: ""
-                val phone: String = userInfoMap[BreinUser.UserInfo.PHONE_NUMBER] ?: ""
-                val email: String = userInfoMap[BreinUser.UserInfo.EMAIL] ?: ""
+                val firstName: String = userInfoMap["firstName"] ?: ""
+                val lastName: String = userInfoMap["lastName"] ?: ""
+                val phone: String = userInfoMap["phone"] ?: ""
+                val email: String = userInfoMap["email"] ?: ""
 
                 setUserInfo(firstName, lastName, phone, email)
             }
