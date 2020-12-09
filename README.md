@@ -89,7 +89,7 @@ The Breinify SDK needs some permission in order to retrieve the appropriate info
 Whenever the library is used, it needs to be configured, i.e., the configuration defines API key and secret 
 (if signed messages are enabled, i.e., `Verification Signature` is checked) to be used. 
 
-Do this on the Main Activity.
+Do this on the *Main Activity*.
 
 ##### Initialize the Library and Firebase Connection
 
