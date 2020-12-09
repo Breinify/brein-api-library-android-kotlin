@@ -39,32 +39,90 @@ It is recommended to use signed messages when utilizing the Android library. A s
 
 ### Installation
 
-### Including the Library
+#### Including the Library
 
 The library is available through Google maven repository and can be easily added within the
-gradle configuration like this:
+gradle configuration within the *app/build.gradle* like this:
 
 ```gradle
 dependencies {
     ...
-    compile 'com.brein.brein-api-library-android-kotlin:1.0.2'
+    implementation 'com.brein.brein-api-library-android-kotlin:1.0.2'
     ...
 }
 ```
 
+
+
+#### Consideration of  Firebase Libraries
+
+The following Firebase Libraries needs to be included in the within the *app/build.gradle* file:
+
+```gradle
+dependencies {
+    ...
+    // Import the Firebase BoM 
+    implementation platform('com.google.firebase:firebase-bom:26.1.0')
+    
+    // Firebase Cloud Messaging (Kotlin)
+    implementation 'com.google.firebase:firebase-messaging-ktx'
+    ...
+}
+```
+
+
+
+#### Permissions
+
+The Breinify SDK needs some permission in order to retrieve the appropriate information. In your `AndroidManifest.xml` file you have to add the following permissions:
+
+```xml
+<!-- This permission is required to allow the application to send requests to Breinify -->
+<uses-permission android:name="android.permission.INTERNET" />
+
+```
+
+
+
 ### Configuring the Library
 
 Whenever the library is used, it needs to be configured, i.e., the configuration defines API key and secret 
-(if signed messages are enabled, i.e., `Verification Signature` is checked) to be used.
+(if signed messages are enabled, i.e., `Verification Signature` is checked) to be used. 
+
+Do this on the Main Activity.
+
+##### Initialize the Library and Firebase Connection
 
 ```kotlin
-val kValidApiKey = "938D-3120-64DD-413F-BB55-6573-90CE-473A"
-val kValidSecret = "**utakxp7sm6weo5gvk7cytw==**"
+func initBreinify() {
+   val kValidApiKey = "938D-3120-64DD-413F-BB55-6573-90CE-473A"
+   val kValidSecret = "**utakxp7sm6weo5gvk7cytw==**"
 
-Breinify.initialize(this.application, this, kValidApiKey, kValidSecret)
+   Breinify.initialize(this.application, this, kValidApiKey, kValidSecret)
+} 
+
+func initToken() {
+  Firebase.messaging.getToken().addOnCompleteListener(OnCompleteListener { task ->
+     if (!task.isSuccessful) {
+         Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+         return@OnCompleteListener
+     }
+     // Get new FCM registration token
+     val token = task.result
+     
+     // Provide some User Information (optional)
+     val userInfoMap = HashMap<String, String>()
+     userInfoMap["firstName"] = "Elvis"
+     userInfoMap["lastName"] = "Presley"
+     userInfoMap["phone"] = "0123456789"
+     userInfoMap["email"] = "elvis.presly@mail.com"
+     
+     // configure token                                                                           
+     Breinify.initWithDeviceToken(token, userInfoMap)
+}
 ```
 
-The Breinify class is now configured with a valid configuration object.
+The Breinify API is now configured with a valid configuration object and valid device token.
 
 ### Clean-Up after Usage
 
@@ -75,6 +133,8 @@ method is used. A typical framework may look like that:
 // whenever the application utilizing the library is destroyed/released
 Breinify.shutdown()
 ```
+
+
 
 ## Activity: Selected Usage Examples
 
@@ -254,50 +314,7 @@ private fun initToken() {
 
 
 
-### 2. Permission
-
-The Breinify SDK needs some permission in order to retrieve the appropriate information. In your `AndroidManifest.xml` file you have to add the following permissions:
-
-```xml
-<!-- for Inet access -->
-<uses-permission android:name="android.permission.INTERNET" />
-
-<!-- For GPS based location -->
-<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
-<!-- For using only network based location -->
-<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
-<!-- For Wifi information -->
-<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-<!-- permission if the application needs to keep the processor from sleeping when a message is received -->
-<uses-permission android:name="android.permission.WAKE_LOCK" />
-```
-
-Android user's must be prompted and grant those permissions. This can be done like this:
-
-```java
-private void checkAppPermission() {
-   final int accessFineLocationPermission = ActivityCompat.checkSelfPermission(this,
-      android.Manifest.permission.ACCESS_FINE_LOCATION);
-   if (accessFineLocationPermission == PackageManager.PERMISSION_DENIED) {
-      ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-   }
-
-   final int accessCoarseLocationPermission = ActivityCompat.checkSelfPermission(this,
-      android.Manifest.permission.ACCESS_COARSE_LOCATION);
-   if (accessCoarseLocationPermission == PackageManager.PERMISSION_DENIED) {
-      ActivityCompat.requestPermissions(this, 
-         new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION}, 2);
-   }
-}
-```
-
-
-
-### 3. Notification Configuration
+### 2. Notification Configuration
 
 Add notification message event handling to  `AndroidManifest.xml` like this:
 
