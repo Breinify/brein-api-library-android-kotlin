@@ -33,7 +33,7 @@ object BreinifyManager {
     private var mainActivity: Activity? = null
 
     // instance of push notification service
-    private val breinPushNotificationReceiver = BreinPushNotificationReceiver()
+//    private val breinPushNotificationReceiver = BreinPushNotificationReceiver()
 
     private var apiKey: String? = null
 
@@ -129,7 +129,9 @@ object BreinifyManager {
     private fun initLifecycleAndEngine(backgroundInterval: Long) {
         // register the callbacks for lifecycle support - necessary to determine if app
         // is in background or foreground
-        application?.registerActivityLifecycleCallbacks(BreinifyLifecycle())
+
+        // deactivated
+        // application?.registerActivityLifecycleCallbacks(BreinifyLifecycle())
 
         // configure the API
         Breinify.setConfig(apiKey, secret)
@@ -154,17 +156,17 @@ object BreinifyManager {
      * Initializes the notification receiver programmatically
      */
     fun initNotificationReceiver() {
-        if (application != null) {
-            val filter = IntentFilter("com.google.android.c2dm.intent.RECEIVE")
-            application!!.registerReceiver(breinPushNotificationReceiver, filter)
-        }
+//        if (application != null) {
+//            val filter = IntentFilter("com.google.android.c2dm.intent.RECEIVE")
+//            application!!.registerReceiver(breinPushNotificationReceiver, filter)
+//        }
     }
 
     /**
      * Stop sending notifications
      */
     fun destroyNotificationReceiver() {
-        application?.unregisterReceiver(breinPushNotificationReceiver)
+//        application?.unregisterReceiver(breinPushNotificationReceiver)
     }
 
     /**
@@ -311,9 +313,6 @@ object BreinifyManager {
         Log.d(TAG, "saveUserDefaults invoked")
         saveUserDefaultValue(BREIN_USER_EMAIL, userEmail)
         saveUserDefaultValue(BREIN_USER_ID, userId)
-
-        // in case of changed user-identification
-        sendIdentifyInfo()
     }
 
     /**
