@@ -94,6 +94,20 @@ Do this on the Main Activity.
 ##### Initialize the Library and Firebase Connection
 
 ```kotlin
+override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        setSupportActionBar(findViewById(R.id.toolbar))
+
+        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
+            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show()
+        }
+
+        initBreinify()
+        initToken()
+    }
+
 func initBreinify() {
    val kValidApiKey = "938D-3120-64DD-413F-BB55-6573-90CE-473A"
    val kValidSecret = "**utakxp7sm6weo5gvk7cytw==**"
