@@ -24,7 +24,7 @@ class TestLifeCycle {
             .setLastName("Presley")
 
         // init device token
-        Breinify.initWithDeviceToken("superDeviceToken")
+        Breinify.initWithDeviceToken("superDeviceToken", null)
 
         // send some activities
         val breinActivity = Breinify.getBreinActivity()
@@ -88,6 +88,18 @@ class TestLifeCycle {
         Breinify.sendActivity(breinActivity)
 
         Breinify.shutdown()
+    }
+
+
+    @Test
+    fun testFullAndroidLifeCycle() {
+
+        // 1. configure API
+        Breinify.configure(VALID_SIGNATURE_API_KEY, VALID_SIGNATURE)
+
+
+
+
     }
 
 
