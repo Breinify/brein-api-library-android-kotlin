@@ -13,6 +13,6 @@ object BreinActivityType {
     const val REMOVE_FROM_CART = "removeFromCart"
     const val SELECT_PRODUCT = "selectProduct"
     const val CHECKOUT = "checkOut"
-    const val PAGEVISIT = "pageVisit"
+    const val PAGE_VISIT = "pageVisit"
     const val OTHER = "other"
 }
