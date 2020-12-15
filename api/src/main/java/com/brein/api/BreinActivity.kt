@@ -199,6 +199,11 @@ class BreinActivity : BreinBase(), ISecretStrategy, IAsyncExecutable<BreinResult
         return this
     }
 
+    fun setTagsDic(map: HashMap<String, Any?>): BreinActivity {
+        this.tagsMap = map
+        return this
+    }
+
     fun getTagsMap(): MutableMap<String, Any?> {
         return tagsMap
     }
