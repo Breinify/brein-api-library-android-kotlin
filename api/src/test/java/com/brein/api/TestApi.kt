@@ -358,7 +358,7 @@ class TestApi {
         breinActivity.setUnixTimestamp(System.currentTimeMillis() / 1000L)
         breinActivity.setUser(breinUser)
         breinActivity.setCategory(BreinCategoryType.APPAREL)
-        breinActivity.setActivityType(BreinActivityType.PAGEVISIT)
+        breinActivity.setActivityType(BreinActivityType.PAGE_VISIT)
         breinActivity.setDescription("your description")
         breinActivity.setToTagMap("t1", 0.0)
         breinActivity.setToTagMap("t2", 5)
@@ -395,7 +395,7 @@ class TestApi {
             .setUserAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2486.0 Safari/537.36 Edge/13.10586")
         Breinify.activity(
             breinUser,
-            BreinActivityType.PAGEVISIT,
+            BreinActivityType.PAGE_VISIT,
             BreinCategoryType.APPAREL,
             "Description",
             restCallback
