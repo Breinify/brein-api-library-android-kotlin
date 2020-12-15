@@ -98,6 +98,61 @@ class TestLifeCycle {
         Breinify.configure(VALID_SIGNATURE_API_KEY, VALID_SIGNATURE)
 
 
+    }
+
+    @Test
+    fun testPageVisit() {
+        // 1. configure API
+        Breinify.configure(VALID_SIGNATURE_API_KEY, VALID_SIGNATURE)
+
+        val breinActivity = Breinify.getBreinActivity()
+        breinActivity.setActivityType(BreinActivityType.PAGE_VISIT)
+
+        // add activity dic
+        val tagsDic = HashMap<String, Any?>()
+        tagsDic["pageId"] = "packages"
+        breinActivity.setTagsDic(tagsDic)
+
+        Breinify.sendActivity(breinActivity)
+    }
+
+    @Test
+    fun testCheckOut() {
+
+        // 1. configure API
+        Breinify.configure(VALID_SIGNATURE_API_KEY, VALID_SIGNATURE)
+
+        val tagsDic = mapOf(
+            "balancePromotional" to 0,
+            "balanceCampaign" to 0,
+            "pageId" to "otherBalance"
+        ) as HashMap<String, Any?>
+
+        val breinActivity = Breinify.getBreinActivity()
+        breinActivity.setTagsDic(tagsDic)
+        breinActivity.setActivityType(BreinActivityType.PAGE_VISIT)
+        Breinify.sendActivity(breinActivity)
+
+
+    }
+
+    @Test
+    fun testActivity2() {
+        val tagsDic = mapOf(
+            "balance" to 6.902,
+            "recharge" to 0,
+            "package" to 0,
+            "consumption" to 3.498,
+            "available" to 2.904,
+            "other" to 0,
+            "pageId" to "consumptionDetails"
+        ) as HashMap<String, Any?>
+
+        val breinActivity = Breinify.getBreinActivity()
+        breinActivity.setTagsDic(tagsDic)
+        breinActivity.setActivityType(BreinActivityType.PAGE_VISIT)
+
+        Breinify.sendActivity(breinActivity)
 
 
     }
@@ -124,7 +179,6 @@ class TestLifeCycle {
             }
         }
     }
-
 
 
 }
