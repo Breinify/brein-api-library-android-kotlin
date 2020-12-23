@@ -41,7 +41,7 @@ It is recommended to use signed messages when utilizing the Android library. A s
 
 #### Including the Library
 
-The library is available through Google maven repository and can be easily added within the
+The library is available through maven and jcenter repository and can be easily added within the
 gradle configuration within the *app/build.gradle* like this:
 
 ```gradle
