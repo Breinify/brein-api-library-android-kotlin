@@ -15,10 +15,6 @@ class Brein {
      * @param breinConfig config object
      */
     fun setConfig(breinConfig: BreinConfig?): Brein {
-        // todo check if this is a good approach
-//        if (this.engine != null) {
-//            shutdown()
-//        }
         this.config = breinConfig
         return this
     }
@@ -31,7 +27,7 @@ class Brein {
      * This request is asynchronous.
      */
     fun activity(data: BreinActivity?, callback: ICallback<BreinResult?>?) {
-            getEngine()?.invoke(this.config, data, callback)
+        getEngine()?.invoke(this.config, data, callback)
     }
 
     /**
@@ -43,7 +39,7 @@ class Brein {
      * @param data a plain object specifying the lookup information.
      */
     fun lookup(data: BreinLookup?, callback: ICallback<BreinResult?>?) {
-            getEngine()?.invoke(this.config, data, callback)
+        getEngine()?.invoke(this.config, data, callback)
     }
 
     /**
