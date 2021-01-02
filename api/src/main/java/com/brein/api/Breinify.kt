@@ -287,7 +287,6 @@ class Breinify {
                 throw BreinException(BreinException.ACTIVITY_TYPE_NOT_SET)
             }
 
-
             if (category != null) {
                 activity.setCategory(category)
             }
@@ -319,7 +318,6 @@ class Breinify {
             category: String?,
             description: String?
         ) {
-
             // invoke activity call without callback
             activity(user, activityType, category, description, null)
         }
