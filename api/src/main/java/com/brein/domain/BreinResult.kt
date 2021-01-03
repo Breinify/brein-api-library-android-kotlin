@@ -8,14 +8,11 @@ import com.google.gson.reflect.TypeToken
  * request
  */
 class BreinResult {
+
     /**
      * provides the map containing the results
      *
      * @return Map of String, Object
-     */
-
-    /**
-     * contains the collected data as map
      */
     var map = mutableMapOf<String, Any?>()
 
@@ -24,11 +21,11 @@ class BreinResult {
      * @param jsonResponse as json string
      */
     constructor(jsonResponse: String?) {
-        map = Gson().fromJson(jsonResponse, object : TypeToken<Map<String, Any?>>() {}.type)
+        this.map = Gson().fromJson(jsonResponse, object : TypeToken<Map<String, Any?>>() {}.type)
     }
 
     constructor(json: MutableMap<String, Any?>) {
-        map = json
+        this.map = json
     }
 
     /**
