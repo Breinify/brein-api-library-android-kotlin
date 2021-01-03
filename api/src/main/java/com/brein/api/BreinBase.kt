@@ -1,6 +1,7 @@
 package com.brein.api
 
 import com.brein.domain.BreinConfig
+import com.brein.domain.BreinIpInfo
 import com.brein.domain.BreinUser
 import com.brein.util.BreinUtil
 import com.google.gson.Gson
@@ -12,7 +13,7 @@ abstract class BreinBase : ISecretStrategy {
 
     private var config: BreinConfig? = null
 
-    fun getConfig():BreinConfig? {
+    fun getConfig(): BreinConfig? {
         return this.config
     }
 
@@ -156,8 +157,8 @@ abstract class BreinBase : ISecretStrategy {
      *
      * @return this
      */
-    fun setClientIpAddress(ipAddress: String): BreinBase {
-        addToBaseMap(IP_ADDRESS, ipAddress)
+    fun setClientIpAddress(ipAddress: String?): BreinBase {
+        ipAddress?.let { addToBaseMap(IP_ADDRESS, ipAddress) }
         return this
     }
 
@@ -207,6 +208,8 @@ abstract class BreinBase : ISecretStrategy {
             requestData[SIGNATURE_FIELD] = createSignature(config)
             requestData[SIGNATURE_TYPE_FIELD] = "HmacSHA256"
         }
+
+        setClientIpAddress(BreinIpInfo.externalIp)
 
         return Gson().toJson(requestData)
     }
