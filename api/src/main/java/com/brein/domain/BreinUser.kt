@@ -40,7 +40,7 @@ class BreinUser(private var email: String?) {
         EMAIL
     }
 
-    /*
+    /**
      * contains further fields in the user section
      */
     private val userMap = mutableMapOf<String, Any?>()
@@ -561,7 +561,6 @@ class BreinUser(private var email: String?) {
 
         // check or create userAgent
         generateUserAgent()
-
 
         // add the additional-data, if there is any
         if (this.additionalMap.isNotEmpty()) {
