@@ -14,7 +14,6 @@ import org.junit.*
  * This test cases shows how to use the  activity
  */
 
-
 class TestActivity {
     /**
      * Contains the Breinify User
@@ -37,7 +36,6 @@ class TestActivity {
             println("within RestResult")
             println("Data is: $data")
         }
-
     }
 
     private val restCallback: ICallback<BreinResult?> = RestResult()
@@ -176,7 +174,6 @@ class TestActivity {
         private const val VALID_API_KEY = "41B2-F48C-156A-409A-B465-317F-A0B4-E0E8"
         private const val VALID_SIGNATURE_API_KEY = "CA8A-8D28-3408-45A8-8E20-8474-06C0-8548"
         private const val VALID_SECRET = "lmcoj4k27hbbszzyiqamhg=="
-
 
         @AfterClass
         fun tearDown() {

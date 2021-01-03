@@ -30,7 +30,6 @@ class TestApi {
      * Correct configuration
      */
     val breinConfig = BreinConfig(VALID_SECRET_API_KEY, VALID_SECRET)
-//    val breinConfig = BreinConfig(VALID_API_KEY, VALID_SECRET)
 
     /**
      * Catches the result from the rest call
@@ -144,7 +143,6 @@ class TestApi {
      */
     @Test
     fun testWithoutSecret() {
-//        val config = BreinConfig(VALID_SECRET_API_KEY, null)
         val config = BreinConfig(VALID_API_KEY, null)
         Breinify.setConfig(config)
     }
@@ -153,7 +151,7 @@ class TestApi {
      * Testcase with null rest engine. This will throw an
      * exception.
      */
-    // @Test (expected = BreinException.class)
+    @Test
     fun testLoginWithDefaultRestEngine() {
         val description = "Login-Description"
 

@@ -71,12 +71,12 @@ class TestDomain {
 
         // set right values
         breinUser.setDateOfBirthValue(10, 2, 2020) // this is correct date
-        Assert.assertFalse(breinUser.getDateOfBirth()!!.isEmpty())
+        Assert.assertFalse(breinUser.getDateOfBirth().isEmpty())
 
         // set wrong day
         breinUser.resetDateOfBirth()
         breinUser.setDateOfBirthValue(0,0,0) // this is wrong date
-        Assert.assertTrue(breinUser.getDateOfBirth()!!.isEmpty()!!)
+        Assert.assertTrue(breinUser.getDateOfBirth().isEmpty()!!)
     }
 
     /**

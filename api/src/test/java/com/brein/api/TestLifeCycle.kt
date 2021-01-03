@@ -5,9 +5,7 @@ import com.brein.domain.BreinCategoryType
 import org.junit.AfterClass
 import org.junit.Test
 
-
 class TestLifeCycle {
-
 
     /**
      * testcase how to use the activity api
@@ -90,13 +88,11 @@ class TestLifeCycle {
         Breinify.shutdown()
     }
 
-
     @Test
     fun testFullAndroidLifeCycle() {
 
         // 1. configure API
         Breinify.configure(VALID_SIGNATURE_API_KEY, VALID_SIGNATURE)
-
 
     }
 
@@ -109,13 +105,14 @@ class TestLifeCycle {
         breinActivity.setActivityType(BreinActivityType.PAGE_VISIT)
 
         // add activity dic
-        val tagsDic = HashMap<String, Any?>()
+        val tagsDic = HashMap<String, Any>()
         tagsDic["pageId"] = "packages"
         breinActivity.setTagsDic(tagsDic)
 
         Breinify.sendActivity(breinActivity)
     }
 
+    @Suppress("UNCHECKED_CAST")
     @Test
     fun testCheckOut() {
 
@@ -126,16 +123,15 @@ class TestLifeCycle {
             "balancePromotional" to 0,
             "balanceCampaign" to 0,
             "pageId" to "otherBalance"
-        ) as HashMap<String, Any?>
+        ) as HashMap<String, Any>
 
         val breinActivity = Breinify.getBreinActivity()
         breinActivity.setTagsDic(tagsDic)
         breinActivity.setActivityType(BreinActivityType.PAGE_VISIT)
         Breinify.sendActivity(breinActivity)
-
-
     }
 
+    @Suppress("UNCHECKED_CAST")
     @Test
     fun testActivity2() {
         val tagsDic = mapOf(
@@ -146,7 +142,7 @@ class TestLifeCycle {
             "available" to 2.904,
             "other" to 0,
             "pageId" to "consumptionDetails"
-        ) as HashMap<String, Any?>
+        ) as HashMap<String, Any>
 
         val breinActivity = Breinify.getBreinActivity()
         breinActivity.setTagsDic(tagsDic)
