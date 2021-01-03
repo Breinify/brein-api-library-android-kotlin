@@ -22,16 +22,10 @@ class BreinConfig {
      */
     var apiKey: String = ""
 
-    /*
+    /**
      * Default REST client
      */
-
     private var restEngineType = BreinEngineType.HTTP_URL_CONNECTION_ENGINE
-    /**
-     * retrieves the activity endpoint
-     *
-     * @return String endpoint
-     */
 
     /**
      * contains the activity endpoint (default = ACTIVITY_ENDPOINT)
