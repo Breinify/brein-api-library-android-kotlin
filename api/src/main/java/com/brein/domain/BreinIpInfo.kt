@@ -41,6 +41,9 @@ object BreinIpInfo {
         refreshData()
     }
 
+    fun detect() {
+    }
+
     private fun refreshData() = Thread {
         val ipJson = invokeRequest()
         if (ipJson != null) {
