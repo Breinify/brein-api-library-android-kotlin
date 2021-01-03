@@ -5,12 +5,9 @@ import com.brein.api.BreinException
 import com.brein.api.Breinify
 import com.brein.domain.BreinConfig
 import com.brein.domain.BreinIpInfo
-import java.io.IOException
-import java.net.HttpURLConnection
-import java.net.URL
 import java.security.InvalidKeyException
 import java.security.SecureRandom
-import java.util.*
+import java.util.Random
 
 /**
  * Utility class
@@ -91,7 +88,6 @@ object BreinUtil {
         }
     }
 
-
     /**
      * Validates if the URL is correct.
      *
@@ -100,26 +96,6 @@ object BreinUtil {
      */
     fun isUrlValid(url: String?): Boolean? {
         return url?.isNotEmpty()
-    }
-
-    fun isUrlValidNotWorkingOnAndroid(url: String?): Boolean {
-        return try {
-            val u = URL(url)
-            val huc = u.openConnection() as HttpURLConnection
-            huc.requestMethod = "POST"
-            huc.setRequestProperty(
-                "User-Agent",
-                "Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US; rv:1.9.1.2) Gecko/20090729 Firefox/3.5.2 (.NET CLR 3.5.30729)"
-            )
-
-            // Todo: this has caused issues on Android
-            huc.connect()
-            true
-        } catch (e: IOException) {
-
-            // this must be an error case!
-            false
-        }
     }
 
     /**
@@ -195,9 +171,6 @@ object BreinUtil {
         // validation of activity and config
         validateBreinBase(breinBase)
         validateConfig(breinBase)
-
-        // validate URL, might throw an exception...
-        // validateUrl(getFullyQualifiedUrl(breinBase));
     }
 
     /**
@@ -212,45 +185,10 @@ object BreinUtil {
         return i
     }
 
-    /*
-    public static String getIPAddress(boolean useIPv4) {
-        try {
-            List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
-            for (NetworkInterface intf : interfaces) {
-                List<InetAddress> addrs = Collections.list(intf.getInetAddresses());
-                for (InetAddress addr : addrs) {
-                    if (!addr.isLoopbackAddress()) {
-                        String sAddr = addr.getHostAddress();
-                        //boolean isIPv4 = InetAddressUtils.isIPv4Address(sAddr);
-                        boolean isIPv4 = sAddr.indexOf(':') < 0;
-
-                        if (useIPv4) {
-                            if (isIPv4)
-                                return sAddr;
-                        } else {
-                            if (!isIPv4) {
-                                int delim = sAddr.indexOf('%'); // drop ip6 zone suffix
-                                return delim < 0 ? sAddr.toUpperCase() : sAddr.substring(0, delim).toUpperCase();
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (final Exception ex) {
-            // for now eat exceptions
-        }
-        return "";
-    }
-    */
     fun detectIpAddress(): String {
         return BreinIpInfo.externalIp.toString()
     }
 
     init {
-//        try {
-//            mac = Mac.getInstance("HmacSHA256")
-//        } catch (e: NoSuchAlgorithmException) {
-//            throw IllegalStateException("Unable to find needed algorithm!", e)
-//        }
     }
 }
