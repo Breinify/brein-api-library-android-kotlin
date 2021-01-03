@@ -11,6 +11,7 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.util.Log
 import androidx.core.app.ActivityCompat
+import com.brein.domain.BreinIpInfo
 import com.brein.util.BreinUtil
 import java.util.*
 
@@ -108,7 +109,6 @@ object BreinifyManager {
         secret: String?,
         backgroundInterval: Long
     ) {
-
         this.application = application
         this.mainActivity = mainActivity
         this.apiKey = apiKey
@@ -117,8 +117,7 @@ object BreinifyManager {
         initLifecycleAndEngine(backgroundInterval)
 
         // invoke ipAddress detection now
-
-        // BreinIpInfo.instance
+        BreinIpInfo.detect()
     }
 
     /**
@@ -147,9 +146,6 @@ object BreinifyManager {
 
         // configure the session
         configureSession()
-
-        // send the user identification to the backend
-        // sendIdentifyInfo()
     }
 
     /**
