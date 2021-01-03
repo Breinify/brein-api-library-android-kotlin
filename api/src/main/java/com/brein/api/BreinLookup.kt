@@ -51,7 +51,7 @@ class BreinLookup : BreinBase(), ISecretStrategy, IAsyncExecutable<BreinResult?>
     }
 
     override fun prepareRequestData(config: BreinConfig?, requestData: MutableMap<String, Any?>) {
-        // todo
+        // nothing additionally to be added
     }
 
     /**
