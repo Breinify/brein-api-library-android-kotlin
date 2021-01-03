@@ -14,15 +14,18 @@ import com.brein.util.BreinUtil.containsValue
  */
 class BreinActivity : BreinBase(), ISecretStrategy, IAsyncExecutable<BreinResult?> {
 
+    // todo
+    // change tagsMap to String, Any
+
     /**
      * contains the tags
      */
-    private var tagsMap = mutableMapOf<String, Any?>()
+    private var tagsMap = mutableMapOf<String, Any>()
 
     /**
      * contains the fields that are part of the activity map
      */
-    private var activityMap = mutableMapOf<String, Any?>()
+    private var activityMap = mutableMapOf<String, Any>()
 
     /**
      * returns activity type
@@ -199,17 +202,13 @@ class BreinActivity : BreinBase(), ISecretStrategy, IAsyncExecutable<BreinResult
         return this
     }
 
-    fun setTagsDic(map: HashMap<String, Any?>): BreinActivity {
+    fun setTagsDic(map: HashMap<String, Any>): BreinActivity {
         this.tagsMap = map
         return this
     }
 
-    fun getTagsMap(): MutableMap<String, Any?> {
+    fun getTagsMap(): MutableMap<String, Any> {
         return tagsMap
-    }
-
-    operator fun <T> get(key: String): Any? {
-        return this.activityMap[key]
     }
 
     override fun execute(callback: ICallback<BreinResult?>?) {
