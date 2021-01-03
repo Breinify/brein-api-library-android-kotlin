@@ -14,8 +14,8 @@ class Breinify {
     companion object {
         const val version: String = BreinConfig.VERSION
 
-        var lastConfig: BreinConfig? = null
-        var lastBrein: Brein? = null
+        private var lastConfig: BreinConfig? = null
+        private var lastBrein: Brein? = null
         private val breinUser = BreinUser()
         private val breinActivity = BreinActivity()
         private val breinLookup = BreinLookup()
