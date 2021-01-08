@@ -26,7 +26,7 @@ class HttpUrlRestEngine : IRestEngine {
 
         val fullUrl: String = BreinUtil.getFullyQualifiedUrl(breinActivity as BreinBase)
         val requestBody: String = BreinUtil.getRequestBody(breinActivity)
-        Log.d(TAG, "Request is: $requestBody")
+        Log.d(TAG, "Breinify doRequest is: $requestBody")
 
         val connectionTimeout = Breinify.config?.connectionTimeout as Int
         val readTimeout = Breinify.config?.socketTimeout as Int
@@ -41,16 +41,16 @@ class HttpUrlRestEngine : IRestEngine {
                 conn.requestMethod = POST_METHOD
                 conn.doInput = true
                 conn.doOutput = true
-                Log.d(TAG, "Outputstream is: " + conn.outputStream)
+                Log.d(TAG, "Breinify outputstream is: " + conn.outputStream)
 
                 val out = PrintWriter(conn.outputStream)
                 out.print(requestBody)
                 out.close()
                 conn.connect()
                 val response = conn.responseCode
-                Log.d(TAG, "response is: $response")
+                Log.d(TAG, "Breinify response is: $response")
             } catch (e: Exception) {
-                Log.d(TAG, "HttpUrlRestEngine exception is: $e")
+                Log.d(TAG, "Breinify HttpURLConnection exception is: $e")
             }
         }.start()
     }
@@ -81,7 +81,7 @@ class HttpUrlRestEngine : IRestEngine {
                 conn.requestMethod = POST_METHOD
                 conn.doInput = true
                 conn.doOutput = true
-                Log.d(TAG, "Outputstream is: " + conn.outputStream)
+                Log.d(TAG, "Breinify outputstream is: " + conn.outputStream)
 
                 val out = PrintWriter(conn.outputStream)
                 out.print(requestBody)
@@ -89,6 +89,7 @@ class HttpUrlRestEngine : IRestEngine {
                 conn.connect()
 
                 val response = conn.responseCode
+                Log.d(TAG, "Breinify response is: $response")
                 if (response == HttpURLConnection.HTTP_OK) {
                     val sb = StringBuilder()
                     val mInputStream = conn.inputStream
@@ -96,11 +97,9 @@ class HttpUrlRestEngine : IRestEngine {
                     while (mInputStream.read().also { i = it } != -1) {
                         sb.append(i.toChar())
                     }
-                } else {
-                    Log.d(TAG, "doLookup - exception")
                 }
             } catch (e: Exception) {
-                Log.d(TAG, "doLookup - exception")
+                Log.d(TAG, "Breinify doLookup - exception is: $e")
             }
         }.start()
         return null
@@ -110,6 +109,7 @@ class HttpUrlRestEngine : IRestEngine {
      * stops possible functionality (e.g. threads)
      */
     override fun terminate() {}
+
     override fun getRestEngine(engine: BreinEngineType?): IRestEngine? {
         return null
     }
@@ -133,7 +133,7 @@ class HttpUrlRestEngine : IRestEngine {
         BreinUtil.validate(data)
         val fullUrl: String = BreinUtil.getFullyQualifiedUrl(data!!)
         val requestBody: String = BreinUtil.getRequestBody(data)
-        Log.d(TAG, "InvokeRequest - request is:  $requestBody")
+        Log.d(TAG, "Breinify invokeRequest - request is:  $requestBody")
 
         val connectionTimeout = Breinify.config?.connectionTimeout
         val readTimeout = Breinify.config?.socketTimeout
@@ -163,9 +163,9 @@ class HttpUrlRestEngine : IRestEngine {
                 conn.outputStream.flush()
 
                 val response = conn.responseCode
-                Log.d(TAG, "InvokeRequest - response is:  $response")
+                Log.d(TAG, "Breinify invokeRequest - response is:  $response")
 
-                var breinResponse: BreinResult? = null
+                val breinResponse: BreinResult?
                 if (response == HttpURLConnection.HTTP_OK) {
                     val jsonResponse = StringBuilder()
                     val mInputStream = conn.inputStream
@@ -191,8 +191,7 @@ class HttpUrlRestEngine : IRestEngine {
                 callback?.callback(breinResponse)
 
             } catch (e: Exception) {
-                Log.d(TAG, "HttpUrlRestEngine exception is: $e")
-                // throw new BreinException("REST rest call exception");
+                Log.d(TAG, "Breinify HttpURLConnection exception is: $e")
             }
         }.start()
     }
