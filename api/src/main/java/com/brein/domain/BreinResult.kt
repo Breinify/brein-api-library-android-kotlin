@@ -51,21 +51,4 @@ class BreinResult {
         return this.map[key]
     }
 
-    /*
-    fun hasValue(key: String): Boolean {
-        return map != null && map.containsKey(key)
-    }
-
-    fun <T> getNestedValue(vararg keys: String?): T {
-        return BreinMapUtil.getNestedValue(map, keys)!!
-    }
-
-    fun hasNestedValue(vararg keys: String?): Boolean {
-        return BreinMapUtil.hasNestedValue(map, *keys)
-    }
-
-    val message: String? = null
-
-     */
-
 }
