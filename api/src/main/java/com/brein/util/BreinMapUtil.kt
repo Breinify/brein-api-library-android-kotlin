@@ -18,7 +18,7 @@ object BreinMapUtil {
         return copy
     }
 
-    fun copyList(source: List<Any?>?): List<Any?> {
+    private fun copyList(source: List<Any?>?): List<Any?> {
         if (source == null) {
             return emptyList<Any>()
         }
