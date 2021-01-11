@@ -44,8 +44,6 @@ class TestStress {
         private const val VALID_SECRET_API_KEY = "CA8A-8D28-3408-45A8-8E20-8474-06C0-8548"
         private const val VALID_SECRET = "lmcoj4k27hbbszzyiqamhg=="
 
-
-
         @AfterClass
         fun tearDown() {
 
