@@ -110,7 +110,6 @@ class TestHttpUrlConnectionApi {
     // @Test(expected= BreinException.class)
     fun testLoginWithNoRestEngine() {
         val description = "Login-Description"
-        val sign = false
         var config: BreinConfig? = null
 
         try {
