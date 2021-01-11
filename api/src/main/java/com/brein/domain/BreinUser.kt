@@ -407,15 +407,20 @@ class BreinUser(private var email: String?) {
             val wifiManager: WifiManager = applicationContext
                 .applicationContext
                 .getSystemService(WIFI_SERVICE) as WifiManager
+
             val wifiInfo: WifiInfo = wifiManager.connectionInfo
+
+            var ssid = ""
+            var bssid = ""
+            var ip = 0
+
             // contains double quotes
-            val ssid: String = wifiInfo.ssid.replace("\"", "")
-            val bssid: String = wifiInfo.bssid
-            // final boolean hiddenSsid = wifiInfo.getHiddenSSID();
-            var ip: Int = wifiInfo.ipAddress
+            wifiInfo.ssid?.let { ssid = wifiInfo.ssid.replace("\"", "") }
+            wifiInfo.bssid?.let { bssid = wifiInfo.bssid }
+            wifiInfo.ipAddress.let { ip = wifiInfo.ipAddress }
 
             // Convert little-endian to big-endianif needed
-            if (ByteOrder.nativeOrder().equals(ByteOrder.LITTLE_ENDIAN)) {
+            if (ByteOrder.nativeOrder() == ByteOrder.LITTLE_ENDIAN) {
                 ip = Integer.reverseBytes(ip)
             }
 
@@ -434,8 +439,7 @@ class BreinUser(private var email: String?) {
             }
 
             val linkSpeed: Int = wifiInfo.linkSpeed
-//            val macAddress: String = wifiInfo.macAddress
-            val macAddress: String = "" // AdvertisingIdClient.Info.getId()
+            val macAddress = ""
             val rssi: Int = wifiInfo.rssi
             val networkId: Int = wifiInfo.networkId
             val state: String = wifiInfo.supplicantState.toString()
