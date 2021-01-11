@@ -480,7 +480,7 @@ class TestApi {
             .setTimezone("America/Los_Angeles")
             .setLocalDateTime("Sun Jul 2 2017 18:15:48 GMT-0800 (PST)")
 
-        val breinTemporalData: BreinTemporalData = BreinTemporalData()
+        val breinTemporalData = BreinTemporalData()
         breinTemporalData.setUser(breinUser)
 
         breinTemporalData.setLocation("san francisco")
@@ -498,7 +498,7 @@ class TestApi {
         breinUser.setSessionId("1133AADDDEEE")
 
         val numberOfRecommendations = 3
-        val recommendation: BreinRecommendation = BreinRecommendation()
+        val recommendation = BreinRecommendation()
         recommendation.setUser(breinUser)
         recommendation.setNumberOfRecommendations(numberOfRecommendations)
         Breinify.recommendation(recommendation, restCallback)
@@ -510,7 +510,7 @@ class TestApi {
         Breinify.setConfig(breinConfig)
 
         val breinUser = BreinUser()
-        val breinActivity: BreinActivity = BreinActivity()
+        val breinActivity = BreinActivity()
 
         breinActivity.setUser(breinUser)
         breinActivity.setActivityType("readArticle")
