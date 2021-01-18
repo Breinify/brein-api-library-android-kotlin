@@ -157,11 +157,11 @@ class BreinActivity : BreinBase(), ISecretStrategy, IAsyncExecutable<BreinResult
         execute(callback)
     }
 
-
     /**
      * initializes the values of this instance
      */
     fun init() {
+        this.clear()
     }
 
     private fun getCategoryOrDefault(config: BreinConfig): String {
