@@ -126,7 +126,7 @@ abstract class BreinBase : ISecretStrategy {
      *
      * @return unix timestamp
      */
-    var unixTimestamp: Long = -1
+    var unixTimestamp: Long = 0
 
     /**
      * Sets the timestamp.
@@ -135,13 +135,13 @@ abstract class BreinBase : ISecretStrategy {
      *
      * @return this
      */
-    fun setUnixTimestamp(unixTimestamp: Long): BreinBase {
+    protected fun setUnixTimestamp(unixTimestamp: Long): BreinBase {
         this.unixTimestamp = unixTimestamp
         addToBaseMap(UNIX_TIMESTAMP_FIELD, unixTimestamp)
         return this
     }
 
-    protected fun addToBaseMap(key: String, value: Any?): BreinBase {
+    private fun addToBaseMap(key: String, value: Any?): BreinBase {
         this.baseMap[key] = value
         return this
     }
@@ -160,6 +160,11 @@ abstract class BreinBase : ISecretStrategy {
     fun setClientIpAddress(ipAddress: String?): BreinBase {
         ipAddress?.let { addToBaseMap(IP_ADDRESS, ipAddress) }
         return this
+    }
+
+    fun clearBase() {
+        this.baseMap.clear()
+        this.unixTimestamp = 0
     }
 
     /**
@@ -190,11 +195,9 @@ abstract class BreinBase : ISecretStrategy {
             }
         }
 
-        var timestamp = this.unixTimestamp
-        if (timestamp == -1L) {
-            timestamp = System.currentTimeMillis() / 1000L
-            setUnixTimestamp(timestamp)
-        }
+        // set current unixtimestamp
+        val timestamp = System.currentTimeMillis() / 1000L
+        setUnixTimestamp(timestamp)
         requestData[UNIX_TIMESTAMP_FIELD] = timestamp
 
         // check if we have user data
@@ -212,11 +215,6 @@ abstract class BreinBase : ISecretStrategy {
         setClientIpAddress(BreinIpInfo.externalIp)
 
         return Gson().toJson(requestData)
-    }
-
-    override fun toString(): String {
-        val config = BreinConfig(null)
-        return prepareRequestData(config)
     }
 
     companion object {

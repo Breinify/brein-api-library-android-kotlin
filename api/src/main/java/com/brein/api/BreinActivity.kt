@@ -14,9 +14,6 @@ import com.brein.util.BreinUtil.containsValue
  */
 class BreinActivity : BreinBase(), ISecretStrategy, IAsyncExecutable<BreinResult?> {
 
-    // todo
-    // change tagsMap to String, Any
-
     /**
      * contains the tags
      */
@@ -33,7 +30,7 @@ class BreinActivity : BreinBase(), ISecretStrategy, IAsyncExecutable<BreinResult
      * @return activity type
      */
     private var activityType = ""
-    fun setActivityType(s: String) : BreinActivity {
+    fun setActivityType(s: String): BreinActivity {
         this.activityType = s
         setToActivityMap("type", s)
         return this
@@ -52,10 +49,12 @@ class BreinActivity : BreinBase(), ISecretStrategy, IAsyncExecutable<BreinResult
     private var category: String? = ""
 
     fun setCategory(category: String?): BreinActivity {
-        if (category != null) {
+
+        category?.let {
             this.category = category
             setToActivityMap("category", category)
         }
+
         return this
     }
 
@@ -70,7 +69,7 @@ class BreinActivity : BreinBase(), ISecretStrategy, IAsyncExecutable<BreinResult
             return config?.defaultCategory
         }
 
-       return this.category
+        return this.category
     }
 
     /**
@@ -93,6 +92,10 @@ class BreinActivity : BreinBase(), ISecretStrategy, IAsyncExecutable<BreinResult
         return this
     }
 
+    fun getDescription(): String {
+        return this.description
+    }
+
     /**
      * retrieves the configured activity endpoint (e.g. \activitiy)
      *
@@ -108,6 +111,18 @@ class BreinActivity : BreinBase(), ISecretStrategy, IAsyncExecutable<BreinResult
     }
 
     /**
+     * Clear the content of the instance
+     */
+    fun clear() {
+        clearBase()
+        this.tagsMap.clear()
+        this.activityMap.clear()
+        this.activityType = ""
+        this.category = ""
+        this.description = ""
+    }
+
+    /**
      * Sends an activity to the Breinify server.
      *
      * @param breinUser         the user-information
@@ -120,7 +135,8 @@ class BreinActivity : BreinBase(), ISecretStrategy, IAsyncExecutable<BreinResult
         breinActivityType: String?,
         breinCategoryType: String?,
         description: String?,
-        callback: ICallback<BreinResult?>?) {
+        callback: ICallback<BreinResult?>?
+    ) {
 
         /*
          * set the values for further usage
@@ -187,12 +203,8 @@ class BreinActivity : BreinBase(), ISecretStrategy, IAsyncExecutable<BreinResult
      *
      * @return full signature
      */
-    override fun createSignature(config: BreinConfig) : String {
-        val breinActivityType = this.activityType
-        val unixTimestamp = this.unixTimestamp
-
-        val message = String.format("%s%d%d", breinActivityType, unixTimestamp, 1)
-
+    override fun createSignature(config: BreinConfig): String {
+        val message = String.format("%s%d%d", this.activityType, this.unixTimestamp, 1)
         val secret = config.secret!!
         return BreinUtil.generateSignature(message, secret)
     }
