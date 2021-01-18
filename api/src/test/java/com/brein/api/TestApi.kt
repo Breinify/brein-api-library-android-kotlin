@@ -353,7 +353,6 @@ class TestApi {
         val breinActivity: BreinActivity = Breinify.getBreinActivity()
 
         // just in case you want to set the unixTimestamp
-        breinActivity.setUnixTimestamp(System.currentTimeMillis() / 1000L)
         breinActivity.setUser(breinUser)
         breinActivity.setCategory(BreinCategoryType.APPAREL)
         breinActivity.setActivityType(BreinActivityType.PAGE_VISIT)
@@ -366,6 +365,8 @@ class TestApi {
         breinActivity.setToTagMap("sortid", "1.0")
 
         Breinify.activity(breinActivity, restCallback)
+
+        breinActivity.init()
     }
 
     /**
