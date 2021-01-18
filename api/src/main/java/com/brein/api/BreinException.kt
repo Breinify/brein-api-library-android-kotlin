@@ -37,6 +37,6 @@ class BreinException : RuntimeException {
         const val USER_NOT_SET = "User not set."
         const val ACTIVITY_TYPE_NOT_SET = "ActivityType not set."
         const val CATEGORY_TYPE_NOT_SET = "CategoryType not set."
-        private const val EXCEPTION_IS = "Exception is:"
+        private const val EXCEPTION_IS = "Breinify exception is:"
     }
 }
