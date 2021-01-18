@@ -38,7 +38,6 @@ class Breinify {
         }
 
         fun configure(apiKey: String?, secret: String?) {
-
             if (apiKey.isNullOrEmpty()) {
                 throw BreinException(BreinException.API_KEY_NOT_SET)
             }
