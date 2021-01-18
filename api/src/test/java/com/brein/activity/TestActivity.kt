@@ -162,7 +162,7 @@ class TestActivity {
         val description = "Other-Description"
         breinActivity.activity(
             breinUser,
-            BreinActivityType.OTHER,
+            BreinActivityType.PAGE_VISIT,
             breinCategory, description, restCallback
         )
     }
