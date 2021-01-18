@@ -38,7 +38,7 @@ class BreinNotficationService : FirebaseMessagingService() {
     }
 
     override fun onDeletedMessages() {
-        Log.d(TAG, "onDeleteMessage invoked")
+        Log.d(TAG, "Breinify - onDeleteMessage invoked")
     }
 
     /**
@@ -49,7 +49,7 @@ class BreinNotficationService : FirebaseMessagingService() {
     private fun sendNotification(remoteMessage: RemoteMessage?) {
 
         if (remoteMessage == null) {
-            Log.d(TAG, "remote notification: message not set!  -> no notification shown.")
+            Log.d(TAG, "Breinify - remote notification: message not set!  -> no notification shown.")
             return
         }
 
@@ -63,6 +63,7 @@ class BreinNotficationService : FirebaseMessagingService() {
             this, 0 /* Request code */, intent,
             PendingIntent.FLAG_ONE_SHOT
         )
+
 
         // todo check notification
         val defaultSoundUri: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)

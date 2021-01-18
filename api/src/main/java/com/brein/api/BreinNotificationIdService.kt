@@ -17,7 +17,7 @@ class BreinNotificationIdService : FirebaseMessagingService() {
      * @param token The new token.
      */
     private fun sendRegistrationToServer(token: String) {
-        Log.d(TAG, "Refreshed token is: $token")
+        Log.d(TAG, "Breinify - refreshed token is: $token")
         Breinify.configureDeviceToken(token)
     }
 

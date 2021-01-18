@@ -15,7 +15,7 @@ import android.util.Log
 class BreinPushNotificationReceiver : BroadcastReceiver()   {
 
     override fun onReceive(context: Context?, intent: Intent) {
-        Log.d(TAG, "onReceive invoked")
+        Log.d(TAG, "Breinify - onReceive invoked")
         if (intent.getExtras() != null) {
             for (key in intent.getExtras()!!.keySet()) {
                 val value: Any? = intent.getExtras()!!.get(key)
