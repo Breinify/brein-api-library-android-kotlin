@@ -55,10 +55,8 @@ class TestLifeCycle {
         breinActivity.setActivityType(BreinActivityType.LOGIN)
             .setDescription("This is a good description")
             .setCategory(BreinCategoryType.HOME)
-            .setUnixTimestamp(1606988396)
 
         Breinify.sendActivity(breinActivity)
-
         Breinify.shutdown()
     }
 
@@ -133,7 +131,7 @@ class TestLifeCycle {
 
     @Suppress("UNCHECKED_CAST")
     @Test
-    fun testActivity2() {
+    fun testAnotherPageVisitActivity() {
         val tagsDic = mapOf(
             "balance" to 6.902,
             "recharge" to 0,
@@ -149,8 +147,28 @@ class TestLifeCycle {
         breinActivity.setActivityType(BreinActivityType.PAGE_VISIT)
 
         Breinify.sendActivity(breinActivity)
+    }
 
+    @Test
+    fun testCoupleOfPageVisitActitvityCalls() {
+        // 1. configure API
+        Breinify.configure(VALID_SIGNATURE_API_KEY, VALID_SIGNATURE)
 
+        val breinActivity = Breinify.getBreinActivity()
+        breinActivity.setActivityType(BreinActivityType.PAGE_VISIT)
+
+        // add activity dic
+        val tagsDic = HashMap<String, Any>()
+        tagsDic["pageId"] = "packages"
+        breinActivity.setTagsDic(tagsDic)
+
+        Breinify.sendActivity(breinActivity)
+
+        // sleep 2 seconds
+        Thread.sleep(2_000)
+
+        // send again
+        Breinify.sendActivity(breinActivity)
     }
 
 
