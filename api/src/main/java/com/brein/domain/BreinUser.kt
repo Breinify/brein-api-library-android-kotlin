@@ -7,6 +7,7 @@ import android.content.Context.WIFI_SERVICE
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
+import android.net.wifi.SupplicantState
 import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
 import android.util.Log
@@ -410,50 +411,53 @@ class BreinUser(private var email: String?) {
 
             val wifiInfo: WifiInfo = wifiManager.connectionInfo
 
-            var ssid = ""
-            var bssid = ""
-            var ip = 0
+            val wifiInfoStatus = wifiInfo.supplicantState
+            if (wifiInfoStatus == SupplicantState.COMPLETED) {
+                var ssid = ""
+                var bssid = ""
+                var ip = 0
 
-            // contains double quotes
-            wifiInfo.ssid?.let { ssid = wifiInfo.ssid.replace("\"", "") }
-            wifiInfo.bssid?.let { bssid = wifiInfo.bssid }
-            wifiInfo.ipAddress.let { ip = wifiInfo.ipAddress }
+                // contains double quotes
+                wifiInfo.ssid?.let { ssid = wifiInfo.ssid.replace("\"", "") }
+                wifiInfo.bssid?.let { bssid = wifiInfo.bssid }
+                wifiInfo.ipAddress.let { ip = wifiInfo.ipAddress }
 
-            // Convert little-endian to big-endianif needed
-            if (ByteOrder.nativeOrder() == ByteOrder.LITTLE_ENDIAN) {
-                ip = Integer.reverseBytes(ip)
-            }
-
-            val detectedIpAddress = try {
-                val ipByteArray: ByteArray = BigInteger.valueOf(ip.toLong()).toByteArray()
-                InetAddress.getByAddress(ipByteArray).hostAddress
-            } catch (ex: UnknownHostException) {
-                Log.e("WIFIIP", "Unable to get host address.")
-                null
-            }
-
-            if (detectedIpAddress != null) {
-                if (detectedIpAddress.isNotEmpty()){
-                    setIpAddress(detectedIpAddress)
+                // Convert little-endian to big-endianif needed
+                if (ByteOrder.nativeOrder() == ByteOrder.LITTLE_ENDIAN) {
+                    ip = Integer.reverseBytes(ip)
                 }
+
+                val detectedIpAddress = try {
+                    val ipByteArray: ByteArray = BigInteger.valueOf(ip.toLong()).toByteArray()
+                    InetAddress.getByAddress(ipByteArray).hostAddress
+                } catch (ex: UnknownHostException) {
+                    Log.e("WIFIIP", "Breinify - unable to get host address.")
+                    null
+                }
+
+                if (detectedIpAddress != null) {
+                    if (detectedIpAddress.isNotEmpty()) {
+                        setIpAddress(detectedIpAddress)
+                    }
+                }
+
+                val linkSpeed: Int = wifiInfo.linkSpeed
+                val macAddress = ""
+                val rssi: Int = wifiInfo.rssi
+                val networkId: Int = wifiInfo.networkId
+                val state: String = wifiInfo.supplicantState.toString()
+                val networkData = JsonObject()
+                networkData.addProperty("ssid", ssid)
+                networkData.addProperty("bssid", bssid)
+                networkData.addProperty("ipAddress", this.ipAddress)
+                networkData.addProperty("linkSpeed", linkSpeed)
+                networkData.addProperty("macAddress", macAddress)
+                networkData.addProperty("rssi", rssi)
+                networkData.addProperty("networkId", networkId)
+                networkData.addProperty("state", state)
+
+                this.additionalMap["network"] = networkData
             }
-
-            val linkSpeed: Int = wifiInfo.linkSpeed
-            val macAddress = ""
-            val rssi: Int = wifiInfo.rssi
-            val networkId: Int = wifiInfo.networkId
-            val state: String = wifiInfo.supplicantState.toString()
-            val networkData = JsonObject()
-            networkData.addProperty("ssid", ssid)
-            networkData.addProperty("bssid", bssid)
-            networkData.addProperty("ipAddress", this.ipAddress)
-            networkData.addProperty("linkSpeed", linkSpeed)
-            networkData.addProperty("macAddress", macAddress)
-            networkData.addProperty("rssi", rssi)
-            networkData.addProperty("networkId", networkId)
-            networkData.addProperty("state", state)
-
-            this.additionalMap["network"] = networkData
         }
     }
 
