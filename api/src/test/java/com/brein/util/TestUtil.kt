@@ -41,12 +41,9 @@ class TestUtil {
    @Test
    fun testActivitySecret() {
        val expected = "WbHv67OJ5LPSCJu7kfh9QOX8b7wkuLiTmE6OTyPqT0g="
-       val timestamp: Long = 1487235949
        val activityType = "paginaUno"
-
        val breinActivity = BreinActivity()
 
-       breinActivity.setUnixTimestamp(timestamp)
        breinActivity.setActivityType(activityType)
 
        try {
