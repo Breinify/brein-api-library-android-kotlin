@@ -163,6 +163,19 @@ class TestDomain {
         println("Current LocalTimeZone is: $strDate")
     }
 
+    @Test
+    fun testClear() {
+        val activity = Breinify.getBreinActivity()
+        activity.setDescription("Sample Description")
+        val descBefore = activity.getDescription()
+        Assert.assertTrue(descBefore.isNotEmpty())
+
+        activity.init()
+        val descAfter = activity.getDescription()
+
+        Assert.assertTrue(descAfter.isEmpty())
+    }
+
     companion object {
         private const val VALID_API_KEY = "41B2-F48C-156A-409A-B465-317F-A0B4-E0E8"
         private const val VALID_SECRET_API_KEY = "CA8A-8D28-3408-45A8-8E20-8474-06C0-8548"
