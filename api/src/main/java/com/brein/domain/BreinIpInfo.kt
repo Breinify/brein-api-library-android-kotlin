@@ -55,7 +55,7 @@ object BreinIpInfo {
         try {
             return URL("http://www.ip-api.com/json").readText()
         } catch (e: Exception) {
-            Log.e("BreinIpInfo", "Exception occurred", e)
+            Log.e("BreinIpInfo", "Breinify - exception occurred calling invokeRequest", e)
         }
         return null
     }
