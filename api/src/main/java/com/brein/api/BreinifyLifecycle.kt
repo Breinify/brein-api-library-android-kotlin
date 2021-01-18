@@ -14,11 +14,11 @@ class BreinifyLifecycle : Application.ActivityLifecycleCallbacks {
     }
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-        Log.d(TAG, "onActivityCreated invoked")
+        Log.d(TAG, "Breinfy - onActivityCreated invoked")
     }
 
     override fun onActivityStarted(activity: Activity) {
-        Log.d(TAG, "onActivityStarted invoked")
+        Log.d(TAG, "Breinify - onActivityStarted invoked")
         if (numStarted == 0) {
             userEnteredTime = System.currentTimeMillis()
 
@@ -29,32 +29,30 @@ class BreinifyLifecycle : Application.ActivityLifecycleCallbacks {
     }
 
     override fun onActivityResumed(activity: Activity) {
-        Log.d(TAG, "onActivityResumed invoked")
+        Log.d(TAG, "Breinify - onActivityResumed invoked")
     }
 
     override fun onActivityPaused(activity: Activity) {
-        Log.d(TAG, "onActivityPaused invoked")
+        Log.d(TAG, "Breinify - onActivityPaused invoked")
     }
 
     override fun onActivityStopped(activity: Activity) {
-        Log.d(TAG, "onActivityStopped invoked")
+        Log.d(TAG, "Breinify - onActivityStopped invoked")
         numStarted--
         if (numStarted == 0) {
             val timeInApp = System.currentTimeMillis() - userEnteredTime
 
             // app is now in background
-
-            // todo convert long to string
-            Log.d(TAG, "app is now in background. Time in App was: " + java.lang.Long.toString(timeInApp))
+            Log.d(TAG, "Breinfiy - app is now in background. Time in App was: $timeInApp")
             BreinifyManager.appIsInBackground()
         }
     }
 
     override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
-        Log.d(TAG, "onActivitySaveInstanceState invoked")
+        Log.d(TAG, "Breinify - onActivitySaveInstanceState invoked")
     }
 
     override fun onActivityDestroyed(activity: Activity) {
-        Log.d(TAG, "onActivityDestroyed invoked")
+        Log.d(TAG, "Breinify - onActivityDestroyed invoked")
     }
 }
