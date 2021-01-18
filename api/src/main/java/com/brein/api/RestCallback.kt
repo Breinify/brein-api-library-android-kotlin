@@ -7,7 +7,7 @@ class RestCallback : ICallback<BreinResult?> {
 
     override fun callback(data: BreinResult?) {
         if (data != null) {
-            Log.d(TAG, "callback data is: $data")
+            Log.d(TAG, "Breinify - callback data is: $data")
         }
     }
 
