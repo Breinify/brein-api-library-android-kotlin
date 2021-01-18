@@ -48,7 +48,7 @@ object BreinifyManager {
      * @param pushDeviceRegistration String
      */
     fun setDeviceRegistration(pushDeviceRegistration: String) {
-        Log.d(TAG, "pushDeviceRegistration is: $pushDeviceRegistration")
+        Log.d(TAG, "Breinify - pushDeviceRegistration is: $pushDeviceRegistration")
         this.pushDeviceRegistration = pushDeviceRegistration
 
         // set user as well -> necessary for correct request
@@ -171,11 +171,11 @@ object BreinifyManager {
      * @param backgroundInterval long interval in ms
      */
     fun initBackgroundHandler(backgroundInterval: Long) {
-        Log.d(TAG, "initBackgroundHandler invoked with duration: $backgroundInterval")
+        Log.d(TAG, "Breinify - initBackgroundHandler invoked with duration: $backgroundInterval")
 
         Timer().schedule(object : TimerTask() {
             override fun run() {
-                Log.d("initBackgroundHandler", "Called on main thread")
+                Log.d("initBackgroundHandler", "Breinify - called on main thread")
 
                 // flag if sending is possible
                 sendLocationInfo()
@@ -188,7 +188,7 @@ object BreinifyManager {
      */
     @Suppress("UNUSED")
     fun shutdown() {
-        Log.d(TAG, "shutdown invoked ")
+        Log.d(TAG, "Breinify shutdown invoked ")
         destroyNotificationReceiver()
     }
 
@@ -209,7 +209,7 @@ object BreinifyManager {
         activityType: String?,
         additionalContent: MutableMap<String, Any?>?
     ) {
-        Log.d(TAG, "sending activity of type: $activityType")
+        Log.d(TAG, "Breinify - sending activity of type: $activityType")
         if (BreinUtil.containsValue(this.userEmail)) {
             Breinify.getUser().setEmail(this.userEmail!!)
         }
@@ -229,12 +229,29 @@ object BreinifyManager {
     /**
      * send an identify information only if token is given
      */
-    fun sendIdentifyInfo() {
-        Log.d(TAG, "sendIdentifyInfo invoked")
+    fun sendIdentifyInfo(deviceToken: String?) {
+        Log.d(TAG, "Breinify sendIdentifyInfo invoked")
         if (BreinUtil.containsValue(pushDeviceRegistration)) {
             val appUser = Breinify.getBreinUser()
             appUser.setPushDeviceRegistration(this.pushDeviceRegistration)
+            val breinActivity = Breinify.getBreinActivity()
+
+            val tagsDic = HashMap<String, Any>()
+            tagsDic["identify"] = "identify"
+
+            deviceToken?.let {
+                tagsDic["deviceToken"] = deviceToken
+                tagsDic["deviceKind"] = "Android"
+            }
+
+            breinActivity.setTagsDic(tagsDic)
             sendActivity("identify", null)
+
+            deviceToken?.let {
+                tagsDic.remove("deviceToken")
+                tagsDic.remove("deviceKind")
+                tagsDic.remove("identify")
+            }
         }
     }
 
@@ -242,16 +259,16 @@ object BreinifyManager {
      * send a location information
      */
     fun sendLocationInfo() {
-        Log.d(TAG, "sendLocationInfo invoked")
+        Log.d(TAG, "Breinify - sendLocationInfo invoked")
         if (this.application == null) {
             Log.d(
                 TAG,
-                "sendLocationInfo. Can not check permissions because application object not set"
+                "Breinify - sendLocationInfo - cannot check permissions because application object not set"
             )
             return
         }
         if (!BreinUtil.containsValue(pushDeviceRegistration)) {
-            Log.d(TAG, "sendLocationInfo. No deviceRegistrationToken set.")
+            Log.d(TAG, "Breinfiy - sendLocationInfo. No deviceRegistrationToken set.")
             return
         }
         val accessFineLocationPermission: Int = ActivityCompat.checkSelfPermission(
@@ -275,9 +292,9 @@ object BreinifyManager {
      * read the user defaults and initializes the brein email and userId properties
      */
     fun readAndInitUserDefaults() {
-        Log.d(TAG, "readAndInitUserDefaults invoked")
+        Log.d(TAG, "Breinify - readAndInitUserDefaults invoked")
         if (this.application == null) {
-            Log.d(TAG, "readAndInitUserDefaults can not work, because application object not set.")
+            Log.d(TAG, "Breinify - readAndInitUserDefaults can not work, because application object not set.")
             return
         }
         val prefs: SharedPreferences = this.application!!.getSharedPreferences(
@@ -306,7 +323,7 @@ object BreinifyManager {
      */
     @Suppress("UNUSED")
     fun saveUserDefaults() {
-        Log.d(TAG, "saveUserDefaults invoked")
+        Log.d(TAG, "Breinify - saveUserDefaults invoked")
         saveUserDefaultValue(BREIN_USER_EMAIL, userEmail)
         saveUserDefaultValue(BREIN_USER_ID, userId)
     }
@@ -318,7 +335,7 @@ object BreinifyManager {
      */
     @Suppress("UNUSED")
     fun configureDeviceToken(deviceToken: String?) {
-        Log.d(TAG, "configureDeviceToken invoked wit token: $deviceToken")
+        Log.d(TAG, "Breinify - configureDeviceToken invoked wit token: $deviceToken")
         if (deviceToken != null) {
             setDeviceRegistration(deviceToken)
         }
@@ -329,7 +346,7 @@ object BreinifyManager {
         saveUserDefaults()
 
         // send Identify
-        sendIdentifyInfo()
+        sendIdentifyInfo(deviceToken)
     }
 
     /**
