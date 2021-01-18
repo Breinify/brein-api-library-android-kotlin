@@ -66,7 +66,7 @@ object BreinUtil {
      * @param length of the secret
      * @return created secret
      */
-    fun generateSecret(length: Int): String? {
+    fun generateSecret(length: Int): String {
         val random = SecureRandom()
         val bytes = ByteArray(length / 8)
         random.nextBytes(bytes)
