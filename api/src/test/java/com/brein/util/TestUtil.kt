@@ -44,6 +44,7 @@ class TestUtil {
        val activityType = "paginaUno"
        val breinActivity = BreinActivity()
 
+       breinActivity.unixTimestamp = 1487235949
        breinActivity.setActivityType(activityType)
 
        try {
