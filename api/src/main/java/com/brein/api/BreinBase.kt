@@ -29,7 +29,7 @@ abstract class BreinBase : ISecretStrategy {
     /**
      * The base data for the request
      */
-    private var baseMap = mutableMapOf<String, Any?>()
+    private var baseMap = HashMap<String, Any?>()
 
     /**
      * Retrieves the current `BreinUser` for the request. This method never returns `null`, instead it
@@ -172,7 +172,7 @@ abstract class BreinBase : ISecretStrategy {
      *
      * @param requestData the request data to be sent to the endpoint
      */
-    abstract fun prepareRequestData(config: BreinConfig?, requestData: MutableMap<String, Any?>)
+    abstract fun prepareRequestData(config: BreinConfig?, requestData: HashMap<String, Any?>)
 
     /**
      * Method to generate the body part of the request.
