@@ -23,7 +23,7 @@ class BreinTemporalData : BreinBase(), ISecretStrategy, IAsyncExecutable<BreinRe
         return config?.temporalDataEndpoint
     }
 
-    override fun prepareRequestData(config: BreinConfig?, requestData: MutableMap<String, Any?>) {
+    override fun prepareRequestData(config: BreinConfig?, requestData: HashMap<String, Any?>) {
         // nothing additionally to be added
     }
 
@@ -267,7 +267,7 @@ class BreinTemporalData : BreinBase(), ISecretStrategy, IAsyncExecutable<BreinRe
     </T> */
     @Suppress("UNCHECKED_CAST")
     fun getLocation(key: String): Any? {
-        val location = getUser()?.getAdditional(LOCATION_FIELD) as MutableMap<String, Any>
+        val location = getUser()?.getAdditional(LOCATION_FIELD) as HashMap<String, Any>
         return location[key]
     }
 

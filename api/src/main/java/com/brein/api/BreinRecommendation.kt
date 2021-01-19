@@ -4,6 +4,7 @@ import com.brein.domain.BreinConfig
 import com.brein.domain.BreinResult
 import com.brein.util.BreinUtil
 import java.util.*
+import kotlin.collections.HashMap
 
 class BreinRecommendation : BreinBase(), IAsyncExecutable<BreinResult?> {
     /**
@@ -70,10 +71,10 @@ class BreinRecommendation : BreinBase(), IAsyncExecutable<BreinResult?> {
      * @param config      BreinConfig contains the configuration object
      * @param requestData Map the request data to be sent to the endpoint
      */
-    override fun prepareRequestData(config: BreinConfig?, requestData: MutableMap<String, Any?>)  {
+    override fun prepareRequestData(config: BreinConfig?, requestData: HashMap<String, Any?>)  {
 
         // recommendation data
-        val recommendationData: MutableMap<String, Any?> = HashMap()
+        val recommendationData = HashMap<String, Any?>()
 
         // check optional field(s)
         if (BreinUtil.containsValue(category)) {
