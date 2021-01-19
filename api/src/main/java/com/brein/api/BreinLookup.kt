@@ -50,7 +50,7 @@ class BreinLookup : BreinBase(), ISecretStrategy, IAsyncExecutable<BreinResult?>
         return config?.lookupEndpoint
     }
 
-    override fun prepareRequestData(config: BreinConfig?, requestData: MutableMap<String, Any?>) {
+    override fun prepareRequestData(config: BreinConfig?, requestData: HashMap<String, Any?>) {
         // nothing additionally to be added
     }
 
