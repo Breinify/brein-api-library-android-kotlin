@@ -6,7 +6,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
 import android.content.Context.MODE_PRIVATE
-import android.content.IntentFilter
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.util.Log
@@ -14,6 +13,7 @@ import androidx.core.app.ActivityCompat
 import com.brein.domain.BreinIpInfo
 import com.brein.util.BreinUtil
 import java.util.*
+import kotlin.collections.HashMap
 
 @SuppressLint("StaticFieldLeak")
 object BreinifyManager {
@@ -207,7 +207,7 @@ object BreinifyManager {
      */
     fun sendActivity(
         activityType: String?,
-        additionalContent: MutableMap<String, Any?>?
+        additionalContent: HashMap<String, Any?>?
     ) {
         Log.d(TAG, "Breinify - sending activity of type: $activityType")
         if (BreinUtil.containsValue(this.userEmail)) {
@@ -236,6 +236,8 @@ object BreinifyManager {
             appUser.setPushDeviceRegistration(this.pushDeviceRegistration)
             val breinActivity = Breinify.getBreinActivity()
 
+            val previousTagsDic = breinActivity.getTagsDic()
+
             val tagsDic = HashMap<String, Any>()
             tagsDic["identify"] = "identify"
 
@@ -247,11 +249,7 @@ object BreinifyManager {
             breinActivity.setTagsDic(tagsDic)
             sendActivity("identify", null)
 
-            deviceToken?.let {
-                tagsDic.remove("deviceToken")
-                tagsDic.remove("deviceKind")
-                tagsDic.remove("identify")
-            }
+            breinActivity.setTagsDic(previousTagsDic)
         }
     }
 
@@ -294,7 +292,10 @@ object BreinifyManager {
     fun readAndInitUserDefaults() {
         Log.d(TAG, "Breinify - readAndInitUserDefaults invoked")
         if (this.application == null) {
-            Log.d(TAG, "Breinify - readAndInitUserDefaults can not work, because application object not set.")
+            Log.d(
+                TAG,
+                "Breinify - readAndInitUserDefaults can not work, because application object not set."
+            )
             return
         }
         val prefs: SharedPreferences = this.application!!.getSharedPreferences(
