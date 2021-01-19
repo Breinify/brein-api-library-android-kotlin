@@ -17,12 +17,12 @@ class BreinActivity : BreinBase(), ISecretStrategy, IAsyncExecutable<BreinResult
     /**
      * contains the tags
      */
-    private var tagsMap = mutableMapOf<String, Any>()
+    private var tagsMap = HashMap<String, Any>()
 
     /**
      * contains the fields that are part of the activity map
      */
-    private var activityMap = mutableMapOf<String, Any>()
+    private var activityMap = HashMap<String, Any>()
 
     /**
      * returns activity type
@@ -173,8 +173,8 @@ class BreinActivity : BreinBase(), ISecretStrategy, IAsyncExecutable<BreinResult
         }
     }
 
-    override fun prepareRequestData(config: BreinConfig?, requestData: MutableMap<String, Any?>) {
-        val activityRequestData: MutableMap<String, Any?> = HashMap()
+    override fun prepareRequestData(config: BreinConfig?, requestData: HashMap<String, Any?>) {
+        val activityRequestData = HashMap<String, Any?>()
 
         // add the user-data, if there is any
         if (this.activityMap.isNotEmpty()) {
@@ -209,8 +209,8 @@ class BreinActivity : BreinBase(), ISecretStrategy, IAsyncExecutable<BreinResult
         return BreinUtil.generateSignature(message, secret)
     }
 
-    fun setToTagMap(key: String, value: Any): BreinActivity {
-        tagsMap[key] = value
+    fun setToTagsDic(key: String, value: Any): BreinActivity {
+        this.tagsMap[key] = value
         return this
     }
 
@@ -219,8 +219,8 @@ class BreinActivity : BreinBase(), ISecretStrategy, IAsyncExecutable<BreinResult
         return this
     }
 
-    fun getTagsMap(): MutableMap<String, Any> {
-        return tagsMap
+    fun getTagsDic(): HashMap<String, Any> {
+        return this.tagsMap
     }
 
     override fun execute(callback: ICallback<BreinResult?>?) {
