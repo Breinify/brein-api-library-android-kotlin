@@ -44,12 +44,12 @@ class BreinUser(private var email: String?) {
     /**
      * contains further fields in the user section
      */
-    private val userMap = mutableMapOf<String, Any?>()
+    private val userMap = HashMap<String, Any?>()
 
     /**
      * contains further fields in the user additional section
      */
-    private val additionalMap = mutableMapOf<String, Any?>()
+    private val additionalMap = HashMap<String, Any?>()
 
     /**
      * contains the first name of the user
@@ -548,7 +548,7 @@ class BreinUser(private var email: String?) {
      * @param requestData Map request destination
      */
     @Suppress("UNUSED_PARAMETER")
-    fun prepareRequestData(config: BreinConfig?, requestData: MutableMap<String, Any?>) {
+    fun prepareRequestData(config: BreinConfig?, requestData: HashMap<String, Any?>) {
         val userRequestData = HashMap<String, Any?>()
 
         requestData["user"] = userRequestData
