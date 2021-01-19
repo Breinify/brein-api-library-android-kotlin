@@ -357,12 +357,12 @@ class TestApi {
         breinActivity.setCategory(BreinCategoryType.APPAREL)
         breinActivity.setActivityType(BreinActivityType.PAGE_VISIT)
         breinActivity.setDescription("your description")
-        breinActivity.setToTagMap("t1", 0.0)
-        breinActivity.setToTagMap("t2", 5)
-        breinActivity.setToTagMap("t3", "0.0")
-        breinActivity.setToTagMap("t4", 5.0000)
-        breinActivity.setToTagMap("nr", 3000)
-        breinActivity.setToTagMap("sortid", "1.0")
+        breinActivity.setToTagsDic("t1", 0.0)
+        breinActivity.setToTagsDic("t2", 5)
+        breinActivity.setToTagsDic("t3", "0.0")
+        breinActivity.setToTagsDic("t4", 5.0000)
+        breinActivity.setToTagsDic("nr", 3000)
+        breinActivity.setToTagsDic("sortid", "1.0")
 
         Breinify.activity(breinActivity, restCallback)
 
