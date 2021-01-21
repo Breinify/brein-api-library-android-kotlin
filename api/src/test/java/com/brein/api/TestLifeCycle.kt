@@ -3,6 +3,7 @@ package com.brein.api
 import com.brein.domain.BreinActivityType
 import com.brein.domain.BreinCategoryType
 import org.junit.AfterClass
+import org.junit.Assert
 import org.junit.Test
 
 class TestLifeCycle {
@@ -126,6 +127,31 @@ class TestLifeCycle {
         val breinActivity = Breinify.getBreinActivity()
         breinActivity.setTagsDic(tagsDic)
         breinActivity.setActivityType(BreinActivityType.PAGE_VISIT)
+        Breinify.sendActivity(breinActivity)
+    }
+
+
+    @Suppress("UNCHECKED_CAST")
+    @Test
+    fun testCheckOutClaro() {
+
+        // 1. configure API
+        Breinify.configure(VALID_SIGNATURE_API_KEY, VALID_SIGNATURE)
+
+        val tagsDic = mapOf(
+            "productPrices" to listOf(1000),
+            "productIds" to listOf("Recharge"),
+            "productQuantities" to listOf(1),
+            "transactionPriceTotal" to 1000,
+            "transactionTotal" to 1000
+        ) as HashMap<String, Any>
+
+        val breinActivity = Breinify.getBreinActivity()
+        breinActivity.setTagsDic(tagsDic)
+        val dic = breinActivity.getTagsDic()
+        Assert.assertTrue(dic.size == 5)
+
+        breinActivity.setActivityType(BreinActivityType.CHECKOUT)
         Breinify.sendActivity(breinActivity)
     }
 
