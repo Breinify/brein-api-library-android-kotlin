@@ -462,20 +462,6 @@ class BreinUser(private var email: String?) {
     }
 
     /**
-     * provides a nicer output of the user details
-     *
-     * @return String nicer output
-     */
-    override fun toString(): String {
-        val config = BreinConfig(null)
-        val requestData = HashMap<String, Any?>()
-
-        prepareRequestData(config, requestData)
-
-        return Gson().toJson(requestData)
-    }
-
-    /**
      * Sets the users value and overrides any current value. Cannot used to override the `additional` field.
      *
      * @param key    String the name of the value to be set
@@ -572,7 +558,7 @@ class BreinUser(private var email: String?) {
 
         // add the additional-data, if there is any
         if (this.additionalMap.isNotEmpty()) {
-            userRequestData["additional"] = BreinMapUtil.copyMap(this.additionalMap)
+            userRequestData["additional"] = this.additionalMap
         }
     }
 
