@@ -191,8 +191,7 @@ class BreinActivity : BreinBase(), ISecretStrategy, IAsyncExecutable<BreinResult
 
         // add tagsMap map if configured
         if (this.tagsMap.isNotEmpty()) {
-            val tagData = BreinMapUtil.copyMap(this.tagsMap)
-            activityRequestData[TAGS_FIELD] = tagData
+            activityRequestData[TAGS_FIELD] = this.tagsMap
         }
 
         requestData[ACTIVITY_FIELD] = activityRequestData
