@@ -229,27 +229,13 @@ object BreinifyManager {
     /**
      * send an identify information only if token is given
      */
-    fun sendIdentifyInfo(deviceToken: String?) {
+    fun sendIdentifyInfo() {
         Log.d(TAG, "Breinify sendIdentifyInfo invoked")
+
         if (BreinUtil.containsValue(pushDeviceRegistration)) {
             val appUser = Breinify.getBreinUser()
             appUser.setPushDeviceRegistration(this.pushDeviceRegistration)
-            val breinActivity = Breinify.getBreinActivity()
-
-            val previousTagsDic = breinActivity.getTagsDic()
-
-            val tagsDic = HashMap<String, Any>()
-            tagsDic["identify"] = "identify"
-
-            deviceToken?.let {
-                tagsDic["deviceToken"] = deviceToken
-                tagsDic["deviceKind"] = "Android"
-            }
-
-            breinActivity.setTagsDic(tagsDic)
             sendActivity("identify", null)
-
-            breinActivity.setTagsDic(previousTagsDic)
         }
     }
 
@@ -347,7 +333,7 @@ object BreinifyManager {
         saveUserDefaults()
 
         // send Identify
-        sendIdentifyInfo(deviceToken)
+        sendIdentifyInfo()
     }
 
     /**
