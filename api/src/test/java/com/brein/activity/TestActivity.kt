@@ -75,6 +75,10 @@ class TestActivity {
         breinActivity.setDescription("This is a good description")
 
         breinActivity.execute(restCallback)
+
+        val name = breinUser.getFirstName()
+        Assert.assertEquals(name, "Toni")
+
     }
 
     /**
@@ -100,6 +104,9 @@ class TestActivity {
             BreinActivityType.LOGOUT,
             breinCategory, description, restCallback
         )
+
+        val birthday = breinUser.getDateOfBirth()
+        Assert.assertEquals(birthday, ("12"))
     }
 
     /**
