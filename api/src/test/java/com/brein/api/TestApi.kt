@@ -1,10 +1,17 @@
 package com.brein.api
 
-import com.brein.domain.*
+import com.brein.domain.BreinConfig
+import com.brein.domain.BreinUser
+import com.brein.domain.BreinActivityType
+import com.brein.domain.BreinCategoryType
+import com.brein.domain.BreinResult
 import com.brein.domain.results.BreinTemporalDataResult
 import com.brein.domain.results.temporaldataparts.BreinLocationResult
 import com.brein.engine.BreinEngineType
-import org.junit.*
+import org.junit.After
+import org.junit.Test
+import org.junit.AfterClass
+import org.junit.Assert
 
 /**
  * Test of Breinify Java API (static option)
@@ -87,6 +94,10 @@ class TestApi {
             "Login-Description",
             restCallback
         )
+
+        Assert.assertEquals(breinUser.getFirstName(), "User")
+        Assert.assertEquals(breinUser.getLastName(), "Name")
+
     }
 
     /**
@@ -105,6 +116,8 @@ class TestApi {
             "Login-Description",
             restCallback
         )
+        Assert.assertEquals(breinUser.getFirstName(), "User")
+        Assert.assertEquals(breinUser.getLastName(), "Name")
     }
 
     /**
@@ -126,16 +139,28 @@ class TestApi {
             description,
             restFailCallback
         )
+
+        Assert.assertEquals(config.apiKey, "")
+        Assert.assertEquals(config.secret, VALID_SECRET)
+        Assert.assertEquals(breinUser.getFirstName(), "User")
+        Assert.assertEquals(breinUser.getLastName(), "Name")
     }
 
     @Test
     fun testWithoutCallback() {
+        Breinify.setConfig(breinConfig)
+
         Breinify.activity(
             breinUser,
             BreinActivityType.LOGIN,
             BreinCategoryType.HOME,
             "Login-Description", null
         )
+
+        val config = Breinify.config
+
+        Assert.assertEquals(config?.apiKey, VALID_SECRET_API_KEY)
+        Assert.assertEquals(config?.secret, VALID_SECRET)
     }
 
     /**
@@ -145,6 +170,9 @@ class TestApi {
     fun testWithoutSecret() {
         val config = BreinConfig(VALID_API_KEY, null)
         Breinify.setConfig(config)
+
+        Assert.assertEquals(config.secret, null)
+        Assert.assertEquals(config.apiKey, VALID_API_KEY)
     }
 
     /**
@@ -173,6 +201,13 @@ class TestApi {
             description,
             restCallback
         )
+
+        Assert.assertEquals(config?.getRestEngineType(), BreinEngineType.NO_ENGINE)
+        Assert.assertEquals(config?.apiKey, VALID_API_KEY)
+        Assert.assertEquals(config?.secret, VALID_SECRET)
+        Assert.assertEquals(breinUser.getFirstName(), "User")
+        Assert.assertEquals(breinUser.getLastName(), "Name")
+
     }
 
     /**
@@ -197,6 +232,13 @@ class TestApi {
             description,
             restCallback
         )
+
+        Assert.assertEquals(config.getRestEngineType(), BreinEngineType.HTTP_URL_CONNECTION_ENGINE)
+        Assert.assertEquals(config.activityEndpoint, "/wrongEndPoint")
+        Assert.assertEquals(config.apiKey, VALID_API_KEY)
+        Assert.assertEquals(config.secret, VALID_SECRET)
+        Assert.assertEquals(breinUser.getFirstName(), "User")
+        Assert.assertEquals(breinUser.getLastName(), "Name")
     }
 
     /**
@@ -217,6 +259,7 @@ class TestApi {
     fun testLogout() {
         val description = "Logout-Description"
         Breinify.setConfig(breinConfig)
+
         breinUser.setDateOfBirth("12")
         Breinify.activity(
             breinUser,
@@ -225,6 +268,13 @@ class TestApi {
             description,
             restCallback
         )
+
+        val config = Breinify.config
+
+        Assert.assertEquals(config?.getRestEngineType(), BreinEngineType.HTTP_URL_CONNECTION_ENGINE)
+        Assert.assertEquals(config?.activityEndpoint, "/activity")
+        Assert.assertEquals(config?.apiKey, VALID_SECRET_API_KEY)
+        Assert.assertEquals(config?.secret, VALID_SECRET)
     }
 
     /**
@@ -241,6 +291,12 @@ class TestApi {
             description,
             restCallback
         )
+
+        val config = Breinify.config
+        Assert.assertEquals(config?.getRestEngineType(), BreinEngineType.HTTP_URL_CONNECTION_ENGINE)
+        Assert.assertEquals(config?.activityEndpoint, "/activity")
+        Assert.assertEquals(config?.apiKey, VALID_SECRET_API_KEY)
+        Assert.assertEquals(config?.secret, VALID_SECRET)
     }
 
     /**
@@ -257,6 +313,11 @@ class TestApi {
             description,
             restCallback
         )
+        val config = Breinify.config
+        Assert.assertEquals(config?.getRestEngineType(), BreinEngineType.HTTP_URL_CONNECTION_ENGINE)
+        Assert.assertEquals(config?.activityEndpoint, "/activity")
+        Assert.assertEquals(config?.apiKey, VALID_SECRET_API_KEY)
+        Assert.assertEquals(config?.secret, VALID_SECRET)
     }
 
     /**
@@ -273,6 +334,11 @@ class TestApi {
             description,
             restCallback
         )
+        val config = Breinify.config
+        Assert.assertEquals(config?.getRestEngineType(), BreinEngineType.HTTP_URL_CONNECTION_ENGINE)
+        Assert.assertEquals(config?.activityEndpoint, "/activity")
+        Assert.assertEquals(config?.apiKey, VALID_SECRET_API_KEY)
+        Assert.assertEquals(config?.secret, VALID_SECRET)
     }
 
     /**
@@ -290,6 +356,11 @@ class TestApi {
             description,
             restCallback
         )
+        val config = Breinify.config
+        Assert.assertEquals(config?.getRestEngineType(), BreinEngineType.HTTP_URL_CONNECTION_ENGINE)
+        Assert.assertEquals(config?.activityEndpoint, "/activity")
+        Assert.assertEquals(config?.apiKey, VALID_SECRET_API_KEY)
+        Assert.assertEquals(config?.secret, VALID_SECRET)
     }
 
     /**
@@ -306,6 +377,11 @@ class TestApi {
             description,
             restCallback
         )
+        val config = Breinify.config
+        Assert.assertEquals(config?.getRestEngineType(), BreinEngineType.HTTP_URL_CONNECTION_ENGINE)
+        Assert.assertEquals(config?.activityEndpoint, "/activity")
+        Assert.assertEquals(config?.apiKey, VALID_SECRET_API_KEY)
+        Assert.assertEquals(config?.secret, VALID_SECRET)
     }
 
     /**
@@ -322,6 +398,12 @@ class TestApi {
             description,
             restCallback
         )
+
+        val config = Breinify.config
+        Assert.assertEquals(config?.getRestEngineType(), BreinEngineType.HTTP_URL_CONNECTION_ENGINE)
+        Assert.assertEquals(config?.activityEndpoint, "/activity")
+        Assert.assertEquals(config?.apiKey, VALID_SECRET_API_KEY)
+        Assert.assertEquals(config?.secret, VALID_SECRET)
     }
 
     /**
@@ -364,8 +446,27 @@ class TestApi {
         breinActivity.setToTagsDic("nr", 3000)
         breinActivity.setToTagsDic("sortid", "1.0")
 
-        Breinify.activity(breinActivity, restCallback)
+        // Assertions
+        Assert.assertEquals(
+            breinConfig.getRestEngineType(),
+            BreinEngineType.HTTP_URL_CONNECTION_ENGINE
+        )
+        Assert.assertEquals(breinConfig.activityEndpoint, "/activity")
+        Assert.assertEquals(breinConfig.apiKey, VALID_API_KEY)
+        Assert.assertEquals(breinConfig.secret, VALID_SECRET)
 
+        Assert.assertEquals(breinUser.getFirstName(), "FirstName")
+        Assert.assertEquals(breinUser.getLastName(), "LastName")
+        Assert.assertEquals(breinUser.getDateOfBirth(), "11/20/1999")
+        Assert.assertEquals(breinUser.getDeviceId(), "DD-EEEEE")
+        Assert.assertEquals(breinUser.getIpAddress(), "10.11.12.130")
+
+        Assert.assertEquals(breinActivity.getActivityType(), BreinActivityType.PAGE_VISIT)
+        Assert.assertEquals(breinActivity.getCategory(breinConfig), BreinCategoryType.APPAREL)
+        Assert.assertEquals(breinActivity.getDescription(), "your description")
+        Assert.assertEquals(breinActivity.getUser(), breinUser)
+
+        Breinify.activity(breinActivity, restCallback)
         breinActivity.init()
     }
 
@@ -410,6 +511,12 @@ class TestApi {
         breinConfig.setConnectionTimeout(10000)
         breinConfig.setSocketTimeout(10000)
         breinEngine!!.configure(breinConfig)
+
+        Assert.assertNotNull(breinEngine)
+        Assert.assertEquals(breinConfig.connectionTimeout, 10000)
+        Assert.assertEquals(breinConfig.socketTimeout, 10000)
+
+
     }
 
     /**
@@ -430,6 +537,9 @@ class TestApi {
             "Login-Description",
             restCallback
         )
+
+        Assert.assertEquals(breinConfig.secret, VALID_SECRET)
+        Assert.assertEquals(breinConfig.apiKey, VALID_API_KEY)
     }
 
     /**
@@ -447,6 +557,13 @@ class TestApi {
             "Login-Description",
             restCallback
         )
+
+        Assert.assertEquals(
+            breinConfig.getRestEngineType(),
+            BreinEngineType.HTTP_URL_CONNECTION_ENGINE
+        )
+        Assert.assertEquals(breinConfig.secret, wrongSecret)
+        Assert.assertEquals(breinConfig.apiKey, VALID_SECRET_API_KEY)
     }
 
     /**
@@ -469,6 +586,16 @@ class TestApi {
         Breinify.activity(breinUser, "ACT-TYPE", null, "DESC", restCallback)
         Breinify.activity(breinUser, "ACT-TYPE", "bla", null, restCallback)
         Breinify.activity(breinUser, "ACT-TYPE", "bla", "Desc", null)
+
+
+        Assert.assertEquals(
+            breinConfig.getRestEngineType(),
+            BreinEngineType.HTTP_URL_CONNECTION_ENGINE
+        )
+        Assert.assertEquals(breinConfig.secret, VALID_SECRET)
+        Assert.assertEquals(breinConfig.apiKey, VALID_API_KEY)
+        Assert.assertEquals(breinConfig.defaultCategory, "DEF-CAT-TYPE")
+
     }
 
     @Test
@@ -487,6 +614,19 @@ class TestApi {
         breinTemporalData.setLocation("san francisco")
             .setUser(breinUser)
         breinTemporalData.execute(restCallback)
+
+        Assert.assertEquals(
+            breinConfig.getRestEngineType(),
+            BreinEngineType.HTTP_URL_CONNECTION_ENGINE
+        )
+        Assert.assertEquals(breinConfig.activityEndpoint, "/activity")
+        Assert.assertEquals(breinConfig.apiKey, VALID_API_KEY)
+        Assert.assertEquals(breinConfig.secret, VALID_SECRET)
+
+        Assert.assertEquals(breinUser.getIpAddress(), "74.115.209.58")
+        Assert.assertEquals(breinUser.getTimezone(), "America/Los_Angeles")
+        Assert.assertEquals(breinUser.getLocalDateTime(), "Sun Jul 2 2017 18:15:48 GMT-0800 (PST)")
+
     }
 
     @Test
@@ -503,6 +643,18 @@ class TestApi {
         recommendation.setUser(breinUser)
         recommendation.setNumberOfRecommendations(numberOfRecommendations)
         Breinify.recommendation(recommendation, restCallback)
+
+        Assert.assertEquals(
+            breinConfig.getRestEngineType(),
+            BreinEngineType.HTTP_URL_CONNECTION_ENGINE
+        )
+        Assert.assertEquals(breinConfig.activityEndpoint, "/activity")
+        Assert.assertEquals(breinConfig.apiKey, VALID_API_KEY)
+        Assert.assertEquals(breinConfig.secret, VALID_SECRET)
+
+        Assert.assertEquals(breinUser.getSessionId(), "1133AADDDEEE")
+        Assert.assertEquals(recommendation.numberOfRecommendations, numberOfRecommendations)
+
     }
 
     @Test
@@ -517,7 +669,21 @@ class TestApi {
         breinActivity.setActivityType("readArticle")
         breinActivity.setDescription("A Homebody Persident Sits Out His Honeymoon Period")
 
+        Assert.assertEquals(
+            breinConfig.getRestEngineType(),
+            BreinEngineType.HTTP_URL_CONNECTION_ENGINE
+        )
+        Assert.assertEquals(breinConfig.activityEndpoint, "/activity")
+        Assert.assertEquals(breinConfig.apiKey, VALID_API_KEY)
+        Assert.assertEquals(breinConfig.secret, VALID_SECRET)
+        Assert.assertEquals(
+            breinActivity.getDescription(),
+            "A Homebody Persident Sits Out His Honeymoon Period"
+        )
+        Assert.assertEquals(breinActivity.getActivityType(), "readArticle")
+
         Breinify.sendActivity(breinActivity)
+
     }
 
     @Test
@@ -548,7 +714,17 @@ class TestApi {
 //                    val holidayResults: List<BreinHolidayResult> = temporalDataResult.getHolidays()
 //                }
             }
+
+
         })
+
+        Assert.assertEquals(
+            breinConfig.getRestEngineType(),
+            BreinEngineType.HTTP_URL_CONNECTION_ENGINE
+        )
+        Assert.assertEquals(breinConfig.activityEndpoint, "/activity")
+        Assert.assertEquals(breinConfig.apiKey, VALID_API_KEY)
+        Assert.assertEquals(breinConfig.secret, VALID_SECRET)
     }
 
     @Test
@@ -570,6 +746,15 @@ class TestApi {
                 val granu = locationResult.granularity
             }
         })
+
+        Assert.assertEquals(
+            breinConfig.getRestEngineType(),
+            BreinEngineType.HTTP_URL_CONNECTION_ENGINE
+        )
+        Assert.assertEquals(breinConfig.activityEndpoint, "/activity")
+        Assert.assertEquals(breinConfig.apiKey, VALID_API_KEY)
+        Assert.assertEquals(breinConfig.secret, VALID_SECRET)
+
     }
 
     @Test
@@ -591,6 +776,14 @@ class TestApi {
 //                temporalDataResult.getLocation().getGeoJson("NEIGHBORHOOD")
             }
         })
+
+        Assert.assertEquals(
+            breinConfig.getRestEngineType(),
+            BreinEngineType.HTTP_URL_CONNECTION_ENGINE
+        )
+        Assert.assertEquals(breinConfig.activityEndpoint, "/activity")
+        Assert.assertEquals(breinConfig.apiKey, VALID_API_KEY)
+        Assert.assertEquals(breinConfig.secret, VALID_SECRET)
     }
 
     companion object {

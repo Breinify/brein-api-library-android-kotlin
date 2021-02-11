@@ -5,6 +5,7 @@ import com.brein.domain.BreinCategoryType
 import com.brein.domain.BreinConfig
 import com.brein.domain.BreinUser
 import org.junit.AfterClass
+import org.junit.Assert
 import org.junit.Test
 
 class TestStress {
@@ -34,6 +35,11 @@ class TestStress {
             "Description",
             null
         )
+
+        Assert.assertEquals(breinUser.getFirstName(), "Toni")
+        Assert.assertEquals(breinUser.getLastName(), "Maroni")
+
+
     }
 
     companion object {

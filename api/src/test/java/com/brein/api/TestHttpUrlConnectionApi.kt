@@ -5,8 +5,12 @@ import com.brein.domain.BreinCategoryType
 import com.brein.domain.BreinConfig
 import com.brein.domain.BreinUser
 import com.brein.engine.BreinEngineType
-import org.junit.*
-
+import org.junit.Before
+import org.junit.After
+import org.junit.Test
+import org.junit.AfterClass
+import org.junit.Assert
+import org.junit.BeforeClass
 /**
  * Test of Breinify API (static option)
  */
@@ -59,6 +63,14 @@ class TestHttpUrlConnectionApi {
             "Login-Description",
             restCallback
         )
+
+        val config = Breinify.config
+
+        Assert.assertEquals(breinUser.getFirstName(), "Marco")
+        Assert.assertEquals(breinUser.getLastName(), "Recchioni")
+        Assert.assertEquals(config?.apiKey, VALID_API_KEY)
+        Assert.assertEquals(config?.secret, VALID_SECRET)
+
     }
 
     /**
@@ -80,6 +92,11 @@ class TestHttpUrlConnectionApi {
             description,
             restCallback
         )
+
+        Assert.assertEquals(breinUser.getFirstName(), "Marco")
+        Assert.assertEquals(breinUser.getLastName(), "Recchioni")
+        Assert.assertEquals(config.apiKey, "")
+        Assert.assertEquals(config.secret, VALID_SECRET)
     }
 
     /**
@@ -101,13 +118,19 @@ class TestHttpUrlConnectionApi {
             description,
             restCallback
         )
+
+        Assert.assertEquals(breinUser.getFirstName(), "Marco")
+        Assert.assertEquals(breinUser.getLastName(), "Recchioni")
+        Assert.assertEquals(config.apiKey, VALID_API_KEY)
+        Assert.assertEquals(config.secret, null)
+
     }
 
     /**
      * Testcase with null rest engine. This will throw an
      * exception.
      */
-    // @Test(expected= BreinException.class)
+//    @Test(expected=BreinException.class)
     fun testLoginWithNoRestEngine() {
         val description = "Login-Description"
         var config: BreinConfig? = null
@@ -150,6 +173,12 @@ class TestHttpUrlConnectionApi {
             breinCategoryType,
             description, restCallback
         )
+
+        Assert.assertEquals(breinUser.getFirstName(), "Marco")
+        Assert.assertEquals(breinUser.getLastName(), "Recchioni")
+        Assert.assertEquals(config.apiKey, VALID_API_KEY)
+        Assert.assertEquals(config.secret, VALID_SECRET)
+        Assert.assertEquals(config.activityEndpoint, "/wrongEndPoint")
     }
 
     /**
@@ -179,6 +208,13 @@ class TestHttpUrlConnectionApi {
             breinCategoryType,
             description, restCallback
         )
+
+        val config = Breinify.config
+
+        Assert.assertEquals(breinUser.getDateOfBirth(), "12")
+        Assert.assertEquals(config?.apiKey, VALID_API_KEY)
+        Assert.assertEquals(config?.secret, VALID_SECRET)
+
     }
 
     /**
@@ -194,6 +230,10 @@ class TestHttpUrlConnectionApi {
             breinCategoryType,
             description, restCallback
         )
+        val config = Breinify.config
+
+        Assert.assertEquals(config?.apiKey, VALID_API_KEY)
+        Assert.assertEquals(config?.secret, VALID_SECRET)
     }
 
     /**
@@ -209,6 +249,10 @@ class TestHttpUrlConnectionApi {
             breinCategoryType,
             description, restCallback
         )
+        val config = Breinify.config
+
+        Assert.assertEquals(config?.apiKey, VALID_API_KEY)
+        Assert.assertEquals(config?.secret, VALID_SECRET)
     }
 
     /**
@@ -225,6 +269,10 @@ class TestHttpUrlConnectionApi {
             breinCategoryType,
             description, restCallback
         )
+        val config = Breinify.config
+
+        Assert.assertEquals(config?.apiKey, VALID_API_KEY)
+        Assert.assertEquals(config?.secret, VALID_SECRET)
     }
 
     /**
@@ -241,6 +289,11 @@ class TestHttpUrlConnectionApi {
             breinCategoryType,
             description, restCallback
         )
+
+        val config = Breinify.config
+
+        Assert.assertEquals(config?.apiKey, VALID_API_KEY)
+        Assert.assertEquals(config?.secret, VALID_SECRET)
     }
 
     /**
@@ -257,6 +310,9 @@ class TestHttpUrlConnectionApi {
             breinCategoryType,
             description, restCallback
         )
+
+        Assert.assertEquals(breinConfig.apiKey, VALID_API_KEY)
+        Assert.assertEquals(breinConfig.secret, VALID_SECRET)
     }
 
     /**
@@ -268,6 +324,14 @@ class TestHttpUrlConnectionApi {
         breinConfig.setConnectionTimeout(30000)
         breinConfig.setSocketTimeout(25000)
         breinEngine!!.configure(breinConfig)
+
+//        val config = Breinify.config
+
+        Assert.assertNotNull(breinEngine)
+        Assert.assertEquals(breinConfig.apiKey, VALID_API_KEY)
+        Assert.assertEquals(breinConfig.secret, VALID_SECRET)
+        Assert.assertEquals(breinConfig.connectionTimeout, 30000)
+        Assert.assertEquals(breinConfig.socketTimeout, 25000)
     }
 
     companion object {

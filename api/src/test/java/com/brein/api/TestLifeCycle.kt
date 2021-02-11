@@ -31,6 +31,15 @@ class TestLifeCycle {
             .setDescription("This is a good description")
             .setCategory(BreinCategoryType.HOME)
 
+        val breinConfig = Breinify.config
+
+        Assert.assertEquals(appUser.getFirstName(), "Elvis")
+        Assert.assertEquals(appUser.getLastName(), "Presley")
+        Assert.assertEquals(breinActivity.getActivityType(), BreinActivityType.LOGIN)
+        Assert.assertEquals(breinActivity.getDescription(), "This is a good description")
+        Assert.assertEquals(breinConfig?.apiKey, VALID_SIGNATURE_API_KEY)
+        Assert.assertEquals(breinConfig?.secret, VALID_SIGNATURE)
+
         Breinify.sendActivity(breinActivity)
 
         Breinify.shutdown()
@@ -57,6 +66,15 @@ class TestLifeCycle {
             .setDescription("This is a good description")
             .setCategory(BreinCategoryType.HOME)
 
+        val breinConfig = Breinify.config
+
+        Assert.assertEquals(appUser.getFirstName(), "Elvis")
+        Assert.assertEquals(appUser.getLastName(), "Presley")
+        Assert.assertEquals(breinActivity.getActivityType(), BreinActivityType.LOGIN)
+        Assert.assertEquals(breinActivity.getDescription(), "This is a good description")
+        Assert.assertEquals(breinConfig?.apiKey, VALID_SIGNATURE_API_KEY)
+        Assert.assertEquals(breinConfig?.secret, VALID_SIGNATURE)
+
         Breinify.sendActivity(breinActivity)
         Breinify.shutdown()
     }
@@ -81,6 +99,15 @@ class TestLifeCycle {
         breinActivity.setActivityType(BreinActivityType.LOGIN)
             .setDescription("This is a good description")
             .setCategory(BreinCategoryType.HOME)
+
+        val breinConfig = Breinify.config
+
+        Assert.assertEquals(breinUser.getFirstName(), "Elvis")
+        Assert.assertEquals(breinUser.getLastName(), "Presley")
+        Assert.assertEquals(breinActivity.getActivityType(), BreinActivityType.LOGIN)
+        Assert.assertEquals(breinActivity.getDescription(), "This is a good description")
+        Assert.assertEquals(breinConfig?.secret, null)
+        Assert.assertEquals(breinConfig?.apiKey, VALID_API_KEY)
 
         Breinify.sendActivity(breinActivity)
 
@@ -108,6 +135,15 @@ class TestLifeCycle {
         tagsDic["pageId"] = "packages"
         breinActivity.setTagsDic(tagsDic)
 
+        val config = Breinify.config
+
+        val tagsMap = breinActivity.getTagsDic()
+
+        Assert.assertEquals(breinActivity.getActivityType(), BreinActivityType.PAGE_VISIT)
+        Assert.assertEquals(config?.secret, VALID_SIGNATURE)
+        Assert.assertEquals(config?.apiKey, VALID_SIGNATURE_API_KEY)
+        Assert.assertEquals(tagsMap["pageId"], tagsDic["pageId"])
+
         Breinify.sendActivity(breinActivity)
     }
 
@@ -127,6 +163,19 @@ class TestLifeCycle {
         val breinActivity = Breinify.getBreinActivity()
         breinActivity.setTagsDic(tagsDic)
         breinActivity.setActivityType(BreinActivityType.PAGE_VISIT)
+
+        val config = Breinify.config
+
+        val tagsMap = breinActivity.getTagsDic()
+
+        Assert.assertTrue(tagsDic.size == 3)
+        Assert.assertEquals(breinActivity.getActivityType(), BreinActivityType.PAGE_VISIT)
+        Assert.assertEquals(config?.secret, VALID_SIGNATURE)
+        Assert.assertEquals(config?.apiKey, VALID_SIGNATURE_API_KEY)
+        Assert.assertEquals(tagsMap["balancePromotional"], tagsDic["balancePromotional"])
+        Assert.assertEquals(tagsMap["balanceCampaign"], tagsDic["balanceCampaign"])
+        Assert.assertEquals(tagsMap["pageId"], tagsDic["pageId"])
+
         Breinify.sendActivity(breinActivity)
     }
 
@@ -146,18 +195,31 @@ class TestLifeCycle {
             "transactionTotal" to 1000
         ) as HashMap<String, Any>
 
+
+        val config = Breinify.config
         val breinActivity = Breinify.getBreinActivity()
         breinActivity.setTagsDic(tagsDic)
         val dic = breinActivity.getTagsDic()
-        Assert.assertTrue(dic.size == 5)
-
         breinActivity.setActivityType(BreinActivityType.CHECKOUT)
+
+        Assert.assertTrue(dic.size == 5)
+        Assert.assertEquals(breinActivity.getActivityType(), BreinActivityType.CHECKOUT)
+        Assert.assertEquals(config?.secret, VALID_SIGNATURE)
+        Assert.assertEquals(config?.apiKey, VALID_SIGNATURE_API_KEY)
+        Assert.assertEquals(dic["productPrices"], tagsDic["productPrices"])
+        Assert.assertEquals(dic["productIds"], tagsDic["productIds"])
+        Assert.assertEquals(dic["productQuantities"], tagsDic["productQuantities"])
+        Assert.assertEquals(dic["transactionPriceTotal"], tagsDic["transactionPriceTotal"])
+        Assert.assertEquals(dic["transactionTotal"], tagsDic["transactionTotal"])
+
         Breinify.sendActivity(breinActivity)
     }
 
     @Suppress("UNCHECKED_CAST")
     @Test
     fun testAnotherPageVisitActivity() {
+        Breinify.configure(VALID_SIGNATURE_API_KEY, VALID_SIGNATURE)
+
         val tagsDic = mapOf(
             "balance" to 6.902,
             "recharge" to 0,
@@ -171,6 +233,19 @@ class TestLifeCycle {
         val breinActivity = Breinify.getBreinActivity()
         breinActivity.setTagsDic(tagsDic)
         breinActivity.setActivityType(BreinActivityType.PAGE_VISIT)
+
+        breinActivity.setTagsDic(tagsDic)
+        val dic = breinActivity.getTagsDic()
+
+        Assert.assertTrue(dic.size == 7)
+        Assert.assertEquals(breinActivity.getActivityType(), BreinActivityType.PAGE_VISIT)
+        Assert.assertEquals(dic["balance"], tagsDic["balance"])
+        Assert.assertEquals(dic["recharge"], tagsDic["recharge"])
+        Assert.assertEquals(dic["package"], tagsDic["package"])
+        Assert.assertEquals(dic["consumption"], tagsDic["consumption"])
+        Assert.assertEquals(dic["available"], tagsDic["available"])
+        Assert.assertEquals(dic["other"], tagsDic["other"])
+        Assert.assertEquals(dic["pageId"], tagsDic["pageId"])
 
         Breinify.sendActivity(breinActivity)
     }
@@ -195,6 +270,15 @@ class TestLifeCycle {
 
         // send again
         Breinify.sendActivity(breinActivity)
+
+        val config = Breinify.config
+
+        val tagsMap = breinActivity.getTagsDic()
+
+        Assert.assertEquals(breinActivity.getActivityType(), BreinActivityType.PAGE_VISIT)
+        Assert.assertEquals(config?.secret, VALID_SIGNATURE)
+        Assert.assertEquals(config?.apiKey, VALID_SIGNATURE_API_KEY)
+        Assert.assertEquals(tagsMap["pageId"], tagsDic["pageId"])
     }
 
 

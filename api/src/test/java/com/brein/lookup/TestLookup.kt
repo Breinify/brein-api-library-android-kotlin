@@ -8,6 +8,7 @@ import com.brein.domain.BreinDimension
 import com.brein.domain.BreinUser
 import junit.framework.TestCase
 import org.junit.AfterClass
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
@@ -61,6 +62,20 @@ class TestLookup {
             final Object dataImages = breinResult.get("digitalfootprint");
         }
         */
+
+        val fields = breinDimension.getDimensionFields()
+        val config = Breinify.config
+
+        Assert.assertEquals(config?.secret, VALID_SECRET)
+        Assert.assertEquals(config?.apiKey, VALID_API_KEY)
+        Assert.assertEquals(fields.size, dimensions.size)
+        Assert.assertEquals(fields[0], dimensions[0])
+        Assert.assertEquals(fields[1], dimensions[1])
+        Assert.assertEquals(fields[2], dimensions[2])
+        Assert.assertEquals(fields[3], dimensions[3])
+        Assert.assertEquals(fields[4], dimensions[4])
+        Assert.assertEquals(fields[5], dimensions[5])
+
     }
 
     companion object {

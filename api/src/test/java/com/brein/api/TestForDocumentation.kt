@@ -3,6 +3,8 @@ package com.brein.api
 import com.brein.domain.BreinConfig
 import com.brein.domain.BreinResult
 import com.brein.domain.results.temporaldataparts.BreinLocationResult
+import com.brein.engine.BreinEngineType
+import org.junit.Assert
 import org.junit.Test
 
 class TestForDocumentation {
@@ -26,6 +28,19 @@ class TestForDocumentation {
                 println("City is: " + locationResult.city)
             }
         })
+        val breinConfig = Breinify.config
+
+        Assert.assertEquals(
+            breinConfig?.getRestEngineType(),
+            BreinEngineType.HTTP_URL_CONNECTION_ENGINE
+        )
+        Assert.assertEquals(breinConfig?.activityEndpoint, "/activity")
+        Assert.assertEquals(breinConfig?.lookupEndpoint, "/lookup")
+        Assert.assertEquals(breinConfig?.temporalDataEndpoint, "/temporaldata")
+        Assert.assertEquals(breinConfig?.recommendationEndpoint, "/recommendation")
+        Assert.assertEquals(breinConfig?.apiKey, VALID_API_KEY)
+        Assert.assertEquals(breinConfig?.secret, VALID_SECRET)
+
         try {
             Thread.sleep(1000)
         } catch (e: InterruptedException) {

@@ -7,8 +7,12 @@ import com.brein.domain.BreinActivityType
 import com.brein.domain.BreinConfig
 import com.brein.domain.BreinResult
 import com.brein.domain.BreinUser
-import junit.framework.Assert.assertTrue
-import org.junit.*
+import org.junit.Before
+import org.junit.After
+import org.junit.Test
+import org.junit.AfterClass
+import org.junit.Assert
+
 
 /**
  * This test cases shows how to use the  activity
@@ -32,7 +36,7 @@ class TestActivity {
 
     internal inner class RestResult : ICallback<BreinResult?> {
         override fun callback(data: BreinResult?) {
-            assertTrue(data != null)
+            Assert.assertTrue(data != null)
             println("within RestResult")
             println("Data is: $data")
         }
@@ -77,8 +81,12 @@ class TestActivity {
         breinActivity.execute(restCallback)
 
         val name = breinUser.getFirstName()
-        Assert.assertEquals(name, "Toni")
+        val lastName = breinUser.getLastName()
 
+        Assert.assertEquals(name, "Toni")
+        Assert.assertEquals(lastName, "Maroni")
+        Assert.assertEquals(breinActivity.getActivityType(), BreinActivityType.LOGIN)
+        Assert.assertEquals(breinActivity.getDescription(), "This is a good description")
     }
 
     /**
@@ -106,7 +114,12 @@ class TestActivity {
         )
 
         val birthday = breinUser.getDateOfBirth()
-        Assert.assertEquals(birthday, ("12"))
+
+
+        Assert.assertEquals(birthday, "12")
+        Assert.assertEquals(breinActivity.getUser(), breinUser)
+        Assert.assertEquals(breinActivity.getActivityType(), BreinActivityType.LOGOUT)
+        Assert.assertEquals(breinActivity.getDescription(), description)
     }
 
     /**
@@ -120,6 +133,10 @@ class TestActivity {
             BreinActivityType.SEARCH,
             breinCategory, description, restCallback
         )
+
+        Assert.assertEquals(breinActivity.getUser(), breinUser)
+        Assert.assertEquals(breinActivity.getDescription(), description)
+        Assert.assertEquals(breinActivity.getActivityType(), BreinActivityType.SEARCH)
     }
 
     /**
@@ -133,6 +150,10 @@ class TestActivity {
             BreinActivityType.ADD_TO_CART,
             breinCategory, description, restCallback
         )
+
+        Assert.assertEquals(breinActivity.getUser(), breinUser)
+        Assert.assertEquals(breinActivity.getDescription(), description)
+        Assert.assertEquals(breinActivity.getActivityType(), BreinActivityType.ADD_TO_CART)
     }
 
     /**
@@ -146,6 +167,10 @@ class TestActivity {
             BreinActivityType.REMOVE_FROM_CART,
             breinCategory, description, restCallback
         )
+
+        Assert.assertEquals(breinActivity.getUser(), breinUser)
+        Assert.assertEquals(breinActivity.getDescription(), description)
+        Assert.assertEquals(breinActivity.getActivityType(), BreinActivityType.REMOVE_FROM_CART)
     }
 
     /**
@@ -159,6 +184,10 @@ class TestActivity {
             BreinActivityType.SELECT_PRODUCT,
             breinCategory, description, restCallback
         )
+
+        Assert.assertEquals(breinActivity.getUser(), breinUser)
+        Assert.assertEquals(breinActivity.getDescription(), description)
+        Assert.assertEquals(breinActivity.getActivityType(), BreinActivityType.SELECT_PRODUCT)
     }
 
     /**
@@ -172,6 +201,9 @@ class TestActivity {
             BreinActivityType.PAGE_VISIT,
             breinCategory, description, restCallback
         )
+        Assert.assertEquals(breinActivity.getUser(), breinUser)
+        Assert.assertEquals(breinActivity.getDescription(), description)
+        Assert.assertEquals(breinActivity.getActivityType(), BreinActivityType.PAGE_VISIT)
     }
 
     companion object {

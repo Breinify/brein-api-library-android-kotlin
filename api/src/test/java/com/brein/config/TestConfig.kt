@@ -51,7 +51,7 @@ class TestConfig {
         // HTTP
         val breinConfigHttp = BreinConfig(testApiKey)
             .setBaseUrl(httpUrl)
-        val isHttpValid = breinConfigHttps.isUrlValid(httpUrl)
+        val isHttpValid = breinConfigHttp.isUrlValid(httpUrl)
         Assert.assertTrue(isHttpValid)
     }
 
