@@ -10,7 +10,6 @@ import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import javax.inject.Inject
 
-
 class BreinNotificationChannelFactory @Inject constructor() {
     private val notificationChannels: MutableList<NotificationChannel> = arrayListOf()
 
@@ -53,7 +52,6 @@ class BreinNotificationChannelFactory @Inject constructor() {
 
         return notificationChannelInfo
     }
-
 
     fun createNotificationChannelInfo(remoteMessage: RemoteMessage): BreinNotificationChannelInfo {
 

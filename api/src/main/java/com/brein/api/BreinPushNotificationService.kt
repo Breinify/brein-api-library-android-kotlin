@@ -44,8 +44,10 @@ object BreinPushNotificationService {
         handleOnMessage(context, remoteMessage, notificationData)
     }
 
-    private fun handleOnMessage(context: Context, remoteMessage: RemoteMessage,
-                                notificationData: BreinNotificationChannelFactory.BreinNotificationChannelInfo) {
+    private fun handleOnMessage(
+        context: Context, remoteMessage: RemoteMessage,
+        notificationData: BreinNotificationChannelFactory.BreinNotificationChannelInfo
+    ) {
         lateinit var notification: BreinNotificationModel
         if (remoteMessage.data.isNotEmpty()) {
             notification =
@@ -59,7 +61,11 @@ object BreinPushNotificationService {
         showNotification(context, notificationData, notification)
     }
 
-    private fun showNotification(context: Context, channelInfo: BreinNotificationChannelFactory.BreinNotificationChannelInfo, notification: BreinNotificationModel) {
+    private fun showNotification(
+        context: Context,
+        channelInfo: BreinNotificationChannelFactory.BreinNotificationChannelInfo,
+        notification: BreinNotificationModel
+    ) {
 
         val id = channelInfo.notificationId
 
@@ -95,12 +101,15 @@ object BreinPushNotificationService {
             val imageUrl = notificationData.view["imageUrl"] as String?
 
             // Getting the actions payload if exists
-            val actionsJson = gson.toJson(notificationData.view["actions"])
+
+            val actionsJson= gson.toJson(notificationData.view["actions"]) as String?
 
             var bigContentTitle = ""
-            notificationData.view["bigContentTitle"]?.let { bigContentTitle =  notificationData.view["bigContentTitle"].toString() }
+            notificationData.view["bigContentTitle"]?.let {
+                bigContentTitle = notificationData.view["bigContentTitle"].toString()
+            }
 
-            if (actionsJson != null) {
+            if (actionsJson.isNullOrEmpty()) {
                 // Creating a MutableList that'll contain the different actions
                 val actions: MutableList<NotificationAction> = mutableListOf()
                 // from json -> MutableList
@@ -169,7 +178,6 @@ object BreinPushNotificationService {
                     )
                     actions.add(notificationModel)
                 }
-
 
 
                 // creating an Action Expandable notification
