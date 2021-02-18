@@ -3,8 +3,6 @@ package com.brein.api
 import com.brein.domain.BreinConfig
 import com.brein.domain.BreinResult
 import com.brein.util.BreinUtil
-import java.util.*
-import kotlin.collections.HashMap
 
 class BreinRecommendation : BreinBase(), IAsyncExecutable<BreinResult?> {
     /**

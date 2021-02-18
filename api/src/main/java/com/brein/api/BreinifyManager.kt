@@ -13,7 +13,6 @@ import androidx.core.app.ActivityCompat
 import com.brein.domain.BreinIpInfo
 import com.brein.util.BreinUtil
 import java.util.*
-import kotlin.collections.HashMap
 
 @SuppressLint("StaticFieldLeak")
 object BreinifyManager {
