@@ -101,15 +101,14 @@ object BreinPushNotificationService {
             val imageUrl = notificationData.view["imageUrl"] as String?
 
             // Getting the actions payload if exists
-
-            val actionsJson= gson.toJson(notificationData.view["actions"]) as String?
+            val actionsJson= gson.toJson(notificationData.view["actions"])
 
             var bigContentTitle = ""
             notificationData.view["bigContentTitle"]?.let {
                 bigContentTitle = notificationData.view["bigContentTitle"].toString()
             }
 
-            if (actionsJson.isNullOrEmpty()) {
+            if (!actionsJson.isNullOrEmpty()) {
                 // Creating a MutableList that'll contain the different actions
                 val actions: MutableList<NotificationAction> = mutableListOf()
                 // from json -> MutableList
@@ -207,9 +206,6 @@ object BreinPushNotificationService {
 
     private fun createNotification(context: Context, model: BreinNotificationModel): Notification {
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-
-        val resources = context.resources
-        val resId = 1
 
         return NotificationCompat.Builder(context, model.channelId)
             .setSmallIcon(R.drawable.common_full_open_on_phone)
