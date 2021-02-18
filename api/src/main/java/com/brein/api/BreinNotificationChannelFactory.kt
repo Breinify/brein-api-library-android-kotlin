@@ -8,7 +8,9 @@ import androidx.annotation.RequiresApi
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.HashMap
 
 class BreinNotificationChannelFactory @Inject constructor() {
     private val notificationChannels: MutableList<NotificationChannel> = arrayListOf()
@@ -70,7 +72,7 @@ class BreinNotificationChannelFactory @Inject constructor() {
         var notificationId  = 1
         var extraText  = ""
         var product  = ""
-        var viewsMap: HashMap<String, Any> = Map()
+        var viewsMap: HashMap<String, Any> = HashMap()
 
         dataMap["channelId"]?.let { channelId = dataMap["channelId"].toString() }
         dataMap["channel"]?.let { channel = dataMap["channel"].toString() }
@@ -84,7 +86,7 @@ class BreinNotificationChannelFactory @Inject constructor() {
         dataMap["extraText"]?.let { extraText = dataMap["extraText"].toString() }
         dataMap["product"]?.let { product = dataMap["product"].toString() }
 
-        dataMap["view"]?.let { viewsMap = dataMap["view"] as Map<String, Any> }
+        dataMap["view"]?.let { viewsMap = dataMap["view"] as HashMap<String, Any> }
 
         val breinNotfictionChannelInfo = BreinNotificationChannelInfo(
             channelId,
