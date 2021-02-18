@@ -4,6 +4,7 @@ import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.graphics.BitmapFactory
 import android.media.RingtoneManager
 import android.net.Uri
@@ -12,11 +13,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.brein.domain.BreinNotificationModel
-import com.brein.domain.NotificationAction
-import com.brein.domain.PictureActionExpandableNotification
-import com.brein.domain.PictureExpandableNotification
-import com.brein.domain.BasicNotification
+import com.brein.domain.*
 import com.example.brein.R
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.GsonBuilder
@@ -26,6 +23,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.net.URL
+
 
 object BreinPushNotificationService {
 
@@ -134,7 +132,7 @@ object BreinPushNotificationService {
                             intent.action = Intent.ACTION_VIEW
                             intent.data = Uri.parse(deepLink)
                             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                            intent.putExtra("coupon", extraText)
+//                            intent.putExtra("extra", extraText)
                             pendingIntent = PendingIntent.getActivity(
                                 context,
                                 0,
@@ -164,7 +162,7 @@ object BreinPushNotificationService {
                                 context,
                                 0 /*Request code*/,
                                 intent,
-                                PendingIntent.FLAG_UPDATE_CURRENT
+                                PendingIntent.FLAG_CANCEL_CURRENT
                             )
                         }
                     }
@@ -208,10 +206,11 @@ object BreinPushNotificationService {
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
 
         return NotificationCompat.Builder(context, model.channelId)
-            .setSmallIcon(R.drawable.common_full_open_on_phone)
+            .setSmallIcon(R.drawable.icon_notification_fallback_white)
             .setContentTitle(model.title)
             .setContentText(model.content)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+//            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setPriority(model.priority)
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
             .setOnlyAlertOnce(true)
@@ -240,6 +239,7 @@ object BreinPushNotificationService {
             }
             .build()
     }
+
 
     // using coroutines to read a picture from URL
     // decode the picture to a `Bitmap`
