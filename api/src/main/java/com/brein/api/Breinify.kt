@@ -2,9 +2,12 @@ package com.brein.api
 
 import android.app.Activity
 import android.app.Application
+import android.content.Context
+import com.brein.domain.BreinActivityType
 import com.brein.domain.BreinConfig
 import com.brein.domain.BreinResult
 import com.brein.domain.BreinUser
+import com.google.firebase.messaging.RemoteMessage
 
 /**
  * Static Implementation of Breinify activity lookup calls
@@ -211,11 +214,7 @@ class Breinify {
             set(userId) {
                 BreinifyManager.userId = userId
             }
-        /**
-         * Contains the push device registration
-         *
-         * @return String containing the pushDeviceRegistration
-         */
+
         /**
          * sets the pushDeviceToken
          *
@@ -248,6 +247,27 @@ class Breinify {
          */
         fun sendActivity(activity: BreinActivity?, callback: ICallback<BreinResult?>? = null) {
             this.activity(activity, callback)
+        }
+
+        //   public func sendActivity(_ activityType: String, additionalContent: [String: Any]) {
+        fun sendActivity(activityType: String, tagsMap: HashMap<String, Any>?) {
+
+
+            // save current map
+            val curTagsMap = this.breinActivity.getTagsDic()
+
+            if (tagsMap != null) {
+                this.breinActivity.setTagsDic(tagsMap)
+            }
+
+            this.activity(
+                getBreinUser(),
+                activityType,
+                null,
+                null
+            )
+
+            this.breinActivity.setTagsDic(curTagsMap)
         }
 
         /**
@@ -380,7 +400,6 @@ class Breinify {
             callback: ICallback<BreinResult?>?,
             vararg shapeTypes: String?
         ) {
-
             val data = BreinTemporalData()
                 .setLongitude(longitude)
                 .setLatitude(latitude)
@@ -434,6 +453,29 @@ class Breinify {
          */
         fun lookUp(data: BreinLookup?, callback: ICallback<BreinResult?>?) {
             brein!!.lookup(data, callback)
+        }
+
+        /**
+         * Checks if the data payload contains a "breinify" element.
+         *
+         */
+        fun isBreinifyPushNotificationMessage(remoteMessage: RemoteMessage): Boolean {
+            return !remoteMessage.data["breinify"].isNullOrEmpty()
+        }
+
+        /**
+         * Handle the received PushNotification.
+         *
+         * Delegate to BreinPushNotification
+         */
+        fun onMessageReceived(context: Context, remoteMessage: RemoteMessage) {
+
+            sendActivity(BreinActivityType.RECEIVED_PUSH_NOTIFICATION, null)
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                BreinPushNotificationService.onMessageReceived(context, remoteMessage)
+            } else {
+                BreinPushNotificationService.onMessageReceivedLegacy(context, remoteMessage)
+            }
         }
 
         /**

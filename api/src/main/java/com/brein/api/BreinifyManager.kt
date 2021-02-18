@@ -33,9 +33,6 @@ object BreinifyManager {
     // contains the main activity
     private var mainActivity: Activity? = null
 
-    // instance of push notification service
-//    private val breinPushNotificationReceiver = BreinPushNotificationReceiver()
-
     private var apiKey: String? = null
 
     private var secret: String? = null
@@ -135,9 +132,6 @@ object BreinifyManager {
         // configure the API
         Breinify.setConfig(apiKey, secret)
 
-        // configure the recipient of push notifications
-        initNotificationReceiver()
-
         // read user defaults (email, userId, token)
         readAndInitUserDefaults()
 
@@ -146,23 +140,6 @@ object BreinifyManager {
 
         // configure the session
         configureSession()
-    }
-
-    /**
-     * Initializes the notification receiver programmatically
-     */
-    fun initNotificationReceiver() {
-//        if (application != null) {
-//            val filter = IntentFilter("com.google.android.c2dm.intent.RECEIVE")
-//            application!!.registerReceiver(breinPushNotificationReceiver, filter)
-//        }
-    }
-
-    /**
-     * Stop sending notifications
-     */
-    fun destroyNotificationReceiver() {
-//        application?.unregisterReceiver(breinPushNotificationReceiver)
     }
 
     /**
@@ -189,7 +166,6 @@ object BreinifyManager {
     @Suppress("UNUSED")
     fun shutdown() {
         Log.d(TAG, "Breinify shutdown invoked ")
-        destroyNotificationReceiver()
     }
 
     /**

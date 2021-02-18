@@ -1,5 +1,6 @@
 package com.brein.api
 
+import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
@@ -14,17 +15,13 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
-class BreinNotficationService : FirebaseMessagingService() {
-
-    override fun onNewToken(token: String) {
-        super.onNewToken(token)
-        Breinify.configureDeviceToken(token)
-    }
+class BreinNotificationService : FirebaseMessagingService() {
 
     /**
      * Invoked in case of ...
      * @param remoteMessage  RemoteMessage
      */
+    @SuppressLint("LongLogTag")
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
 
         // super.onMessageReceived(remoteMessage);
@@ -37,6 +34,13 @@ class BreinNotficationService : FirebaseMessagingService() {
         sendNotification(remoteMessage)
     }
 
+    override fun onNewToken(token: String) {
+        super.onNewToken(token)
+        Breinify.configureDeviceToken(token)
+    }
+
+
+    @SuppressLint("LongLogTag")
     override fun onDeletedMessages() {
         Log.d(TAG, "Breinify - onDeleteMessage invoked")
     }
@@ -46,10 +50,14 @@ class BreinNotficationService : FirebaseMessagingService() {
      *
      * @param remoteMessage RemoteMessage FCM message
      */
+    @SuppressLint("LongLogTag")
     private fun sendNotification(remoteMessage: RemoteMessage?) {
 
         if (remoteMessage == null) {
-            Log.d(TAG, "Breinify - remote notification: message not set!  -> no notification shown.")
+            Log.d(
+                TAG,
+                "Breinify - remote notification: message not set!  -> no notification shown."
+            )
             return
         }
 
@@ -79,25 +87,23 @@ class BreinNotficationService : FirebaseMessagingService() {
         val notificationManager: NotificationManager? =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
 
-        notificationManager?.notify(0 , notification)
+        notificationManager?.notify(0, notification)
     }
 
     private fun handleNow(remoteMessage: RemoteMessage) {
         val handler = Handler(Looper.getMainLooper())
 
         handler.post {
-//            Toast.makeText(baseContext, getString(R.string.handle_notification_now), Toast.LENGTH_LONG).show()
             Toast.makeText(baseContext, "Breinify", Toast.LENGTH_LONG).show()
 
             remoteMessage.notification?.let {
                 val intent = Intent("MyData")
                 intent.putExtra("message", remoteMessage.data["text"])
-//                broadcaster?.sendBroadcast(intent)
             }
         }
     }
 
     companion object {
-        private const val TAG = "BreinNotficationService"
+        private const val TAG = "BreinNotificationService"
     }
 }
