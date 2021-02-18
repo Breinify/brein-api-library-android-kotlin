@@ -14,9 +14,7 @@ import android.util.Log
 import androidx.core.app.ActivityCompat
 import com.brein.api.Breinify
 import com.brein.api.BreinifyManager
-import com.brein.util.BreinMapUtil
 import com.brein.util.BreinUtil
-import com.google.gson.Gson
 import com.google.gson.JsonObject
 import java.math.BigInteger
 import java.net.InetAddress

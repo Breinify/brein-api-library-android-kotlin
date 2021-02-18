@@ -7,7 +7,7 @@ import com.brein.domain.BreinConfig
 import com.brein.domain.BreinIpInfo
 import java.security.InvalidKeyException
 import java.security.SecureRandom
-import java.util.Random
+import java.util.*
 
 /**
  * Utility class
