@@ -11,6 +11,8 @@ import com.google.gson.reflect.TypeToken
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.HashMap
+import com.google.gson.Gson
+
 
 class BreinNotificationChannelFactory @Inject constructor() {
     private val notificationChannels: MutableList<NotificationChannel> = arrayListOf()
@@ -68,25 +70,35 @@ class BreinNotificationChannelFactory @Inject constructor() {
         var channelId = ""
         var channel = ""
         var channelDescription = ""
-        var importance  = 1
-        var notificationId  = 1
-        var extraText  = ""
-        var product  = ""
-        var viewsMap: HashMap<String, Any> = HashMap()
+        var importance = 1
+        var notificationId = 1
+        var extraText = ""
+        var product = ""
+        val viewsMap = dataMap["view"] as Map<String, Any>?
 
         dataMap["channelId"]?.let { channelId = dataMap["channelId"].toString() }
         dataMap["channel"]?.let { channel = dataMap["channel"].toString() }
         dataMap["channelDescription"]?.let {
             channelDescription = dataMap["channelDescription"].toString()
         }
-        dataMap["importance"]?.let { importance = dataMap["importance"].toString().toInt() }
-        dataMap["notificationId"]?.let {
-            notificationId = dataMap["notificationId"].toString().toInt()
-        }
-        dataMap["extraText"]?.let { extraText = dataMap["extraText"].toString() }
-        dataMap["product"]?.let { product = dataMap["product"].toString() }
 
-        dataMap["view"]?.let { viewsMap = dataMap["view"] as HashMap<String, Any> }
+        dataMap["importance"]?.let {
+            val priority = dataMap["importance"]
+            importance = priority as? Int ?: 1
+        }
+        dataMap["notificationId"]?.let {
+            val noti = dataMap["notificationId"]
+            notificationId = noti as? Int ?: 1
+        }
+
+        dataMap["extraText"]?.let {
+            val extra = dataMap["extraText"]
+            extraText = extra as? String ?: ""
+        }
+        dataMap["product"]?.let {
+            val pro = dataMap["product"]
+            product = pro as? String ?: ""
+        }
 
         val breinNotfictionChannelInfo = BreinNotificationChannelInfo(
             channelId,
