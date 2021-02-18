@@ -8,10 +8,7 @@ import androidx.annotation.RequiresApi
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import java.util.*
 import javax.inject.Inject
-import kotlin.collections.HashMap
-import com.google.gson.Gson
 
 
 class BreinNotificationChannelFactory @Inject constructor() {
@@ -76,16 +73,26 @@ class BreinNotificationChannelFactory @Inject constructor() {
         var product = ""
         val viewsMap = dataMap["view"] as Map<String, Any>?
 
-        dataMap["channelId"]?.let { channelId = dataMap["channelId"].toString() }
-        dataMap["channel"]?.let { channel = dataMap["channel"].toString() }
+        dataMap["channelId"]?.let {
+            val tempChannelId = dataMap["channelId"]
+            channelId = tempChannelId as? String ?: ""
+        }
+
+        dataMap["channel"]?.let {
+            val tempChannel = dataMap["channel"]
+            channel = tempChannel as? String ?: ""
+        }
+
         dataMap["channelDescription"]?.let {
-            channelDescription = dataMap["channelDescription"].toString()
+            val tempChannelDesc = dataMap["channelDescription"]
+            channelDescription = tempChannelDesc as? String ?: ""
         }
 
         dataMap["importance"]?.let {
             val priority = dataMap["importance"]
             importance = priority as? Int ?: 1
         }
+
         dataMap["notificationId"]?.let {
             val noti = dataMap["notificationId"]
             notificationId = noti as? Int ?: 1
@@ -95,6 +102,7 @@ class BreinNotificationChannelFactory @Inject constructor() {
             val extra = dataMap["extraText"]
             extraText = extra as? String ?: ""
         }
+
         dataMap["product"]?.let {
             val pro = dataMap["product"]
             product = pro as? String ?: ""
