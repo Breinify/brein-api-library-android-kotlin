@@ -204,11 +204,12 @@ object BreinPushNotificationService {
     private fun createNotification(context: Context, model: BreinNotificationModel): Notification {
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
 
+        // Todo - use customer icon
+
         return NotificationCompat.Builder(context, model.channelId)
             .setSmallIcon(R.drawable.icon_notification_fallback_white)
             .setContentTitle(model.title)
             .setContentText(model.content)
-//            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setPriority(model.priority)
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
@@ -217,19 +218,9 @@ object BreinPushNotificationService {
                 when (model) {
                     is PictureExpandableNotification -> {
                         applyImageUrl(this, model.picture)
-//                        setStyle(
-//                            NotificationCompat.BigPictureStyle()
-//                                .bigPicture(myBitmap)
-//                                .bigLargeIcon(null)
-//                        )
                     }
                     is PictureActionExpandableNotification -> {
                         applyImageUrl(this, model.picture)
-//                        setStyle(
-//                            NotificationCompat.BigPictureStyle()
-//                                .bigPicture(myBitmap)
-//                                .bigLargeIcon(null)
-//                        )
                     }
                 }
                 model.actions.forEach { (iconId, title, actionIntent) ->
