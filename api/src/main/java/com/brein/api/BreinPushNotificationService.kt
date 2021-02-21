@@ -6,7 +6,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
-import android.graphics.drawable.Drawable
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
@@ -15,7 +14,6 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.brein.domain.*
-import com.example.brein.R
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
@@ -117,7 +115,7 @@ object BreinPushNotificationService {
                 val actions: MutableList<NotificationAction> = mutableListOf()
                 // from json -> MutableList
                 val actionList: MutableList<Any> =
-                    gson.fromJson(actionsJson, object : TypeToken<MutableList<NotificationAction>>() {}.type)
+                    gson.fromJson(actionsJson, object : TypeToken<MutableList<Any>>() {}.type)
 
                 // each action needs a different intent
                 actionList.forEach { action ->
@@ -165,13 +163,9 @@ object BreinPushNotificationService {
                             val intent = Intent()
                             intent.action = currentAction["action"]
                             intent.putExtra("id", notificationData.notificationId)
-//                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-
-//                            val notificationManager = context.getSystemService(BreinP::class.java)
 
                             NotificationManagerCompat.from(context)
                                 .cancel(notificationData.notificationId);
-
 
                             pendingIntent = PendingIntent.getActivity(
                                 context,
@@ -179,11 +173,6 @@ object BreinPushNotificationService {
                                 Intent(),
                                 PendingIntent.FLAG_ONE_SHOT
                             )
-
-//                            NotificationManagerCompat.from(context).cancelAll();
-
-//                            NotificationManagerCompat.from(context)
-//                                .cancel(notificationData.notificationId)
                         }
                     }
 
@@ -195,7 +184,6 @@ object BreinPushNotificationService {
                     )
                     actions.add(notificationModel)
                 }
-
 
                 // creating an Action Expandable notification
                 return PictureActionExpandableNotification(
@@ -230,31 +218,29 @@ object BreinPushNotificationService {
     private fun createNotification(context: Context, model: BreinNotificationModel): Notification {
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
 
-        var ressourceId: Int
+        val resourceId: Int
 
         // get the id of custom notification icon for further use
         // when not found (name not specified in the payload / or false name)
         // a fallback icon would be used
         if (checkNotificationIconExists(model.notificationIcon.toString(), context)) {
-            ressourceId = context.resources.getIdentifier(
+            resourceId = context.resources.getIdentifier(
                 model.notificationIcon,
                 "drawable",
                 context.packageName
             )
         } else {
-            ressourceId = context.resources.getIdentifier(
+            resourceId = context.resources.getIdentifier(
                 "icon_notification_fallback_white",
                 "drawable",
                 context.packageName
             )
         }
 
-
         return NotificationCompat.Builder(context, model.channelId)
-            .setSmallIcon(ressourceId)
+            .setSmallIcon(resourceId)
             .setContentTitle(model.title)
             .setContentText(model.content)
-//            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setPriority(model.priority)
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
@@ -263,19 +249,9 @@ object BreinPushNotificationService {
                 when (model) {
                     is PictureExpandableNotification -> {
                         applyImageUrl(this, model.picture)
-//                        setStyle(
-//                            NotificationCompat.BigPictureStyle()
-//                                .bigPicture(myBitmap)
-//                                .bigLargeIcon(null)
-//                        )
                     }
                     is PictureActionExpandableNotification -> {
                         applyImageUrl(this, model.picture)
-//                        setStyle(
-//                            NotificationCompat.BigPictureStyle()
-//                                .bigPicture(myBitmap)
-//                                .bigLargeIcon(null)
-//                        )
                     }
                 }
                 model.actions.forEach { (iconId, title, actionIntent) ->
@@ -299,7 +275,6 @@ object BreinPushNotificationService {
         }
         return true
     }
-
 
     // using coroutines to read a picture from URL
     // decode the picture to a `Bitmap`
