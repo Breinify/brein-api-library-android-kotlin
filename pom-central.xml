@@ -5,7 +5,7 @@
 
     <groupId>com.breinify</groupId>
     <artifactId>brein-api-library-android-kotlin</artifactId>
-    <version>1.0.7</version>
+    <version>1.0.8</version>
 
     <name>brein-api-library-android-kotlin</name>
     <description>Brein API Library Android Kotlin</description>
