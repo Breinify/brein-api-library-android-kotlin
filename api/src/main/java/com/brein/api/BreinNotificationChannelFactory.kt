@@ -67,6 +67,7 @@ class BreinNotificationChannelFactory @Inject constructor() {
         var channelDescription = ""
         var importance = 1
         var notificationId = 1
+        var notificationIcon = "icon_notification_fallback_white"
         var extraText = ""
         var product = ""
         val viewsMap = dataMap["view"] as Map<String, Any>?
@@ -96,6 +97,12 @@ class BreinNotificationChannelFactory @Inject constructor() {
             notificationId = noti as? Int ?: 1
         }
 
+        dataMap["notificationIcon"]?.let {
+            val notifIcon = dataMap["notificationIcon"]
+            // check id exists
+            notificationIcon = notifIcon as? String ?: "icon_notification_fallback_white"
+        }
+
         dataMap["extraText"]?.let {
             val extra = dataMap["extraText"]
             extraText = extra as? String ?: ""
@@ -112,6 +119,7 @@ class BreinNotificationChannelFactory @Inject constructor() {
             channelDescription,
             importance,
             notificationId,
+            notificationIcon,
             extraText,
             product,
             viewsMap
@@ -126,6 +134,7 @@ class BreinNotificationChannelFactory @Inject constructor() {
         val description: String, // channelDescription
         val priority: Int, // notification priority
         val notificationId: Int,
+        val notificationIcon: String?,
         val extraText: String?,
         val product: String?,
         val view: Map<String, Any>?
