@@ -64,7 +64,7 @@ class BreinNotificationService : FirebaseMessagingService() {
         val title: String = remoteMessage.data["title"].toString()
         val message: String = remoteMessage.data["message"].toString()
 
-        val intent = Intent(this, BreinifyManager.getMainActivity()?.javaClass)
+        val intent = Intent() //, BreinifyManager.getMainActivity()?.javaClass)
 
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent: PendingIntent = PendingIntent.getActivity(
@@ -72,8 +72,6 @@ class BreinNotificationService : FirebaseMessagingService() {
             PendingIntent.FLAG_ONE_SHOT
         )
 
-
-        // todo check notification
         val defaultSoundUri: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notification = NotificationCompat.Builder(this, "BreinifyChannel")
             .setSmallIcon(android.R.color.transparent)
