@@ -152,7 +152,6 @@ object BreinPushNotificationService {
 //                            openSecondIntent.data = Uri.parse(deepLink)
                             openSecondIntent.putExtra("notificationId", notificationId);
 //                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-//                            intent.putExtra("test", "second action clicked")
 
                             pendingIntent = PendingIntent.getBroadcast(
                                 context,
