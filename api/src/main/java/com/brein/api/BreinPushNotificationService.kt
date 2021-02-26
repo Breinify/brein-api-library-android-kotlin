@@ -2,6 +2,7 @@ package com.brein.api
 
 import android.annotation.SuppressLint
 import android.app.Notification
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -65,7 +66,7 @@ object BreinPushNotificationService {
     ) {
 
         val id = channelInfo.notificationId
-        val notificationIcon = channelInfo.notificationIcon
+//        val notificationIcon = channelInfo.notificationIcon
 
         NotificationManagerCompat.from(context)
             .notify(id, createNotification(context, notification))
@@ -132,46 +133,44 @@ object BreinPushNotificationService {
                     when (currentAction["action"]) {
                         "open" -> {
                             // when action: open -> deep link to the app
-                            val intent = Intent()
-                            intent.action = Intent.ACTION_VIEW
-                            intent.data = Uri.parse(deepLink)
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                            intent.putExtra("extra", extraText)
-                            pendingIntent = PendingIntent.getActivity(
+                            val openIntent = Intent(context, NotificationListener::class.java)
+                            openIntent.action = BreinNotificationAction.OPENED_FIRST
+//                            openIntent.data = Uri.parse(deepLink)
+                            openIntent.putExtra("notificationId", notificationId);
+
+                            pendingIntent = PendingIntent.getBroadcast(
                                 context,
                                 0,
-                                intent,
-                                PendingIntent.FLAG_ONE_SHOT
+                                openIntent,
+                                PendingIntent.FLAG_UPDATE_CURRENT
                             )
                         }
                         "open_second" -> {
                             // when action: open -> deep link to the app
-                            val intent = Intent()
-                            intent.action = Intent.ACTION_VIEW
-                            intent.data = Uri.parse(deepLink)
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                            val openSecondIntent = Intent(context, NotificationListener::class.java)
+                            openSecondIntent.action = BreinNotificationAction.OPENED_SECOND
+//                            openSecondIntent.data = Uri.parse(deepLink)
+                            openSecondIntent.putExtra("notificationId", notificationId);
+//                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 //                            intent.putExtra("test", "second action clicked")
 
-                            pendingIntent = PendingIntent.getActivity(
+                            pendingIntent = PendingIntent.getBroadcast(
                                 context,
                                 0,
-                                intent,
-                                PendingIntent.FLAG_ONE_SHOT
+                                openSecondIntent,
+                                PendingIntent.FLAG_UPDATE_CURRENT
                             )
                         }
                         else -> {
-                            val intent = Intent()
-                            intent.action = currentAction["action"]
-                            intent.putExtra("id", notificationData.notificationId)
+                            val intent = Intent(context, NotificationListener::class.java)
+                            intent.action = BreinNotificationAction.IGNORE
+                            intent.putExtra("notificationId", notificationId);
 
-                            NotificationManagerCompat.from(context)
-                                .cancel(notificationData.notificationId);
-
-                            pendingIntent = PendingIntent.getActivity(
+                            pendingIntent = PendingIntent.getBroadcast(
                                 context,
                                 0 /*Request code*/,
-                                Intent(),
-                                PendingIntent.FLAG_ONE_SHOT
+                                intent,
+                                PendingIntent.FLAG_CANCEL_CURRENT
                             )
                         }
                     }
@@ -242,9 +241,9 @@ object BreinPushNotificationService {
             .setContentTitle(model.title)
             .setContentText(model.content)
             .setPriority(model.priority)
-            .setAutoCancel(true)
             .setSound(defaultSoundUri)
-            .setOnlyAlertOnce(true)
+//            .setOnlyAlertOnce(true)
+            .setAutoCancel(true)
             .apply {
                 when (model) {
                     is PictureExpandableNotification -> {

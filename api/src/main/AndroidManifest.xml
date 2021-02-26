@@ -4,5 +4,10 @@
 
     <!-- for Inet access -->
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <application>
+        <receiver
+            android:name="com.brein.api.NotificationListener"
+            android:enabled="true"
+            android:exported="false" />
+    </application>
 </manifest>
