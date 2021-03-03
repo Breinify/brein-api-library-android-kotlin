@@ -131,7 +131,7 @@ object BreinPushNotificationService {
                     when (currentAction["action"]) {
                         "open" -> {
                             // when action: open -> deep link to the app
-                            val openIntent = Intent(context, NotificationListener::class.java)
+                            val openIntent = Intent(context, BreinNotificationListener::class.java)
                             openIntent.action = BreinNotificationAction.OPENED_FIRST
 //                            openIntent.data = Uri.parse(deepLink)
                             openIntent.putExtra("notificationId", notificationId);
@@ -145,7 +145,7 @@ object BreinPushNotificationService {
                         }
                         "open_second" -> {
                             // when action: open -> deep link to the app
-                            val openSecondIntent = Intent(context, NotificationListener::class.java)
+                            val openSecondIntent = Intent(context, BreinNotificationListener::class.java)
                             openSecondIntent.action = BreinNotificationAction.OPENED_SECOND
 //                            openSecondIntent.data = Uri.parse(deepLink)
                             openSecondIntent.putExtra("notificationId", notificationId);
@@ -159,7 +159,7 @@ object BreinPushNotificationService {
                             )
                         }
                         else -> {
-                            val intent = Intent(context, NotificationListener::class.java)
+                            val intent = Intent(context, BreinNotificationListener::class.java)
                             intent.action = BreinNotificationAction.IGNORE
                             intent.putExtra("notificationId", notificationId);
 
