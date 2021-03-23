@@ -1,5 +1,6 @@
 package com.brein.engine
 
+import android.util.Log
 import com.brein.api.BreinActivity
 import com.brein.api.BreinBase
 import com.brein.api.BreinLookup
@@ -64,7 +65,11 @@ class BreinEngine {
         data: BreinBase?,
         callback: ICallback<BreinResult?>?
     ) {
-        getEngine()!!.invokeRequest(config, data, callback)
+        try {
+            getEngine()!!.invokeRequest(config, data, callback)
+        } catch (e: Exception) {
+            Log.e("BreinEngine '", "could not invoke request");
+        }
     }
 
     fun getEngine(): IRestEngine? {

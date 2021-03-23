@@ -38,7 +38,11 @@ object BreinIpInfo {
         get() = this.infoMap[TIMEZONE_FIELD] as String?
 
     init {
-        refreshData()
+        try {
+            refreshData()
+        } finally {
+            Log.e("BreinIpInfo", "could not invoke BreinIpInfo")
+        }
     }
 
     fun detect() {
