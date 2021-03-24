@@ -6,7 +6,7 @@ import com.brein.engine.BreinEngine
 
 class Brein {
 
-    private var config: BreinConfig? = null
+    private var config: BreinConfig? = BreinConfig()
     private var engine: BreinEngine? = BreinEngine()
 
     /**

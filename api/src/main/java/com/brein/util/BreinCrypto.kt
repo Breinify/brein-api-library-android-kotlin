@@ -31,7 +31,6 @@ object BreinCrypto {
         return bytes.encodeBase64ToString()
     }
 
-
 }
 
 fun String.encodeBase64ToString(): String = String(this.toByteArray().encodeBase64())

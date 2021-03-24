@@ -3,6 +3,7 @@ package com.brein.api
 import android.app.Activity
 import android.app.Application
 import android.content.Context
+import android.util.Log
 import com.brein.domain.BreinActivityType
 import com.brein.domain.BreinConfig
 import com.brein.domain.BreinResult
@@ -16,8 +17,9 @@ class Breinify {
 
     companion object {
         const val version: String = BreinConfig.VERSION
+        private const val TAG = "Breinify"
 
-        private var lastConfig: BreinConfig? = null
+        private var lastConfig: BreinConfig? = BreinConfig()
         private var lastBrein: Brein? = null
         private val breinUser = BreinUser()
         private val breinActivity = BreinActivity()
@@ -246,28 +248,36 @@ class Breinify {
          * @param callback        Contains the callback object
          */
         fun sendActivity(activity: BreinActivity?, callback: ICallback<BreinResult?>? = null) {
-            this.activity(activity, callback)
-        }
 
-        //   public func sendActivity(_ activityType: String, additionalContent: [String: Any]) {
-        fun sendActivity(activityType: String, tagsMap: HashMap<String, Any>?) {
-
-
-            // save current map
-            val curTagsMap = this.breinActivity.getTagsDic()
-
-            if (tagsMap != null) {
-                this.breinActivity.setTagsDic(tagsMap)
+            try {
+                this.activity(activity, callback)
+            } catch (e: Exception) {
+                Log.e(TAG, "could not sendActivity due to exception: $e")
             }
 
-            this.activity(
-                getBreinUser(),
-                activityType,
-                null,
-                null
-            )
+        }
 
-            this.breinActivity.setTagsDic(curTagsMap)
+        private fun sendActivity(activityType: String, tagsMap: HashMap<String, Any>?) {
+
+            try {
+                // save current map
+                val curTagsMap = this.breinActivity.getTagsDic()
+
+                if (tagsMap != null) {
+                    this.breinActivity.setTagsDic(tagsMap)
+                }
+
+                this.activity(
+                    getBreinUser(),
+                    activityType,
+                    null,
+                    null
+                )
+
+                this.breinActivity.setTagsDic(curTagsMap)
+            } catch (e: Exception) {
+                Log.e(TAG, "could not send send activity due to exception: $e")
+            }
         }
 
         /**

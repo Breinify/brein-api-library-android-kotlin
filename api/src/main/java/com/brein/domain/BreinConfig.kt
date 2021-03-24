@@ -299,7 +299,7 @@ class BreinConfig {
         get() = secret != null && secret!!.isNotEmpty()
 
     companion object {
-        const val VERSION = "1.0.6"
+        const val VERSION = "1.0.10"
         const val DEFAULT_ACTIVITY_ENDPOINT = "/activity"
         const val DEFAULT_TEMPORALDATA_ENDPOINT = "/temporaldata"
         const val DEFAULT_RECOMMENDATION_ENDPOINT = "/recommendation"

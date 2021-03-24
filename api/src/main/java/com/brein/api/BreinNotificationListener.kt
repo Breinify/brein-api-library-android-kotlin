@@ -15,34 +15,38 @@ class BreinNotificationListener : BroadcastReceiver() {
     }
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        // get notificationId from intent extra
-        val notificationId = intent?.getIntExtra("notificationId", 0)
 
-        // depends on which action was sent from notification service
-        when (intent?.action.toString()) {
-            BreinNotificationAction.OPENED_FIRST -> {
+        try {// get notificationId from intent extra
+            val notificationId = intent?.getIntExtra("notificationId", 0)
 
-                Log.d(TAG, "openedPushNotification (OPENED_FIRST) is:" + intent.toString())
+            // depends on which action was sent from notification service
+            when (intent?.action.toString()) {
+                BreinNotificationAction.OPENED_FIRST -> {
 
-                val breinActivity = Breinify.getBreinActivity()
-                    .setActivityType(BreinActivityType.OPENED_PUSH_NOTIFICATION)
+                    Log.d(TAG, "openedPushNotification (OPENED_FIRST) is:" + intent.toString())
 
-                Breinify.sendActivity(breinActivity)
+                    val breinActivity = Breinify.getBreinActivity()
+                        .setActivityType(BreinActivityType.OPENED_PUSH_NOTIFICATION)
+
+                    Breinify.sendActivity(breinActivity)
+                }
+                BreinNotificationAction.OPENED_SECOND -> {
+
+                    Log.d(TAG, "openedPushNotification (OPENED_SECOND)is:" + intent.toString())
+
+                    val breinActivity = Breinify.getBreinActivity()
+                        .setActivityType(BreinActivityType.OPENED_PUSH_NOTIFICATION)
+
+                    Breinify.sendActivity(breinActivity)
+                }
+                BreinNotificationAction.IGNORE -> {
+                    val manager =
+                        context!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                    manager.cancel(notificationId!!)
+                }
             }
-            BreinNotificationAction.OPENED_SECOND -> {
-
-                Log.d(TAG, "openedPushNotification (OPENED_SECOND)is:" + intent.toString())
-
-                val breinActivity = Breinify.getBreinActivity()
-                    .setActivityType(BreinActivityType.OPENED_PUSH_NOTIFICATION)
-
-                Breinify.sendActivity(breinActivity)
-            }
-            BreinNotificationAction.IGNORE -> {
-                val manager =
-                    context!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                manager.cancel(notificationId!!)
-            }
+        } catch (e: Exception) {
+            Log.e(TAG, "could not handle onReceive due to exception $e")
         }
     }
 }

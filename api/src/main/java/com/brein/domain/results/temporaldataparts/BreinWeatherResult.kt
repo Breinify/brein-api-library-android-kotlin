@@ -1,7 +1,7 @@
 package com.brein.domain.results.temporaldataparts
 
 import com.brein.util.JsonHelper
-import java.util.Locale
+import java.util.*
 
 class BreinWeatherResult(private val result: MutableMap<String, Any?>?) {
 

@@ -66,9 +66,13 @@ class BreinEngine {
         callback: ICallback<BreinResult?>?
     ) {
         try {
-            getEngine()!!.invokeRequest(config, data, callback)
+            if (config != null && data != null) {
+                getEngine()!!.invokeRequest(config, data, callback)
+            } else {
+                Log.d(TAG, "could not invoke request, either config or data is null")
+            }
         } catch (e: Exception) {
-            Log.e("BreinEngine '", "could not invoke request");
+            Log.e(TAG, "could not invoke request due to exception: $e");
         }
     }
 
@@ -84,4 +88,9 @@ class BreinEngine {
     init {
         this.restEngine = HttpUrlRestEngine()
     }
+
+    companion object {
+        private const val TAG = "BreinEngine"
+    }
+
 }
