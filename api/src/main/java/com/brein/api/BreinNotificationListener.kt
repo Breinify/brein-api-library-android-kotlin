@@ -27,8 +27,13 @@ class BreinNotificationListener : BroadcastReceiver() {
 
                     val breinActivity = Breinify.getBreinActivity()
                         .setActivityType(BreinActivityType.OPENED_PUSH_NOTIFICATION)
-
                     Breinify.sendActivity(breinActivity)
+
+                    val mainActivity = BreinifyManager.getMainActivity()
+                    val clazz = mainActivity?.javaClass
+                    val mainIntent = Intent(context, clazz)
+                    mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context?.startActivity(mainIntent)
                 }
                 BreinNotificationAction.OPENED_SECOND -> {
 
