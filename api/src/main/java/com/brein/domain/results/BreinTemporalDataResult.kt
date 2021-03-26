@@ -1,9 +1,11 @@
 package com.brein.domain.results
 
 
+import android.util.Log
 import com.brein.domain.BreinResult
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.lang.Exception
 
 
 class BreinTemporalDataResult {
@@ -21,10 +23,14 @@ class BreinTemporalDataResult {
     private val HOLIDAY_LIST_KEY = "holidays"
     private val EVENT_LIST_KEY = "events"
 
-    val map: MutableMap<String, Any?>
+    lateinit var map: MutableMap<String, Any?>
 
     constructor(jsonResponse: String?) {
-        map = Gson().fromJson(jsonResponse, object : TypeToken<Map<String, Any?>>() {}.type)
+        try {
+            map = Gson().fromJson(jsonResponse, object : TypeToken<Map<String, Any?>>() {}.type)
+        } catch (e: Exception) {
+            Log.e(TAG, "Exception is: $e")
+        }
     }
 
     constructor(json: MutableMap<String, Any?>) {
@@ -33,6 +39,10 @@ class BreinTemporalDataResult {
 
     constructor(breinResult: BreinResult) {
         map = breinResult.map
+    }
+
+    companion object {
+        private const val TAG = "BreinTempDataResult"
     }
 
 }
