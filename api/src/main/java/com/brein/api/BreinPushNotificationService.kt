@@ -244,10 +244,14 @@ object BreinPushNotificationService {
             .apply {
                 when (model) {
                     is PictureExpandableNotification -> {
-                        applyImageUrl(this, model.picture)
+                        model.picture?.let {
+                            applyImageUrl(this, model.picture)
+                        }
                     }
                     is PictureActionExpandableNotification -> {
-                        applyImageUrl(this, model.picture)
+                        model.picture?.let {
+                            applyImageUrl(this, model.picture)
+                        }
                     }
                 }
                 model.actions.forEach { (iconId, title, actionIntent) ->
@@ -272,9 +276,6 @@ object BreinPushNotificationService {
         return true
     }
 
-    // using coroutines to read a picture from URL
-    // decode the picture to a `Bitmap`
-    // and appending it to the notification
     fun applyImageUrl(
         builder: NotificationCompat.Builder,
         imageUrl: String?
