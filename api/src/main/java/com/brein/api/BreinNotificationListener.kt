@@ -16,7 +16,8 @@ class BreinNotificationListener : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
 
-        try {// get notificationId from intent extra
+        try {
+            // get notificationId from intent extra
             val notificationId = intent?.getIntExtra("notificationId", 0)
 
             // depends on which action was sent from notification service
@@ -34,6 +35,7 @@ class BreinNotificationListener : BroadcastReceiver() {
                     val mainIntent = Intent(context, clazz)
                     mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context?.startActivity(mainIntent)
+
                 }
                 BreinNotificationAction.OPENED_SECOND -> {
 
