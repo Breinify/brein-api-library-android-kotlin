@@ -26,12 +26,16 @@ class BreinNotificationChannelFactory @Inject constructor() {
         notificationChannelInfo: BreinNotificationChannelInfo
     ) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val generalChannel = createChannel(notificationChannelInfo)
+            val notificationChannel = createChannel(notificationChannelInfo)
+            // notificationChannel.enableVibration(true)
+            // notificationChannel.vibrationPattern = longArrayOf(100, 200, 300)
+            // notificationChannel.enableLights(true);
+
             val notificationManager: NotificationManager =
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-            notificationManager.createNotificationChannel(generalChannel)
-            notificationChannels.add(generalChannel)
+            notificationManager.createNotificationChannel(notificationChannel)
+            notificationChannels.add(notificationChannel)
         }
     }
 
@@ -62,10 +66,10 @@ class BreinNotificationChannelFactory @Inject constructor() {
                 object : TypeToken<Map<String, Any>>() {}.type
             )
 
-        var channelId = ""
-        var channel = ""
-        var channelDescription = ""
-        var importance = 1
+        var channelId = "BreinifyChannel"
+        var channel = "BreinifyChannel"
+        var channelDescription = "BreinifyChannelDescription"
+        var importance = 4.0
         var notificationId = 1
         var notificationIcon = "icon_notification_fallback_white"
         var extraText = ""
@@ -74,22 +78,22 @@ class BreinNotificationChannelFactory @Inject constructor() {
 
         dataMap["channelId"]?.let {
             val tempChannelId = dataMap["channelId"]
-            channelId = tempChannelId as? String ?: ""
+            channelId = tempChannelId as? String ?: "BreinifyChannel"
         }
 
         dataMap["channel"]?.let {
             val tempChannel = dataMap["channel"]
-            channel = tempChannel as? String ?: ""
+            channel = tempChannel as? String ?: "BreinifyChannel"
         }
 
         dataMap["channelDescription"]?.let {
             val tempChannelDesc = dataMap["channelDescription"]
-            channelDescription = tempChannelDesc as? String ?: ""
+            channelDescription = tempChannelDesc as? String ?: "BreinifyChannelDescription"
         }
 
         dataMap["importance"]?.let {
             val priority = dataMap["importance"]
-            importance = priority as? Int ?: 1
+            importance = priority as? Double ?: 4.0
         }
 
         dataMap["notificationId"]?.let {
@@ -117,7 +121,7 @@ class BreinNotificationChannelFactory @Inject constructor() {
             channelId,
             channel,
             channelDescription,
-            importance,
+            importance.toInt(),
             notificationId,
             notificationIcon,
             extraText,
