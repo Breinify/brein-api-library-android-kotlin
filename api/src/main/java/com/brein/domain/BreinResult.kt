@@ -1,7 +1,9 @@
 package com.brein.domain
 
+import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.lang.Exception
 
 /**
  * Contains the result of an Brein Request when invoking a
@@ -21,7 +23,12 @@ class BreinResult {
      * @param jsonResponse as json string
      */
     constructor(jsonResponse: String?) {
-        this.map = Gson().fromJson(jsonResponse, object : TypeToken<Map<String, Any?>>() {}.type)
+        try {
+            this.map =
+                Gson().fromJson(jsonResponse, object : TypeToken<Map<String, Any?>>() {}.type)
+        } catch (e: Exception) {
+            Log.e(TAG, "Exception is: $e")
+        }
     }
 
     constructor(json: MutableMap<String, Any?>) {
@@ -51,4 +58,7 @@ class BreinResult {
         return this.map[key]
     }
 
+    companion object {
+        private const val TAG = "BreinResult"
+    }
 }
