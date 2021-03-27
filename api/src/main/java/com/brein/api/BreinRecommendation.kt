@@ -69,7 +69,7 @@ class BreinRecommendation : BreinBase(), IAsyncExecutable<BreinResult?> {
      * @param config      BreinConfig contains the configuration object
      * @param requestData Map the request data to be sent to the endpoint
      */
-    override fun prepareRequestData(config: BreinConfig?, requestData: HashMap<String, Any?>)  {
+    override fun prepareRequestData(config: BreinConfig?, requestData: HashMap<String, Any?>) {
 
         // recommendation data
         val recommendationData = HashMap<String, Any?>()
