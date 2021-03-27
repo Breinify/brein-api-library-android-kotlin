@@ -39,7 +39,7 @@ object BreinIpInfo {
 
     init {
         try {
-           // refreshData()
+            // refreshData()
             Log.d("BreinIpInfo", "BreinIpInfo deactivated")
         } finally {
             Log.w("BreinIpInfo", "BreinIpInfo not invoked")
