@@ -1,7 +1,6 @@
 package com.brein.api
 
 import com.brein.domain.BreinConfig
-import com.brein.domain.BreinIpInfo
 import com.brein.domain.BreinUser
 import com.brein.util.BreinUtil
 import com.google.gson.Gson
