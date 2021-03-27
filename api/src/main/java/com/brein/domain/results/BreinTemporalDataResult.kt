@@ -5,7 +5,6 @@ import android.util.Log
 import com.brein.domain.BreinResult
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.lang.Exception
 
 
 class BreinTemporalDataResult {
