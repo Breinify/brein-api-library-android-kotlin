@@ -69,7 +69,7 @@ class BreinConfig {
      *
      * @return String default category
      */
-     var defaultCategory: String = ""
+    var defaultCategory: String = ""
 
     /**
      * contains the configured secret
@@ -285,7 +285,7 @@ class BreinConfig {
         return BreinUtil.isUrlValid(url)!!
     }
 
-    fun setConnectionTimeout(value: Int) : BreinConfig {
+    fun setConnectionTimeout(value: Int): BreinConfig {
         this.connectionTimeout = value
         return this
     }
