@@ -13,5 +13,5 @@ interface ISecretStrategy {
      * @return creates signature
      */
 
-    fun createSignature(config: BreinConfig) : String
+    fun createSignature(config: BreinConfig): String
 }
