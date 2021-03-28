@@ -10,9 +10,6 @@ import com.brein.domain.BreinNotificationAction
 
 class BreinNotificationListener : BroadcastReceiver() {
 
-    companion object {
-        private const val TAG = "BreinNotiListener"
-    }
 
     override fun onReceive(context: Context?, intent: Intent?) {
 
@@ -23,7 +20,6 @@ class BreinNotificationListener : BroadcastReceiver() {
             // depends on which action was sent from notification service
             when (intent?.action.toString()) {
                 BreinNotificationAction.OPENED_FIRST -> {
-
                     Log.d(TAG, "openedPushNotification (OPENED_FIRST) is:" + intent.toString())
 
                     val breinActivity = Breinify.getBreinActivity()
@@ -38,7 +34,6 @@ class BreinNotificationListener : BroadcastReceiver() {
 
                 }
                 BreinNotificationAction.OPENED_SECOND -> {
-
                     Log.d(TAG, "openedPushNotification (OPENED_SECOND)is:" + intent.toString())
 
                     val breinActivity = Breinify.getBreinActivity()
@@ -56,4 +51,9 @@ class BreinNotificationListener : BroadcastReceiver() {
             Log.e(TAG, "could not handle onReceive due to exception $e")
         }
     }
+
+    companion object {
+        private const val TAG = "BreinNotiListener"
+    }
+
 }

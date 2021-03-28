@@ -1,14 +1,15 @@
 package com.brein.api
 
-import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.media.RingtoneManager
+import android.net.Uri
 import android.os.Build
 import android.util.Log
+import android.webkit.URLUtil
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -64,7 +65,6 @@ object BreinPushNotificationService {
     ) {
 
         val id = channelInfo.notificationId
-//        val notificationIcon = channelInfo.notificationIcon
 
         NotificationManagerCompat.from(context)
             .notify(id, createNotification(context, notification))
@@ -78,160 +78,176 @@ object BreinPushNotificationService {
         remoteMessage: RemoteMessage,
         notificationData: BreinNotificationChannelFactory.BreinNotificationChannelInfo
     ): BreinNotificationModel {
-        val title = remoteMessage.data["title"]!!
-        val body = remoteMessage.data["body"]!!
-        val extraText: String? = notificationData.extraText
-        val notificationId = notificationData.notificationId
-        val notificationIcon = notificationData.notificationIcon
 
-        // notificationData contains `view`
-        if (notificationData.view.isNullOrEmpty()) {
-            return BasicNotification(
-                notificationData.id,
-                notificationId,
-                title,
-                body,
-                notificationIcon,
-                notificationData.priority
-            )
-        } else {
-            // Getting and changing the type of view payload to Map
-            val gson = GsonBuilder().setPrettyPrinting().create()
+        try {
+            val title = remoteMessage.data["title"]!!
+            val body = remoteMessage.data["body"]!!
+            val extraText: String? = notificationData.extraText
+            val notificationId = notificationData.notificationId
+            val notificationIcon = notificationData.notificationIcon
 
-            // url for further use
-            val imageUrl = notificationData.view["imageUrl"] as String?
+            val largeContent = remoteMessage.data["largeContent"]
 
-            // Getting the actions payload if exists
-            val actionsJson = gson.toJson(notificationData.view["actions"])
-
-            var bigContentTitle = ""
-            notificationData.view["bigContentTitle"]?.let {
-                bigContentTitle = notificationData.view["bigContentTitle"].toString()
-            }
-
-            if (!actionsJson.isNullOrEmpty()) {
-                // Creating a MutableList that'll contain the different actions
-                val actions: MutableList<NotificationAction> = mutableListOf()
-                // from json -> MutableList
-                val actionList: MutableList<Any> =
-                    gson.fromJson(actionsJson, object : TypeToken<MutableList<Any>>() {}.type)
-
-                // each action needs a different intent
-                actionList.forEach { action ->
-                    val currentAction: Map<String, String> =
-                        gson.fromJson(
-                            gson.toJson(action),
-                            object : TypeToken<Map<String, String>>() {}.type
-                        )
-
-                    val pendingIntent: PendingIntent
-                    val deepLink = currentAction["deeplink"]
-
-                    // different result for each action
-                    when (currentAction["action"]) {
-                        "open" -> {
-                            // when action: open -> deep link to the app
-                            val openIntent = Intent(context, BreinNotificationListener::class.java)
-                            openIntent.action = BreinNotificationAction.OPENED_FIRST
-//                            openIntent.data = Uri.parse(deepLink)
-                            openIntent.putExtra("notificationId", notificationId);
-
-                            pendingIntent = PendingIntent.getBroadcast(
-                                context,
-                                0,
-                                openIntent,
-                                PendingIntent.FLAG_UPDATE_CURRENT
-                            )
-                        }
-                        "open_second" -> {
-                            // when action: open -> deep link to the app
-                            val openSecondIntent = Intent(context, BreinNotificationListener::class.java)
-                            openSecondIntent.action = BreinNotificationAction.OPENED_SECOND
-//                            openSecondIntent.data = Uri.parse(deepLink)
-                            openSecondIntent.putExtra("notificationId", notificationId);
-//                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-
-                            pendingIntent = PendingIntent.getBroadcast(
-                                context,
-                                0,
-                                openSecondIntent,
-                                PendingIntent.FLAG_UPDATE_CURRENT
-                            )
-                        }
-                        else -> {
-                            val intent = Intent(context, BreinNotificationListener::class.java)
-                            intent.action = BreinNotificationAction.IGNORE
-                            intent.putExtra("notificationId", notificationId);
-
-                            pendingIntent = PendingIntent.getBroadcast(
-                                context,
-                                0 /*Request code*/,
-                                intent,
-                                PendingIntent.FLAG_CANCEL_CURRENT
-                            )
-                        }
-                    }
-
-                    // Creating a Notification Model
-                    val notificationModel = NotificationAction(
-                        notificationData.notificationId,
-                        currentAction["content"].toString(),
-                        pendingIntent
-                    )
-                    actions.add(notificationModel)
-                }
-
-                // creating an Action Expandable notification
-                return PictureActionExpandableNotification(
+            // notificationData contains `view`
+            if (notificationData.view.isNullOrEmpty()) {
+                return BasicNotification(
                     notificationData.id,
                     notificationId,
                     title,
                     body,
                     notificationIcon,
                     notificationData.priority,
-                    bigContentTitle,
-                    imageUrl,
-                    actions
+                    largeContent
                 )
             } else {
-                // actions is an empty array
-                // -> notification will be sent without actions
-                return PictureExpandableNotification(
-                    notificationData.id,
-                    notificationId,
-                    title,
-                    body,
-                    notificationIcon,
-                    notificationData.priority,
-                    bigContentTitle,
-                    imageUrl
-                )
+                // Getting and changing the type of view payload to Map
+                val gson = GsonBuilder().setPrettyPrinting().create()
+
+                // url for further use
+                val imageUrl = notificationData.view["imageUrl"] as String?
+
+                // Getting the actions payload if exists
+                val actionsJson = gson.toJson(notificationData.view["actions"])
+
+                if (!actionsJson.isNullOrEmpty()) {
+                    // Creating a MutableList that'll contain the different actions
+                    val actions: MutableList<NotificationAction> = mutableListOf()
+                    // from json -> MutableList
+                    val actionList: MutableList<Any> =
+                        gson.fromJson(actionsJson, object : TypeToken<MutableList<Any>>() {}.type)
+
+                    // each action needs a different intent
+                    actionList.forEach { action ->
+                        val currentAction: Map<String, String> =
+                            gson.fromJson(
+                                gson.toJson(action),
+                                object : TypeToken<Map<String, String>>() {}.type
+                            )
+
+                        val pendingIntent: PendingIntent
+                        val deepLink = currentAction["deeplink"]
+
+                        // different result for each action
+                        when (currentAction["action"]) {
+                            "open" -> {
+                                // when action: open -> deep link to the app
+                                val openIntent =
+                                    Intent(context, BreinNotificationListener::class.java)
+                                openIntent.action = BreinNotificationAction.OPENED_FIRST
+                                openIntent.data = Uri.parse(deepLink)
+                                openIntent.putExtra("notificationId", notificationId);
+
+                                pendingIntent = PendingIntent.getBroadcast(
+                                    context,
+                                    0,
+                                    openIntent,
+                                    PendingIntent.FLAG_UPDATE_CURRENT
+                                )
+                            }
+                            "open_second" -> {
+                                // when action: open -> deep link to the app
+                                val openSecondIntent =
+                                    Intent(context, BreinNotificationListener::class.java)
+                                openSecondIntent.action = BreinNotificationAction.OPENED_SECOND
+                                openSecondIntent.data = Uri.parse(deepLink)
+                                openSecondIntent.putExtra("notificationId", notificationId);
+//                              intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+
+                                pendingIntent = PendingIntent.getBroadcast(
+                                    context,
+                                    0,
+                                    openSecondIntent,
+                                    PendingIntent.FLAG_UPDATE_CURRENT
+                                )
+                            }
+                            else -> {
+                                val intent = Intent(context, BreinNotificationListener::class.java)
+                                intent.action = BreinNotificationAction.IGNORE
+                                intent.putExtra("notificationId", notificationId);
+
+                                pendingIntent = PendingIntent.getBroadcast(
+                                    context,
+                                    0 /*Request code*/,
+                                    intent,
+                                    PendingIntent.FLAG_CANCEL_CURRENT
+                                )
+                            }
+                        }
+
+                        // Creating a Notification Model
+                        val notificationModel = NotificationAction(
+                            notificationData.notificationId,
+                            currentAction["content"].toString(),
+                            pendingIntent
+                        )
+                        actions.add(notificationModel)
+                    }
+
+                    // creating an Action Expandable notification
+                    return PictureActionExpandableNotification(
+                        notificationData.id,
+                        notificationId,
+                        title,
+                        body,
+                        notificationIcon,
+                        notificationData.priority,
+                        imageUrl,
+                        largeContent,
+                        actions
+                    )
+                } else {
+                    // actions is an empty array
+                    // -> notification will be sent without actions
+                    return PictureExpandableNotification(
+                        notificationData.id,
+                        notificationId,
+                        title,
+                        body,
+                        notificationIcon,
+                        notificationData.priority,
+                        imageUrl,
+                        largeContent
+                    )
+                }
             }
+        } catch (e: Exception) {
+            Log.e(TAG, "Exception is: $e")
+
+            return BasicNotification(
+                notificationData.id,
+                0,
+                "",
+                "",
+                "",
+                notificationData.priority,
+                ""
+            )
         }
+
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
+    // @SuppressLint("UseCompatLoadingForDrawables")
     private fun createNotification(context: Context, model: BreinNotificationModel): Notification {
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-
-        val resourceId: Int
 
         // get the id of custom notification icon for further use
         // when not found (name not specified in the payload / or false name)
         // a fallback icon would be used
-        if (checkNotificationIconExists(model.notificationIcon.toString(), context)) {
-            resourceId = context.resources.getIdentifier(
-                model.notificationIcon,
-                "drawable",
-                context.packageName
-            )
-        } else {
-            resourceId = context.resources.getIdentifier(
-                "icon_notification_fallback_white",
-                "drawable",
-                context.packageName
-            )
-        }
+
+        val resourceId: Int =
+            if (checkNotificationIconExists(model.notificationIcon.toString(), context)) {
+                context.resources.getIdentifier(
+                    model.notificationIcon.toString(),
+                    "drawable",
+                    context.packageName
+                )
+            } else {
+                context.resources.getIdentifier(
+                    "icon_notification_fallback_white",
+                    "drawable",
+                    context.packageName
+                )
+            }
 
         return NotificationCompat.Builder(context, model.channelId)
             .setSmallIcon(resourceId)
@@ -239,19 +255,30 @@ object BreinPushNotificationService {
             .setContentText(model.content)
             .setPriority(model.priority)
             .setSound(defaultSoundUri)
-//            .setOnlyAlertOnce(true)
+            .setTicker(model.content)
             .setAutoCancel(true)
             .apply {
                 when (model) {
                     is PictureExpandableNotification -> {
-                        model.picture?.let {
-                            applyImageUrl(this, model.picture)
+                        if (model.picture != null) {
+                            applyImageUrl(this, model.picture, model.largeContent)
+                        }
+                        if (model.largeContent != null && !pictureApplied) {
+                            this.setStyle(
+                                NotificationCompat.BigTextStyle().bigText(model.largeContent)
+                            )
                         }
                     }
                     is PictureActionExpandableNotification -> {
-                        model.picture?.let {
-                            applyImageUrl(this, model.picture)
+                        if (model.picture != null) {
+                            applyImageUrl(this, model.picture, model.largeContent)
                         }
+                        if (model.largeContent != null && !pictureApplied) {
+                            this.setStyle(
+                                NotificationCompat.BigTextStyle().bigText(model.largeContent)
+                            )
+                        }
+
                     }
                 }
                 model.actions.forEach { (iconId, title, actionIntent) ->
@@ -276,24 +303,41 @@ object BreinPushNotificationService {
         return true
     }
 
-    fun applyImageUrl(
+    private fun applyImageUrl(
         builder: NotificationCompat.Builder,
-        imageUrl: String?
+        imageUrl: String?,
+        message: String?
     ) = runBlocking {
-        val url = URL(imageUrl)
-        withContext(Dispatchers.IO) {
-            try {
-                val input = url.openStream()
-                BitmapFactory.decodeStream(input)
-            } catch (e: IOException) {
-                null
+        val isValidUrl = URLUtil.isValidUrl(imageUrl)
+        if (isValidUrl) {
+            val url = URL(imageUrl)
+            withContext(Dispatchers.IO) {
+                try {
+                    val input = url.openStream()
+                    BitmapFactory.decodeStream(input)
+                } catch (e: IOException) {
+                    null
+                }
+            }?.let { bitmap ->
+                // setting the style to a big picture
+                pictureApplied = true
+                builder.setLargeIcon(bitmap)
+                if (message != null) {
+                    builder.setStyle(
+                        NotificationCompat.BigPictureStyle().bigPicture(bitmap)
+                            .setSummaryText(message)
+                    )
+                } else {
+                    builder.setStyle(
+                        NotificationCompat.BigPictureStyle().bigPicture(bitmap)
+                    )
+                }
             }
-        }?.let { bitmap ->
-            // setting the style to a big picture
-            builder.setStyle(NotificationCompat.BigPictureStyle().bigPicture(bitmap))
         }
     }
 
     private const val TAG = "BreinPushNotification"
+
+    var pictureApplied = false
 
 }
