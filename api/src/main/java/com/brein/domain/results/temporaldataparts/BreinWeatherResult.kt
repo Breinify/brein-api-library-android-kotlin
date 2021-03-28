@@ -16,12 +16,12 @@ class BreinWeatherResult(private val result: MutableMap<String, Any?>?) {
     private var lat: Double? = null
     private var lon: Double? = null
 
-    val temperatureFahrenheit: Double?
+    val temperatureFahrenheit: Double
         get() {
             val celsius = this.temperatureCelsius
             return celsius * 9 / 5 + 32
         }
-    val temperatureKelvin: Double?
+    val temperatureKelvin: Double
         get() {
             val celsius = this.temperatureCelsius
             return celsius + 273.15

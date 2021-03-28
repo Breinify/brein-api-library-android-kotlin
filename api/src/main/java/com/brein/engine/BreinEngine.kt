@@ -72,7 +72,7 @@ class BreinEngine {
                 Log.d(TAG, "could not invoke request, either config or data is null")
             }
         } catch (e: Exception) {
-            Log.e(TAG, "could not invoke request due to exception: $e");
+            Log.e(TAG, "could not invoke request due to exception: $e")
         }
     }
 

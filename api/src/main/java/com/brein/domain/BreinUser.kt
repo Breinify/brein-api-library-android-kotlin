@@ -250,7 +250,7 @@ class BreinUser(private var email: String?) {
         return this
     }
 
-    fun getSessionId(): String? {
+    fun getSessionId(): String {
         return this.sessionId
     }
 
