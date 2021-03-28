@@ -355,6 +355,4 @@ object BreinifyManager {
     const val BREIN_USER_EMAIL = "breinUserEmail"
     const val BREIN_USER_ID = "breinUserId"
 
-    init {
-    }
 }

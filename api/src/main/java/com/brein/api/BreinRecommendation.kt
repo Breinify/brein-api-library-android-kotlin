@@ -56,7 +56,7 @@ class BreinRecommendation : BreinBase(), IAsyncExecutable<BreinResult?> {
      *
      * @return
      */
-    override fun getEndPoint(config: BreinConfig?): String? {
+    override fun getEndPoint(config: BreinConfig?): String {
         if (config != null) {
             return config.recommendationEndpoint
         }

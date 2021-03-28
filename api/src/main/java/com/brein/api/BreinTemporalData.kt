@@ -248,7 +248,7 @@ class BreinTemporalData : BreinBase(), ISecretStrategy, IAsyncExecutable<BreinRe
      * @return `this`
      */
 
-    fun setShapeTypes(vararg shapeTypes: String?): BreinTemporalData? {
+    fun setShapeTypes(vararg shapeTypes: String?): BreinTemporalData {
         if (shapeTypes.isEmpty()) {
             setLocation(SHAPE_TYPES_FIELD, null)
         } else {
@@ -310,9 +310,8 @@ class BreinTemporalData : BreinBase(), ISecretStrategy, IAsyncExecutable<BreinRe
         val message = String.format("%d-%s-%s", this.unixTimestamp, paraLocalDateTime, paraTimezone)
 
         val secret = config.secret
-        val signature = BreinUtil.generateSignature(message, secret!!)
 
-        return signature
+        return BreinUtil.generateSignature(message, secret!!)
     }
 
     companion object {

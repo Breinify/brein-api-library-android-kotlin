@@ -135,7 +135,7 @@ object BreinPushNotificationService {
                                     Intent(context, BreinNotificationListener::class.java)
                                 openIntent.action = BreinNotificationAction.OPENED_FIRST
                                 openIntent.data = Uri.parse(deepLink)
-                                openIntent.putExtra("notificationId", notificationId);
+                                openIntent.putExtra("notificationId", notificationId)
 
                                 pendingIntent = PendingIntent.getBroadcast(
                                     context,
@@ -150,7 +150,7 @@ object BreinPushNotificationService {
                                     Intent(context, BreinNotificationListener::class.java)
                                 openSecondIntent.action = BreinNotificationAction.OPENED_SECOND
                                 openSecondIntent.data = Uri.parse(deepLink)
-                                openSecondIntent.putExtra("notificationId", notificationId);
+                                openSecondIntent.putExtra("notificationId", notificationId)
 //                              intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
                                 pendingIntent = PendingIntent.getBroadcast(
@@ -163,7 +163,7 @@ object BreinPushNotificationService {
                             else -> {
                                 val intent = Intent(context, BreinNotificationListener::class.java)
                                 intent.action = BreinNotificationAction.IGNORE
-                                intent.putExtra("notificationId", notificationId);
+                                intent.putExtra("notificationId", notificationId)
 
                                 pendingIntent = PendingIntent.getBroadcast(
                                     context,
@@ -258,28 +258,26 @@ object BreinPushNotificationService {
             .setTicker(model.content)
             .setAutoCancel(true)
             .apply {
-                when (model) {
-                    is PictureExpandableNotification -> {
-                        if (model.picture != null) {
-                            applyImageUrl(this, model.picture, model.largeContent)
-                        }
-                        if (model.largeContent != null && !pictureApplied) {
-                            this.setStyle(
-                                NotificationCompat.BigTextStyle().bigText(model.largeContent)
-                            )
-                        }
+                if (model is PictureExpandableNotification) {
+                    if (model.picture != null) {
+                        applyImageUrl(this, model.picture, model.largeContent)
                     }
-                    is PictureActionExpandableNotification -> {
-                        if (model.picture != null) {
-                            applyImageUrl(this, model.picture, model.largeContent)
-                        }
-                        if (model.largeContent != null && !pictureApplied) {
-                            this.setStyle(
-                                NotificationCompat.BigTextStyle().bigText(model.largeContent)
-                            )
-                        }
+                    if (model.largeContent != null && !pictureApplied) {
+                        this.setStyle(
+                            NotificationCompat.BigTextStyle().bigText(model.largeContent)
+                        )
+                    }
+                }
+                else if (model is PictureActionExpandableNotification) {
+                    if (model.picture != null) {
+                        applyImageUrl(this, model.picture, model.largeContent)
+                    }
+                    if (model.largeContent != null && !pictureApplied) {
+                        this.setStyle(
+                            NotificationCompat.BigTextStyle().bigText(model.largeContent)
+                        )
+                    }
 
-                    }
                 }
                 model.actions.forEach { (iconId, title, actionIntent) ->
                     addAction(iconId, title, actionIntent)

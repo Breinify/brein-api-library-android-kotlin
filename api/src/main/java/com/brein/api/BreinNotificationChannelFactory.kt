@@ -134,7 +134,7 @@ class BreinNotificationChannelFactory @Inject constructor() {
                 product = pro as? String ?: ""
             }
 
-            val breinNotfictionChannelInfo = BreinNotificationChannelInfo(
+            return BreinNotificationChannelInfo(
                 channelId,
                 channel,
                 channelDescription,
@@ -149,12 +149,10 @@ class BreinNotificationChannelFactory @Inject constructor() {
                 lights
             )
 
-            return breinNotfictionChannelInfo
-
         } catch (e: Exception) {
             Log.e(TAG, "Exception within createNotificationChannelInfo is: $e")
 
-            val breinNotfictionChannelInfo = BreinNotificationChannelInfo(
+            return BreinNotificationChannelInfo(
                 "",
                 "",
                 "",
@@ -168,8 +166,6 @@ class BreinNotificationChannelFactory @Inject constructor() {
                 false,
                 false
             )
-
-            return breinNotfictionChannelInfo
         }
     }
 
