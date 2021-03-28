@@ -318,8 +318,9 @@ object BreinPushNotificationService {
                 }
             }?.let { bitmap ->
                 // setting the style to a big picture
-                pictureApplied = true
+                pictureApplied = false
                 builder.setLargeIcon(bitmap)
+                /*
                 if (message != null) {
                     builder.setStyle(
                         NotificationCompat.BigPictureStyle().bigPicture(bitmap)
@@ -330,6 +331,8 @@ object BreinPushNotificationService {
                         NotificationCompat.BigPictureStyle().bigPicture(bitmap)
                     )
                 }
+
+                 */
             }
         }
     }
