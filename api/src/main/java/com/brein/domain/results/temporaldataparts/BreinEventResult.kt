@@ -24,7 +24,8 @@ class BreinEventResult(private val result: Map<String, Any?>?) {
         size =
             if (innerSize == null || innerSize == -1L) null else BreinUtil.safeLongToInt(innerSize)
 
-        val categoryName: String? = JsonHelper.getOrString(result as MutableMap<String, Any?>?, CATEGORY_KEY)
+        val categoryName: String? =
+            JsonHelper.getOrString(result as MutableMap<String, Any?>?, CATEGORY_KEY)
 
         categoryName?.replace("eventCategory", "")
         categoryName?.toUpperCase(Locale.getDefault())

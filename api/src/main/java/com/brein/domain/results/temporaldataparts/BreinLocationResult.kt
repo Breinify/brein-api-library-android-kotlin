@@ -12,7 +12,7 @@ class BreinLocationResult(private val json: Map<String, Any?>?) {
     var lat = 0.0
     var lon = 0.0
 
-    fun getGeoJson(type: String): Map<String, Any?> ? {
+    fun getGeoJson(type: String): Map<String, Any?>? {
         return this.geojsons!![type]
     }
 

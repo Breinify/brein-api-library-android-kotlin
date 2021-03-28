@@ -59,7 +59,8 @@ class BreinWeatherResult(private val result: MutableMap<String, Any?>?) {
         this.lastMeasured = JsonHelper.getOrLong(result, LAST_MEASURED_KEY)!!
         this.cloudCover = JsonHelper.getOrDouble(result, CLOUD_COVER_KEY)!!
 
-        val measuredJson: MutableMap<String, Any?>? = JsonHelper.getOrMap(result, MEASURED_LOCATION_KEY)
+        val measuredJson: MutableMap<String, Any?>? =
+            JsonHelper.getOrMap(result, MEASURED_LOCATION_KEY)
         if (measuredJson == null) {
             this.lat = null
             this.lon = null
@@ -73,7 +74,8 @@ class BreinWeatherResult(private val result: MutableMap<String, Any?>?) {
             this.precipitation = PrecipitationType.UNKNOWN
             this.precipitationAmount = null
         } else {
-            val type: MutableMap<String, Any?>? = JsonHelper.getOrMap(preciValue, PRECIPITATION_TYPE_KEY)
+            val type: MutableMap<String, Any?>? =
+                JsonHelper.getOrMap(preciValue, PRECIPITATION_TYPE_KEY)
             if (type == null) {
                 this.precipitation = PrecipitationType.UNKNOWN
             } else {
