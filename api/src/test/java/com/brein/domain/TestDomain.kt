@@ -1,5 +1,6 @@
 package com.brein.domain
 
+import android.util.Log
 import com.brein.api.BreinActivity
 import com.brein.api.Breinify
 import junit.framework.Assert.assertFalse
@@ -7,6 +8,7 @@ import junit.framework.Assert.assertTrue
 import org.junit.Assert
 import org.junit.BeforeClass
 import org.junit.Test
+import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -91,7 +93,7 @@ class TestDomain {
             .setDateOfBirthValue(6, 20, 1985)
             .setDeviceId("AAAAAAAAA-BBBB-CCCC-1111-222222220000")
 
-        assertFalse(breinUser.toString().isEmpty());
+        assertFalse(breinUser.toString().isEmpty())
     }
 
     /**
@@ -149,6 +151,37 @@ class TestDomain {
     fun testBreinIpInfo() {
         val externalIp = BreinIpInfo.externalIp
         println("External IP is: $externalIp")
+    }
+
+    @Test
+    fun testWrongURL() {
+        val spec = ""
+        val s: String? = invokeRequest(spec)
+        if (s != null) {
+            println("s is not null")
+        } else {
+            println ("s is null")
+        }
+    }
+
+    @Test
+    fun testRightURL() {
+        val spec = "http://www.ip-api.com/json"
+        val s: String? = invokeRequest(spec)
+        if (s != null) {
+            println("s is not null")
+        } else {
+            println ("s is null")
+        }
+    }
+
+    fun invokeRequest(spec: String): String? {
+        try {
+            return URL(spec).readText()
+        } catch (e: Exception) {
+            Log.e("BreinIpInfo", "Breinify - exception occurred calling invokeRequest", e)
+        }
+        return null
     }
 
     @Test

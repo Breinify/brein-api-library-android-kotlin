@@ -189,6 +189,4 @@ object BreinUtil {
         return BreinIpInfo.externalIp.toString()
     }
 
-    init {
-    }
 }

@@ -110,7 +110,7 @@ class TestUtil {
             print("IP2 is: $ip2")
         }
 
-        val detectedIp = BreinUtil.detectIpAddress();
+        val detectedIp = BreinUtil.detectIpAddress()
         print("detectedIp $detectedIp")
     }
 
