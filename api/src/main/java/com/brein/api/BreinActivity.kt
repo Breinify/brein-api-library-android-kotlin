@@ -165,10 +165,10 @@ class BreinActivity : BreinBase(), ISecretStrategy, IAsyncExecutable<BreinResult
 
     private fun getCategoryOrDefault(config: BreinConfig): String {
         val category = this.activityMap["category"]
-        if (containsValue(category)) {
-            return category as String
+        return if (containsValue(category)) {
+            category as String
         } else {
-            return config.defaultCategory
+            config.defaultCategory
         }
     }
 
