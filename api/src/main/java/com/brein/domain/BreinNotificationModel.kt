@@ -14,6 +14,7 @@ sealed class BreinNotificationModel(
     val content: String,
     val notificationIcon: String?,
     val priority: Int,
+    val largeContent: String?,
     val actions: MutableList<NotificationAction> = mutableListOf()
 )
 
@@ -23,8 +24,11 @@ class BasicNotification(
     title: String,
     content: String,
     notificationIcon: String?,
-    priority: Int
-) : BreinNotificationModel(channelId, notificationId, title, content, notificationIcon, priority)
+    priority: Int,
+    largeContent: String?
+) : BreinNotificationModel(channelId, notificationId, title, content, notificationIcon, priority,
+    largeContent
+)
 
 class TextExpandableNotification(
     channelId: String,
@@ -33,8 +37,11 @@ class TextExpandableNotification(
     content: String,
     notificationIcon: String?,
     priority: Int,
-    val longText: String
-) : BreinNotificationModel(channelId, notificationId, title, content, notificationIcon, priority)
+    val longText: String,
+    largeContent: String?
+) : BreinNotificationModel(channelId, notificationId, title, content, notificationIcon, priority,
+    largeContent
+)
 
 class PictureExpandableNotification(
     channelId: String,
@@ -43,9 +50,11 @@ class PictureExpandableNotification(
     content: String,
     notificationIcon: String?,
     priority: Int,
-    val bigContentTitle: String,
-    val picture: String?
-) : BreinNotificationModel(channelId, notificationId, title, content, notificationIcon, priority)
+    val picture: String?,
+    largeContent: String?
+) : BreinNotificationModel(channelId, notificationId, title, content, notificationIcon, priority,
+    largeContent
+)
 
 class PictureActionExpandableNotification(
     channelId: String,
@@ -54,8 +63,8 @@ class PictureActionExpandableNotification(
     content: String,
     notificationIcon: String?,
     priority: Int,
-    val bigContentTitle: String,
     val picture: String?,
+    largeContent: String?,
     actions: MutableList<NotificationAction>
 ) : BreinNotificationModel(
     channelId,
@@ -64,6 +73,7 @@ class PictureActionExpandableNotification(
     content,
     notificationIcon,
     priority,
+    largeContent,
     actions
 )
 
@@ -74,8 +84,11 @@ class InboxNotification(
     content: String,
     notificationIcon: String?,
     priority: Int,
-    val lines: List<String>
-) : BreinNotificationModel(channelId, notificationId, title, content, notificationIcon, priority)
+    val lines: List<String>,
+    largeContent: String?
+) : BreinNotificationModel(channelId, notificationId, title, content, notificationIcon, priority,
+    largeContent
+)
 
 data class NotificationAction(
     val iconId: Int,

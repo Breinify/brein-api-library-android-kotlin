@@ -82,7 +82,7 @@ object BreinUtil {
      */
     fun generateSignature(message: String, secret: String): String {
         return try {
-           BreinCrypto.generateSignature(message, secret)
+            BreinCrypto.generateSignature(message, secret)
         } catch (e: InvalidKeyException) {
             throw IllegalStateException("Unable to create signature!", e)
         }
