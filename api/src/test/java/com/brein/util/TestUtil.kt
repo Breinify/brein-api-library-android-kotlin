@@ -109,9 +109,6 @@ class TestUtil {
         if (ip2 != null) {
             print("IP2 is: $ip2")
         }
-
-        val detectedIp = BreinUtil.detectIpAddress()
-        print("detectedIp $detectedIp")
     }
 
     private val localIpAddress: String?

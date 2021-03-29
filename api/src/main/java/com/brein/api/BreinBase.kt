@@ -211,8 +211,6 @@ abstract class BreinBase : ISecretStrategy {
             requestData[SIGNATURE_TYPE_FIELD] = "HmacSHA256"
         }
 
-//        setClientIpAddress(BreinIpInfo.externalIp)
-
         return Gson().toJson(requestData)
     }
 

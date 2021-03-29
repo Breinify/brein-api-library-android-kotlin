@@ -10,7 +10,6 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.util.Log
 import androidx.core.app.ActivityCompat
-import com.brein.domain.BreinIpInfo
 import com.brein.util.BreinUtil
 import java.util.*
 
@@ -111,9 +110,6 @@ object BreinifyManager {
         this.secret = secret
         this.backgroundInterval = backgroundInterval
         initLifecycleAndEngine(backgroundInterval)
-
-        // invoke ipAddress detection now
-        BreinIpInfo.detect()
     }
 
     /**

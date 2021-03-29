@@ -38,21 +38,17 @@ object BreinIpInfo {
         get() = this.infoMap[TIMEZONE_FIELD] as String?
 
     init {
-        try {
-            // refreshData()
-            Log.d("BreinIpInfo", "BreinIpInfo deactivated")
-        } finally {
-            Log.w("BreinIpInfo", "BreinIpInfo not invoked")
-        }
-    }
-
-    fun detect() {
     }
 
     private fun refreshData() = Thread {
-        val ipJson = invokeRequest()
-        if (ipJson != null) {
-            this.infoMap = Gson().fromJson(ipJson, object : TypeToken<Map<String, Any?>>() {}.type)
+
+        try {
+            val ipJson = invokeRequest()
+            if (ipJson != null) {
+                this.infoMap = Gson().fromJson(ipJson, object : TypeToken<Map<String, Any?>>() {}.type)
+            }
+        } catch (e: Exception) {
+            Log.e("BreinIpInfo", "Breinify - exception occurred calling refreshData", e)
         }
     }.start()
 

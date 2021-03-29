@@ -4,7 +4,6 @@ import com.brein.api.BreinBase
 import com.brein.api.BreinException
 import com.brein.api.Breinify
 import com.brein.domain.BreinConfig
-import com.brein.domain.BreinIpInfo
 import java.security.InvalidKeyException
 import java.security.SecureRandom
 import java.util.*
@@ -183,10 +182,6 @@ object BreinUtil {
         val i = value.toInt()
         require(i.toLong() == value) { "$value cannot be cast to int without changing its value." }
         return i
-    }
-
-    fun detectIpAddress(): String {
-        return BreinIpInfo.externalIp.toString()
     }
 
 }
