@@ -243,8 +243,8 @@ class Breinify {
         /**
          * Delegate to send activities
          *
-         * @param activity        Contains the activity object
-         * @param callback        Contains the callback object
+         * @param activity Contains the activity object
+         * @param callback Contains the callback object
          */
         fun sendActivity(activity: BreinActivity?, callback: ICallback<BreinResult?>? = null) {
 
