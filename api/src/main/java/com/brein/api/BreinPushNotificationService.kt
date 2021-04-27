@@ -249,13 +249,21 @@ object BreinPushNotificationService {
                 )
             }
 
+        val intent = Intent(context, BreinifyManager.getMainActivity()?.javaClass).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
+
         return NotificationCompat.Builder(context, model.channelId)
             .setSmallIcon(resourceId)
+            .setSmallIcon(context.applicationInfo.icon)
             .setContentTitle(model.title)
             .setContentText(model.content)
             .setPriority(model.priority)
             .setSound(defaultSoundUri)
             .setTicker(model.content)
+            .setContentIntent(pendingIntent)
             .setAutoCancel(true)
             .apply {
                 if (model is PictureExpandableNotification) {

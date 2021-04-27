@@ -28,11 +28,14 @@ class BreinNotificationListener : BroadcastReceiver() {
 
                     val mainActivity = BreinifyManager.getMainActivity()
                     val clazz = mainActivity?.javaClass
+                    // for closing the notification drawer
+                    val closeIntent = Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
+                    context?.sendBroadcast(closeIntent)
                     val mainIntent = Intent(context, clazz)
-                    mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     context?.startActivity(mainIntent)
-
                 }
+
                 BreinNotificationAction.OPENED_SECOND -> {
                     Log.d(TAG, "openedPushNotification (OPENED_SECOND)is:" + intent.toString())
 
@@ -41,10 +44,14 @@ class BreinNotificationListener : BroadcastReceiver() {
 
                     Breinify.sendActivity(breinActivity)
                 }
+
                 BreinNotificationAction.IGNORE -> {
                     val manager =
                         context!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                     manager.cancel(notificationId!!)
+                    // for closing the notification drawer
+                    val closeIntent = Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
+                    context.sendBroadcast(closeIntent)
                 }
             }
         } catch (e: Exception) {

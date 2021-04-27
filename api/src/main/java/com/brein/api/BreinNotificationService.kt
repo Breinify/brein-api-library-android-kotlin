@@ -64,13 +64,10 @@ class BreinNotificationService : FirebaseMessagingService() {
         val title: String = remoteMessage.data["title"].toString()
         val message: String = remoteMessage.data["message"].toString()
 
-        val intent = Intent() //, BreinifyManager.getMainActivity()?.javaClass)
+        val intent = Intent()
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
 
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(
-            this, 0 /* Request code */, intent,
-            PendingIntent.FLAG_ONE_SHOT
-        )
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
 
         val defaultSoundUri: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notification = NotificationCompat.Builder(this, "BreinifyChannel")
