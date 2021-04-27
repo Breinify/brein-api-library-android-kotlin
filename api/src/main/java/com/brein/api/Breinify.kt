@@ -4,11 +4,10 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.util.Log
-import com.brein.domain.BreinActivityType
-import com.brein.domain.BreinConfig
-import com.brein.domain.BreinResult
-import com.brein.domain.BreinUser
+import com.brein.domain.*
 import com.google.firebase.messaging.RemoteMessage
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 
 /**
  * Static Implementation of Breinify activity lookup calls
@@ -257,6 +256,7 @@ class Breinify {
 
         }
 
+
         private fun sendActivity(activityType: String, tagsMap: HashMap<String, Any>?) {
 
             try {
@@ -274,7 +274,7 @@ class Breinify {
                     null
                 )
 
-                this.breinActivity.setTagsDic(curTagsMap)
+//                this.breinActivity.setTagsDic(curTagsMap)
             } catch (e: Exception) {
                 Log.e(TAG, "could not send send activity due to exception: $e")
             }
@@ -479,8 +479,35 @@ class Breinify {
          * Delegate to BreinPushNotification
          */
         fun onMessageReceived(context: Context, remoteMessage: RemoteMessage) {
+            val breinifyPayload = remoteMessage.data["breinify"]
+            val type = object : TypeToken<HashMap<String, Any>>() {}.type
+            val gson = GsonBuilder().setPrettyPrinting().create()
+            var campaign: HashMap<String, Any> = HashMap()
 
-            sendActivity(BreinActivityType.RECEIVED_PUSH_NOTIFICATION, null)
+            if (breinifyPayload != null) {
+                // from json -> Hashmap
+                val breinifyMap: Map<String, Any> =
+                    gson.fromJson(
+                        breinifyPayload,
+                        type
+                    )
+
+                campaign = gson.fromJson(
+                    gson.toJson(breinifyMap["campaign"]),
+                    type
+                )
+            }
+
+            // @todo Marco
+            //     adapted
+            sendActivity(
+                getBreinActivity().setActivityType(BreinActivityType.RECEIVED_PUSH_NOTIFICATION)
+                    .setTagsDic(campaign)
+            )
+//            sendActivity(
+//                BreinActivityType.RECEIVED_PUSH_NOTIFICATION,
+//                campaign
+//            )
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                 BreinPushNotificationService.onMessageReceived(context, remoteMessage)
             } else {

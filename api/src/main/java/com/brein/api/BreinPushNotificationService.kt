@@ -136,6 +136,12 @@ object BreinPushNotificationService {
                                 openIntent.action = BreinNotificationAction.OPENED_FIRST
                                 openIntent.data = Uri.parse(deepLink)
                                 openIntent.putExtra("notificationId", notificationId)
+                                // send breinify payload as extra
+                                openIntent.putExtra(
+                                    "breinPayload",
+                                    remoteMessage.data["breinify"].toString()
+                                )
+
 
                                 pendingIntent = PendingIntent.getBroadcast(
                                     context,
@@ -152,6 +158,10 @@ object BreinPushNotificationService {
                                 openSecondIntent.data = Uri.parse(deepLink)
                                 openSecondIntent.putExtra("notificationId", notificationId)
 //                              intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                                openSecondIntent.putExtra(      // send breinify payload as extra
+                                    "breinPayload",
+                                    remoteMessage.data["breinify"].toString()
+                                )
 
                                 pendingIntent = PendingIntent.getBroadcast(
                                     context,
@@ -164,6 +174,10 @@ object BreinPushNotificationService {
                                 val intent = Intent(context, BreinNotificationListener::class.java)
                                 intent.action = BreinNotificationAction.IGNORE
                                 intent.putExtra("notificationId", notificationId)
+                                intent.putExtra(
+                                    "breinifyPayload",
+                                    notificationData.view["breinify"].toString()
+                                )
 
                                 pendingIntent = PendingIntent.getBroadcast(
                                     context,
@@ -275,8 +289,7 @@ object BreinPushNotificationService {
                             NotificationCompat.BigTextStyle().bigText(model.largeContent)
                         )
                     }
-                }
-                else if (model is PictureActionExpandableNotification) {
+                } else if (model is PictureActionExpandableNotification) {
                     if (model.picture != null) {
                         applyImageUrl(this, model.picture, model.largeContent)
                     }
