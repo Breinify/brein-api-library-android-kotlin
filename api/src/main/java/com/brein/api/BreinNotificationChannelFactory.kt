@@ -82,7 +82,7 @@ class BreinNotificationChannelFactory @Inject constructor() {
 
             var channelId = "BreinifyChannelId"
             var channel = "BreinifyChannel"
-            var channelDescription = "BreinifyChannelDescription"
+            var channelDescription = "Notifications by Breinify AI Engine"
             var importance = 4.0
             var notificationId = 1
             var notificationIcon = "icon_notification_fallback_white"
