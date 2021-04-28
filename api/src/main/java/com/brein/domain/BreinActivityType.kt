@@ -15,6 +15,7 @@ object BreinActivityType {
     const val CHECKOUT = "checkOut"
     const val PAGE_VISIT = "pageVisit"
     const val OTHER = "other"
+    const val IDENTIFY = "identify"
     const val RECEIVED_PUSH_NOTIFICATION = "receivedPushNotification"
     const val OPENED_PUSH_NOTIFICATION = "openedPushNotification"
 
