@@ -166,6 +166,9 @@ class Breinify {
 
         }
 
+        /**
+         * Sets the User Information
+         */
         private fun setUserInfo(firstName: String, lastName: String, phone: String, email: String) {
             val appUser = getBreinUser()
             appUser.setFirstName(firstName)
@@ -479,6 +482,27 @@ class Breinify {
          * Delegate to BreinPushNotification
          */
         fun onMessageReceived(context: Context, remoteMessage: RemoteMessage) {
+            val campaign: HashMap<String, Any> = getBreinifyPayload(remoteMessage)
+
+
+            // @todo Marco
+            //     adapted
+            sendActivity(
+                getBreinActivity().setActivityType(BreinActivityType.RECEIVED_PUSH_NOTIFICATION)
+                    .setTagsDic(campaign)
+            )
+//            sendActivity(
+//                BreinActivityType.RECEIVED_PUSH_NOTIFICATION,
+//                campaign
+//            )
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                BreinPushNotificationService.onMessageReceived(context, remoteMessage)
+            } else {
+                BreinPushNotificationService.onMessageReceivedLegacy(context, remoteMessage)
+            }
+        }
+
+        private fun getBreinifyPayload(remoteMessage: RemoteMessage): HashMap<String, Any> {
             val breinifyPayload = remoteMessage.data["breinify"]
             val type = object : TypeToken<HashMap<String, Any>>() {}.type
             val gson = GsonBuilder().setPrettyPrinting().create()
@@ -497,22 +521,7 @@ class Breinify {
                     type
                 )
             }
-
-            // @todo Marco
-            //     adapted
-            sendActivity(
-                getBreinActivity().setActivityType(BreinActivityType.RECEIVED_PUSH_NOTIFICATION)
-                    .setTagsDic(campaign)
-            )
-//            sendActivity(
-//                BreinActivityType.RECEIVED_PUSH_NOTIFICATION,
-//                campaign
-//            )
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                BreinPushNotificationService.onMessageReceived(context, remoteMessage)
-            } else {
-                BreinPushNotificationService.onMessageReceivedLegacy(context, remoteMessage)
-            }
+            return campaign
         }
 
         /**
