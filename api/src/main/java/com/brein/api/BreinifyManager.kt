@@ -10,6 +10,7 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.util.Log
 import androidx.core.app.ActivityCompat
+import com.brein.domain.BreinActivityType
 import com.brein.util.BreinUtil
 import java.util.*
 
@@ -206,7 +207,7 @@ object BreinifyManager {
         if (BreinUtil.containsValue(pushDeviceRegistration)) {
             val appUser = Breinify.getBreinUser()
             appUser.setPushDeviceRegistration(this.pushDeviceRegistration)
-            sendActivity("identify", null)
+            sendActivity(BreinActivityType.IDENTIFY, null)
         }
     }
 
