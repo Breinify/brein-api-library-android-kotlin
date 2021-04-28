@@ -163,6 +163,16 @@ class BreinUser(private var email: String?) {
     }
 
     /**
+     * contains the detected ipAddress (additional part)
+     *
+     * @return  String detected ipAddress
+     */
+    private var detectedIp: String = ""
+    fun getDetectedIp(): String {
+        return this.detectedIp
+    }
+
+    /**
      * contains the additional referrer value
      *
      * @return String the referrer
@@ -219,6 +229,12 @@ class BreinUser(private var email: String?) {
     fun setIpAddress(s: String): BreinUser {
         this.ipAddress = s
         this.additionalMap["ipAddress"] = this.ipAddress
+        return this
+    }
+
+    fun setDetectedIp(s: String): BreinUser {
+        this.detectedIp = s
+        this.additionalMap["detectedIp"] = this.detectedIp
         return this
     }
 
@@ -420,7 +436,7 @@ class BreinUser(private var email: String?) {
                 wifiInfo.bssid?.let { bssid = wifiInfo.bssid }
                 wifiInfo.ipAddress.let { ip = wifiInfo.ipAddress }
 
-                // Convert little-endian to big-endianif needed
+                // Convert little-endian to big-endian if needed
                 if (ByteOrder.nativeOrder() == ByteOrder.LITTLE_ENDIAN) {
                     ip = Integer.reverseBytes(ip)
                 }
@@ -435,7 +451,7 @@ class BreinUser(private var email: String?) {
 
                 if (detectedIpAddress != null) {
                     if (detectedIpAddress.isNotEmpty()) {
-                        setIpAddress(detectedIpAddress)
+                        setDetectedIp(detectedIpAddress)
                     }
                 }
 
