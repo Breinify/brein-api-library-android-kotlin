@@ -179,7 +179,7 @@ class TestDomain {
         try {
             return URL(spec).readText()
         } catch (e: Exception) {
-            Log.e("BreinIpInfo", "Breinify - exception occurred calling invokeRequest", e)
+            println("Breinify - exception occurred calling invokeRequest :e")
         }
         return null
     }
