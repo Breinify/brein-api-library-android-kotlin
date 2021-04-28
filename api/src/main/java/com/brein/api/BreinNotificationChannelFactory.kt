@@ -59,12 +59,12 @@ class BreinNotificationChannelFactory @Inject constructor() {
         val notificationChannelInfo = createNotificationChannelInfo(remoteMessage)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
-            val breinfyChannel = createChannel(notificationChannelInfo)
+            val breinifyChannel = createChannel(notificationChannelInfo)
             val notificationManager: NotificationManager =
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-            notificationManager.createNotificationChannel(breinfyChannel)
-            notificationChannels.add(breinfyChannel)
+            notificationManager.createNotificationChannel(breinifyChannel)
+            notificationChannels.add(breinifyChannel)
         }
 
         return notificationChannelInfo
