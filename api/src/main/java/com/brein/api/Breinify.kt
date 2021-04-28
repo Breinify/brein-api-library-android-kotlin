@@ -4,7 +4,10 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.util.Log
-import com.brein.domain.*
+import com.brein.domain.BreinActivityType
+import com.brein.domain.BreinConfig
+import com.brein.domain.BreinResult
+import com.brein.domain.BreinUser
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
@@ -250,34 +253,33 @@ class Breinify {
          * @param callback Contains the callback object
          */
         fun sendActivity(activity: BreinActivity?, callback: ICallback<BreinResult?>? = null) {
-
             try {
                 this.activity(activity, callback)
             } catch (e: Exception) {
                 Log.e(TAG, "could not sendActivity due to exception: $e")
             }
-
         }
 
+        /**
+         * Sends an activity
+         *
+         * @param activityType Contains the activity type
+         * @param tagsMap Contains a map that should be part of the tag section
 
+         */
         private fun sendActivity(activityType: String, tagsMap: HashMap<String, Any>?) {
 
             try {
-                // save current map
-                val curTagsMap = this.breinActivity.getTagsDic()
-
-                if (tagsMap != null) {
-                    this.breinActivity.setTagsDic(tagsMap)
+                // clone the activity
+                val clonedActivity = getBreinActivity().clone()
+                clonedActivity.let {
+                    clonedActivity?.setActivityType(activityType)
+                    if (tagsMap != null) {
+                        clonedActivity?.setTagsDic(tagsMap)
+                    }
+                    sendActivity(clonedActivity)
                 }
 
-                this.activity(
-                    getBreinUser(),
-                    activityType,
-                    null,
-                    null
-                )
-
-//                this.breinActivity.setTagsDic(curTagsMap)
             } catch (e: Exception) {
                 Log.e(TAG, "could not send send activity due to exception: $e")
             }
@@ -365,7 +367,12 @@ class Breinify {
             if (activityType != null) {
                 breinActivity.setActivityType(activityType)
             }
-            activity(breinActivity, null)
+
+            val clonedActivity = breinActivity.clone()
+            clonedActivity.let {
+                activity(clonedActivity, null)
+            }
+
         }
 
         /**
@@ -484,17 +491,13 @@ class Breinify {
         fun onMessageReceived(context: Context, remoteMessage: RemoteMessage) {
             val campaign: HashMap<String, Any> = getBreinifyPayload(remoteMessage)
 
+            val clonedActivity = getBreinActivity().clone()
+            clonedActivity.let {
+                clonedActivity?.setActivityType(BreinActivityType.RECEIVED_PUSH_NOTIFICATION)
+                clonedActivity?.setTagsDic(campaign)
+                sendActivity(clonedActivity)
+            }
 
-            // @todo Marco
-            //     adapted
-            sendActivity(
-                getBreinActivity().setActivityType(BreinActivityType.RECEIVED_PUSH_NOTIFICATION)
-                    .setTagsDic(campaign)
-            )
-//            sendActivity(
-//                BreinActivityType.RECEIVED_PUSH_NOTIFICATION,
-//                campaign
-//            )
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                 BreinPushNotificationService.onMessageReceived(context, remoteMessage)
             } else {
