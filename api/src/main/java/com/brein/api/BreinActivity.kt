@@ -231,7 +231,7 @@ class BreinActivity : BreinBase(), ISecretStrategy, IAsyncExecutable<BreinResult
             val activityAsString = Gson().toJson(this, BreinActivity::class.java)
             return Gson().fromJson(activityAsString, BreinActivity::class.java)
         } catch (e: Exception) {
-            Log.d(TAG, "could not clone activity")
+            Log.d(TAG, "could not clone activity due to exception: $e")
         }
 
         return null;
