@@ -1,10 +1,12 @@
 package com.brein.api
 
+import android.util.Log
 import com.brein.domain.BreinConfig
 import com.brein.domain.BreinResult
 import com.brein.domain.BreinUser
 import com.brein.util.BreinUtil
 import com.brein.util.BreinUtil.containsValue
+import com.google.gson.Gson
 
 /**
  * Sends an activity to the com.brein.engine utilizing the API.
@@ -221,6 +223,20 @@ class BreinActivity : BreinBase(), ISecretStrategy, IAsyncExecutable<BreinResult
         return this.tagsMap
     }
 
+    /**
+     * Clones the current activity
+     */
+    fun clone(): BreinActivity? {
+        try {
+            val activityAsString = Gson().toJson(this, BreinActivity::class.java)
+            return Gson().fromJson(activityAsString, BreinActivity::class.java)
+        } catch (e: Exception) {
+            Log.d(TAG, "could not clone activity")
+        }
+
+        return null;
+    }
+
     override fun execute(callback: ICallback<BreinResult?>?) {
         Breinify.activity(this, callback)
     }
@@ -228,5 +244,6 @@ class BreinActivity : BreinBase(), ISecretStrategy, IAsyncExecutable<BreinResult
     companion object {
         const val ACTIVITY_FIELD = "activity"
         const val TAGS_FIELD = "tags"
+        const val TAG = "BreinActivity"
     }
 }
