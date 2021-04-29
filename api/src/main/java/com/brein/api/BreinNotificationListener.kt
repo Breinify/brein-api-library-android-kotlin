@@ -7,6 +7,7 @@ import android.content.Intent
 import android.util.Log
 import com.brein.domain.BreinActivityType
 import com.brein.domain.BreinNotificationAction
+import com.brein.domain.BreinifyNotificationConstant
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 
@@ -16,9 +17,9 @@ class BreinNotificationListener : BroadcastReceiver() {
 
         try {
             // get notificationId from intent extra
-            val notificationId = intent?.getIntExtra("notificationId", 0)
+            val notificationId = intent?.getIntExtra(BreinifyNotificationConstant.BREIN_NOTIFICATION_ID, 0)
             // read breinify payload
-            val breinPayload = intent?.getStringExtra("breinPayload")
+            val breinPayload = intent?.getStringExtra(BreinifyNotificationConstant.BREIN_PAYLOAD)
 
             // Hashmap containing the tags // extract campaign payload from breinify payload
             val campaign = extractCampaign(breinPayload)
@@ -85,7 +86,7 @@ class BreinNotificationListener : BroadcastReceiver() {
                 )
 
             return gson.fromJson(
-                gson.toJson(breinifyMap["campaign"]),
+                gson.toJson(breinifyMap[BreinifyNotificationConstant.BREIN_CAMPAIGN_SEGMENT]),
                 type
             )
         }
