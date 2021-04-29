@@ -13,7 +13,7 @@ import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 
 /**
- * Static Implementation of Breinify activity lookup calls
+ * Static Implementation of Breinify methods
  */
 class Breinify {
 
@@ -138,6 +138,21 @@ class Breinify {
         }
 
         /**
+         * Configures the notification default channel
+         *
+         * @param channelId    String contains the channelId
+         * @param channelDesc  String contains the channelDescription
+         */
+        fun configureNotificationDefaultChannel(
+            channelId: Int,
+            channelDesc: Int
+        ) {
+            channelId.let {
+                BreinifyManager.configureDefaultNotificationChannel(channelId, channelDesc)
+            }
+        }
+
+        /**
          * configures the deviceToken
          *
          * @param deviceToken String contains the deviceToken
@@ -166,7 +181,6 @@ class Breinify {
                 getUser().setPushDeviceRegistration(deviceToken)
             }
             BreinifyManager.configureDeviceToken(deviceToken)
-
         }
 
         /**
