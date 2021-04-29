@@ -5,9 +5,13 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.os.Build
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import com.brein.domain.BreinActivityType
@@ -207,6 +211,7 @@ object BreinifyManager {
         if (BreinUtil.containsValue(pushDeviceRegistration)) {
             val appUser = Breinify.getBreinUser()
             appUser.setPushDeviceRegistration(this.pushDeviceRegistration)
+
             sendActivity(BreinActivityType.IDENTIFY, null)
         }
     }
@@ -343,6 +348,35 @@ object BreinifyManager {
     @Suppress("UNUSED")
     fun appIsInBackground() {
         Breinify.getUser().setSessionId("")
+    }
+
+    /**
+     * Configures the default notification channel
+     *
+     * @param channelId       Int Resource contains the channel Id
+     * @param channelDescId   Int Resource contains the channel description Id
+     */
+    fun configureDefaultNotificationChannel(channelId: Int, channelDescId: Int) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            val context = getApplication()?.applicationContext
+            val manager = context?.getSystemService(Context.NOTIFICATION_SERVICE)
+                    as NotificationManager
+
+            manager.let {
+                val channelIdString = context.getString(channelId)
+                if (manager.getNotificationChannel(channelIdString) == null) {
+                    val channel = NotificationChannel(
+                        channelIdString,
+                        context.getString(channelId),
+                        NotificationManager.IMPORTANCE_HIGH
+                    )
+                    channel.description = context.getString(channelDescId)
+                    manager.createNotificationChannel(channel)
+                }
+            }
+        }
     }
 
     // some handy constants
