@@ -23,9 +23,7 @@ import java.nio.ByteOrder
 
 /**
  * A plain object specifying the user information the activity belongs to
- */
-
-/**
+ *
  * create a brein user with field email.
  *
  * @param email of the user
