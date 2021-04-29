@@ -7,10 +7,12 @@ import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import com.brein.domain.BreinifyNotificationConstant
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import java.util.*
+import java.util.Collections
+
 import javax.inject.Inject
 
 class BreinNotificationChannelFactory @Inject constructor() {
@@ -30,25 +32,27 @@ class BreinNotificationChannelFactory @Inject constructor() {
     ) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel = createChannel(notificationChannelInfo)
-            notificationChannel.enableVibration(true)
-            notificationChannel.vibrationPattern = longArrayOf(100, 200, 300)
-
-            if (notificationChannelInfo.lights) {
-                notificationChannel.enableLights(true)
-            }
-
-            notificationChannel.importance = notificationChannelInfo.priority
-
-            if (notificationChannelInfo.lockScreenVisibility) {
-                notificationChannel.lockscreenVisibility =
-                    Notification.VISIBILITY_PUBLIC
-            }
-
             val notificationManager: NotificationManager =
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-            notificationManager.createNotificationChannel(notificationChannel)
-            notificationChannels.add(notificationChannel)
+            if (notificationManager.getNotificationChannel(notificationChannel.id) == null) {
+                notificationChannel.enableVibration(true)
+                notificationChannel.vibrationPattern = longArrayOf(100, 200, 300)
+
+                if (notificationChannelInfo.lights) {
+                    notificationChannel.enableLights(true)
+                }
+
+                notificationChannel.importance = notificationChannelInfo.priority
+
+                if (notificationChannelInfo.lockScreenVisibility) {
+                    notificationChannel.lockscreenVisibility =
+                        Notification.VISIBILITY_PUBLIC
+                }
+
+                notificationManager.createNotificationChannel(notificationChannel)
+                notificationChannels.add(notificationChannel)
+            }
         }
     }
 
@@ -60,11 +64,14 @@ class BreinNotificationChannelFactory @Inject constructor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
             val breinifyChannel = createChannel(notificationChannelInfo)
+
             val notificationManager: NotificationManager =
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-            notificationManager.createNotificationChannel(breinifyChannel)
-            notificationChannels.add(breinifyChannel)
+            if (notificationManager.getNotificationChannel(breinifyChannel.id) == null) {
+                notificationManager.createNotificationChannel(breinifyChannel)
+                notificationChannels.add(breinifyChannel)
+            }
         }
 
         return notificationChannelInfo
@@ -76,12 +83,12 @@ class BreinNotificationChannelFactory @Inject constructor() {
             val gson = GsonBuilder().setPrettyPrinting().create()
             val dataMap: Map<String, Any> =
                 gson.fromJson(
-                    remoteMessage.data["breinify"],
+                    remoteMessage.data[BreinifyNotificationConstant.BREIN_SEGEMENT],
                     object : TypeToken<Map<String, Any>>() {}.type
                 )
 
-            var channelId = "BreinifyChannelId"
-            var channel = "BreinifyChannel"
+            var channelId = "NotificationChannelId"
+            var channel = "Notification Channel"
             var channelDescription = "Notifications by Breinify AI Engine"
             var importance = 4.0
             var notificationId = 1
@@ -95,17 +102,17 @@ class BreinNotificationChannelFactory @Inject constructor() {
 
             dataMap["channelId"]?.let {
                 val tempChannelId = dataMap["channelId"]
-                channelId = tempChannelId as? String ?: "BreinifyChannelId"
+                channelId = tempChannelId as? String ?: "NotificationChannelId"
             }
 
             dataMap["channel"]?.let {
                 val tempChannel = dataMap["channel"]
-                channel = tempChannel as? String ?: "BreinifyChannel"
+                channel = tempChannel as? String ?: "Notification Channel"
             }
 
             dataMap["channelDescription"]?.let {
                 val tempChannelDesc = dataMap["channelDescription"]
-                channelDescription = tempChannelDesc as? String ?: "BreinifyChannelDescription"
+                channelDescription = tempChannelDesc as? String ?: "Notification Channel"
             }
 
             dataMap["importance"]?.let {
