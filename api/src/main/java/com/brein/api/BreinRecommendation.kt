@@ -5,21 +5,12 @@ import com.brein.domain.BreinResult
 import com.brein.util.BreinUtil
 
 class BreinRecommendation : BreinBase(), IAsyncExecutable<BreinResult?> {
-    /**
-     * get the number of recommendations
-     *
-     * @return number
-     */
+
     /**
      * contains the number of recommendations - default is 3
      */
     var numberOfRecommendations = 3
 
-    /**
-     * get the recommendation category
-     *
-     * @return String category
-     */
     /**
      * contains the category for the recommendation
      */
