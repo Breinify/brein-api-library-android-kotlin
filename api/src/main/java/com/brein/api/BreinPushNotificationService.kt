@@ -33,7 +33,6 @@ object BreinPushNotificationService {
         handleOnMessage(context, remoteMessage, notificationData)
     }
 
-
     fun onMessageReceivedLegacy(context: Context, remoteMessage: RemoteMessage) {
         val notificationData =
             BreinNotificationChannelFactory().createNotificationChannelInfo(remoteMessage)
@@ -82,7 +81,6 @@ object BreinPushNotificationService {
         try {
             val title = remoteMessage.data["title"]!!
             val body = remoteMessage.data["body"]!!
-            val extraText: String? = notificationData.extraText
             val notificationId = notificationData.notificationId
             val notificationIcon = notificationData.notificationIcon
 
@@ -135,13 +133,13 @@ object BreinPushNotificationService {
                                     Intent(context, BreinNotificationListener::class.java)
                                 openIntent.action = BreinNotificationAction.OPENED_FIRST
                                 openIntent.data = Uri.parse(deepLink)
-                                openIntent.putExtra("notificationId", notificationId)
+                                openIntent.putExtra(BreinifyNotificationConstant.BREIN_NOTIFICATION_ID, notificationId)
+
                                 // send breinify payload as extra
                                 openIntent.putExtra(
-                                    "breinPayload",
-                                    remoteMessage.data["breinify"].toString()
+                                    BreinifyNotificationConstant.BREIN_PAYLOAD,
+                                    remoteMessage.data[BreinifyNotificationConstant.BREIN_SEGEMENT].toString()
                                 )
-
 
                                 pendingIntent = PendingIntent.getBroadcast(
                                     context,
@@ -156,11 +154,11 @@ object BreinPushNotificationService {
                                     Intent(context, BreinNotificationListener::class.java)
                                 openSecondIntent.action = BreinNotificationAction.OPENED_SECOND
                                 openSecondIntent.data = Uri.parse(deepLink)
-                                openSecondIntent.putExtra("notificationId", notificationId)
-//                              intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                                openSecondIntent.putExtra(BreinifyNotificationConstant.BREIN_NOTIFICATION_ID, notificationId)
+
                                 openSecondIntent.putExtra(      // send breinify payload as extra
-                                    "breinPayload",
-                                    remoteMessage.data["breinify"].toString()
+                                    BreinifyNotificationConstant.BREIN_PAYLOAD,
+                                    remoteMessage.data[BreinifyNotificationConstant.BREIN_SEGEMENT].toString()
                                 )
 
                                 pendingIntent = PendingIntent.getBroadcast(
@@ -173,15 +171,15 @@ object BreinPushNotificationService {
                             else -> {
                                 val intent = Intent(context, BreinNotificationListener::class.java)
                                 intent.action = BreinNotificationAction.IGNORE
-                                intent.putExtra("notificationId", notificationId)
+                                intent.putExtra(BreinifyNotificationConstant.BREIN_NOTIFICATION_ID, notificationId)
                                 intent.putExtra(
-                                    "breinifyPayload",
-                                    notificationData.view["breinify"].toString()
+                                    BreinifyNotificationConstant.BREIN_PAYLOAD,
+                                    notificationData.view[BreinifyNotificationConstant.BREIN_SEGEMENT].toString()
                                 )
 
                                 pendingIntent = PendingIntent.getBroadcast(
                                     context,
-                                    0 /*Request code*/,
+                                    0,
                                     intent,
                                     PendingIntent.FLAG_CANCEL_CURRENT
                                 )
@@ -240,7 +238,6 @@ object BreinPushNotificationService {
 
     }
 
-    // @SuppressLint("UseCompatLoadingForDrawables")
     private fun createNotification(context: Context, model: BreinNotificationModel): Notification {
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
 
@@ -352,7 +349,6 @@ object BreinPushNotificationService {
                         NotificationCompat.BigPictureStyle().bigPicture(bitmap)
                     )
                 }
-
                  */
             }
         }
