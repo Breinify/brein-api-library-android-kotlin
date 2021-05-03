@@ -16,13 +16,11 @@ class BreinNotificationListener : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
 
         try {
-            // get notificationId from intent extra
             val notificationId = intent?.getIntExtra(BreinifyNotificationConstant.BREIN_NOTIFICATION_ID, 0)
-            // read breinify payload
             val breinPayload = intent?.getStringExtra(BreinifyNotificationConstant.BREIN_PAYLOAD)
-
-            // Hashmap containing the tags // extract campaign payload from breinify payload
             val campaign = extractCampaign(breinPayload)
+
+            sendOpenedPushNotification(notificationId, campaign)
 
             // depends on which action was sent from notification service
             when (intent?.action.toString()) {
@@ -69,7 +67,19 @@ class BreinNotificationListener : BroadcastReceiver() {
                 }
             }
         } catch (e: Exception) {
-            Log.e(TAG, "could not handle onReceive due to exception $e")
+            Log.e(TAG, "Breinify - could not handle onReceive due to exception $e")
+        }
+    }
+
+    private fun sendOpenedPushNotification(notificationId: Int?, campaign: HashMap<String, Any>?) {
+        // send openedPushNotification
+        val clonedActivity = Breinify.getBreinActivity().clone()
+        clonedActivity.let {
+            clonedActivity?.setActivityType(BreinActivityType.OPENED_PUSH_NOTIFICATION)
+            if (campaign != null) {
+                clonedActivity?.setTagsDic(campaign)
+            }
+            Breinify.sendActivity(clonedActivity)
         }
     }
 

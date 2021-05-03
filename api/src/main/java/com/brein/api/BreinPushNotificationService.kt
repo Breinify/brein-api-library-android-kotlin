@@ -63,10 +63,8 @@ object BreinPushNotificationService {
         notification: BreinNotificationModel
     ) {
 
-        val id = channelInfo.notificationId
-
         NotificationManagerCompat.from(context)
-            .notify(id, createNotification(context, notification))
+            .notify(channelInfo.notificationId, createNotification(context, notification))
     }
 
     /**
@@ -88,6 +86,25 @@ object BreinPushNotificationService {
 
             // notificationData contains `view`
             if (notificationData.view.isNullOrEmpty()) {
+
+                // add extras here
+                val openIntent = Intent(context, BreinNotificationListener::class.java)
+                openIntent.putExtra(
+                    BreinifyNotificationConstant.BREIN_NOTIFICATION_ID,
+                    notificationId
+                )
+                openIntent.putExtra(
+                    BreinifyNotificationConstant.BREIN_PAYLOAD,
+                    remoteMessage.data[BreinifyNotificationConstant.BREIN_SEGEMENT].toString()
+                )
+
+                val pendingIntent = PendingIntent.getBroadcast(
+                    context,
+                    0,
+                    openIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT
+                )
+
                 return BasicNotification(
                     notificationData.id,
                     notificationId,
@@ -95,7 +112,9 @@ object BreinPushNotificationService {
                     body,
                     notificationIcon,
                     notificationData.priority,
-                    largeContent
+                    largeContent,
+                    pendingIntent
+
                 )
             } else {
                 // Getting and changing the type of view payload to Map
@@ -133,7 +152,10 @@ object BreinPushNotificationService {
                                     Intent(context, BreinNotificationListener::class.java)
                                 openIntent.action = BreinNotificationAction.OPENED_FIRST
                                 openIntent.data = Uri.parse(deepLink)
-                                openIntent.putExtra(BreinifyNotificationConstant.BREIN_NOTIFICATION_ID, notificationId)
+                                openIntent.putExtra(
+                                    BreinifyNotificationConstant.BREIN_NOTIFICATION_ID,
+                                    notificationId
+                                )
 
                                 // send breinify payload as extra
                                 openIntent.putExtra(
@@ -154,7 +176,10 @@ object BreinPushNotificationService {
                                     Intent(context, BreinNotificationListener::class.java)
                                 openSecondIntent.action = BreinNotificationAction.OPENED_SECOND
                                 openSecondIntent.data = Uri.parse(deepLink)
-                                openSecondIntent.putExtra(BreinifyNotificationConstant.BREIN_NOTIFICATION_ID, notificationId)
+                                openSecondIntent.putExtra(
+                                    BreinifyNotificationConstant.BREIN_NOTIFICATION_ID,
+                                    notificationId
+                                )
 
                                 openSecondIntent.putExtra(      // send breinify payload as extra
                                     BreinifyNotificationConstant.BREIN_PAYLOAD,
@@ -171,7 +196,10 @@ object BreinPushNotificationService {
                             else -> {
                                 val intent = Intent(context, BreinNotificationListener::class.java)
                                 intent.action = BreinNotificationAction.IGNORE
-                                intent.putExtra(BreinifyNotificationConstant.BREIN_NOTIFICATION_ID, notificationId)
+                                intent.putExtra(
+                                    BreinifyNotificationConstant.BREIN_NOTIFICATION_ID,
+                                    notificationId
+                                )
                                 intent.putExtra(
                                     BreinifyNotificationConstant.BREIN_PAYLOAD,
                                     notificationData.view[BreinifyNotificationConstant.BREIN_SEGEMENT].toString()
@@ -232,7 +260,8 @@ object BreinPushNotificationService {
                 "",
                 "",
                 notificationData.priority,
-                ""
+                "",
+                null
             )
         }
 
@@ -260,11 +289,18 @@ object BreinPushNotificationService {
                 )
             }
 
-        val intent = Intent(context, BreinifyManager.getMainActivity()?.javaClass).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        var pendingIntent = model.pendingIntent
+        if (pendingIntent == null) {
+
+            val intent = Intent(context, BreinifyManager.getMainActivity()?.javaClass).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
+            Log.d(TAG, "Breinify - using new created pending intent.")
+        } else {
+            Log.d(TAG, "Breinify - using created pending intent.")
         }
 
-        val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
 
         return NotificationCompat.Builder(context, model.channelId)
             .setSmallIcon(resourceId)
@@ -297,7 +333,7 @@ object BreinPushNotificationService {
                     }
 
                 }
-                model.actions.forEach { (iconId, title, actionIntent) ->
+                model.actions?.forEach { (iconId, title, actionIntent) ->
                     addAction(iconId, title, actionIntent)
                 }
             }

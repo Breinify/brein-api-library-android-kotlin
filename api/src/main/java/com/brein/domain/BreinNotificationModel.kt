@@ -15,7 +15,8 @@ sealed class BreinNotificationModel(
     val notificationIcon: String?,
     val priority: Int,
     val largeContent: String?,
-    val actions: MutableList<NotificationAction> = mutableListOf()
+    val actions: MutableList<NotificationAction>? = mutableListOf(),
+    val pendingIntent: PendingIntent? = null
 )
 
 class BasicNotification(
@@ -25,9 +26,10 @@ class BasicNotification(
     content: String,
     notificationIcon: String?,
     priority: Int,
-    largeContent: String?
+    largeContent: String?,
+    pendingIntent: PendingIntent?
 ) : BreinNotificationModel(channelId, notificationId, title, content, notificationIcon, priority,
-    largeContent
+    largeContent, null, pendingIntent
 )
 
 class TextExpandableNotification(
