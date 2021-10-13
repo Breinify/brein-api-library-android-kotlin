@@ -131,6 +131,16 @@ class HttpUrlRestEngine : IRestEngine {
 
         // validate the input objects
         BreinUtil.validate(data)
+
+        // check if apiKey is provided
+        val currentApiKey = config?.apiKey
+        if (currentApiKey != null) {
+            if (currentApiKey.isEmpty()) {
+                Log.d(TAG, "Breinify - not fully configured apiKey")
+                return
+            }
+        }
+
         val fullUrl: String = BreinUtil.getFullyQualifiedUrl(data!!)
         val requestBody: String = BreinUtil.getRequestBody(data)
         Log.d(TAG, "Breinify - invokeRequest - request is:  $requestBody")

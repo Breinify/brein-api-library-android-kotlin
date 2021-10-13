@@ -1,26 +1,36 @@
 package com.brein.api
 
 import android.app.NotificationManager
+import android.content.ActivityNotFoundException
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import com.brein.domain.BreinActivityType
 import com.brein.domain.BreinNotificationAction
 import com.brein.domain.BreinifyNotificationConstant
+import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import org.json.JSONObject
+import org.json.JSONTokener
+import java.lang.reflect.Type
+
 
 class BreinNotificationListener : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
 
         try {
-            val notificationId = intent?.getIntExtra(BreinifyNotificationConstant.BREIN_NOTIFICATION_ID, 0)
+            val notificationId =
+                intent?.getIntExtra(BreinifyNotificationConstant.BREIN_NOTIFICATION_ID, 0)
             val breinPayload = intent?.getStringExtra(BreinifyNotificationConstant.BREIN_PAYLOAD)
             val campaign = extractCampaign(breinPayload)
 
             sendOpenedPushNotification(notificationId, campaign)
+
+            handleActionPayload(breinPayload, context)
 
             // depends on which action was sent from notification service
             when (intent?.action.toString()) {
@@ -70,6 +80,118 @@ class BreinNotificationListener : BroadcastReceiver() {
             Log.e(TAG, "Breinify - could not handle onReceive due to exception $e")
         }
     }
+
+    private fun handleActionPayload(breinPayload: String?, context: Context?) {
+
+        val action = try {
+            val jsonObject = JSONTokener(breinPayload).nextValue() as JSONObject
+            val action = jsonObject.getString("action")
+
+            if (action.isNotEmpty()) {
+                val actionJson = JSONTokener(action).nextValue() as JSONObject
+
+                // handle sendActivity
+                handleSendActivityFromPushNotification(actionJson, context)
+
+                // handle openUrl
+                handleOpenUrlFromPushNotification(actionJson, context)
+            } else {
+                Log.d(TAG, "Breinify - empty action element detected")
+            }
+
+
+
+        } catch (e: Exception) {
+            Log.d(TAG, "no action payload provided - exception is: $e")
+        }
+
+    }
+
+    private fun handleOpenUrlFromPushNotificationSAVE(jsonObject: JSONObject, context: Context?) {
+
+        val storeId = "com.babbel.mobile.android.en"
+
+        try {
+            Log.d(TAG, "starting market playstore with storeId = $storeId")
+            val playStoreIntent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$storeId"))
+            playStoreIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            context?.startActivity(playStoreIntent)
+        } catch (e: ActivityNotFoundException) {
+            Log.d(TAG, "starting https playstore with storeId = $storeId")
+
+            val playStoreIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?$storeId"))
+            playStoreIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            context?.startActivity(playStoreIntent)
+        }
+
+    }
+
+    private fun handleOpenUrlFromPushNotification(jsonObject: JSONObject, context: Context?) {
+        try {
+            val openUrl = "market://details?id=com.babbel.mobile.android.en" // jsonObject.getString("openUrl")
+            if (openUrl.isNotEmpty()) {
+                try {
+                    Log.d(TAG, "starting with url = $openUrl")
+                    val playStoreIntent = Intent(Intent.ACTION_VIEW, Uri.parse(openUrl))
+                    playStoreIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+
+                    val application = BreinifyManager.getApplication()
+//                     application?.startActivity(playStoreIntent)
+
+//                    application?.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(openUrl)))
+
+                    val mainActivity = BreinifyManager.getMainActivity()
+//                    mainActivity?.applicationContext
+                    mainActivity?.startActivity(playStoreIntent)
+                } catch (e: ActivityNotFoundException) {
+                    Log.d(TAG, "Breinify - exception could not invoke activity url = $openUrl - exception is $e")
+                }
+            } else {
+                Log.d(TAG, "Breinify - empty openUrl value")
+            }
+        } catch (e: Exception) {
+            Log.d(
+                TAG,
+                "Breinify exception in method handleOpenUrlFromPushNotification - exception is: $e"
+            )
+        }
+    }
+
+    private fun handleSendActivityFromPushNotification(jsonObject: JSONObject, context: Context?) {
+
+        try {
+            val sendActivity: String = jsonObject.getString("sendActivity")
+            if (sendActivity.isNotEmpty()) {
+
+                val hashMapType: Type = object : TypeToken<HashMap<String, Any>>() {}.type
+                val map: HashMap<String, Any> = Gson().fromJson(sendActivity, hashMapType)
+
+                val activityType = map.get("activity")
+                val tagsDic = map.get("tags")
+
+                if (activityType != null) {
+                    val clonedActivity = Breinify.getBreinActivity().clone()
+                    clonedActivity.let {
+                        clonedActivity?.setActivityType(activityType as String)
+                        if (tagsDic != null) {
+                            val toJson = Gson().toJson(tagsDic)
+                            val innerMap: HashMap<String, Any> =
+                                Gson().fromJson(toJson, hashMapType)
+                            clonedActivity?.setTagsDic(innerMap)
+                        }
+                        Breinify.sendActivity(clonedActivity)
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            Log.d(
+                TAG,
+                "Breinify exception in method handleSendActivityFromPushNotification - exception is: $e"
+            )
+        }
+
+    }
+
 
     private fun sendOpenedPushNotification(notificationId: Int?, campaign: HashMap<String, Any>?) {
         // send openedPushNotification

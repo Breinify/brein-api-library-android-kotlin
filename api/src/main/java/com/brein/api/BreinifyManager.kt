@@ -15,7 +15,9 @@ import android.os.Build
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import com.brein.domain.BreinActivityType
+import com.brein.domain.BreinConfig
 import com.brein.util.BreinUtil
+import java.text.SimpleDateFormat
 import java.util.*
 
 @SuppressLint("StaticFieldLeak")
@@ -212,8 +214,62 @@ object BreinifyManager {
             val appUser = Breinify.getBreinUser()
             appUser.setPushDeviceRegistration(this.pushDeviceRegistration)
 
-            sendActivity(BreinActivityType.IDENTIFY, null)
+            val breinActivity: BreinActivity = Breinify.getBreinActivity()
+
+            val map = collectAdditionalTagInformation()
+            if (!map.isEmpty()) {
+                breinActivity.setTagsDic(map)
+            }
+
+            // sendActivity(BreinActivityType.IDENTIFY, null)
+
+            breinActivity.setActivityType(BreinActivityType.IDENTIFY)
+            Breinify.activity(breinActivity)
         }
+    }
+
+    private fun collectAdditionalTagInformation(): HashMap<String, Any> {
+
+        try {
+            val packageManager = BreinifyManager.mainActivity?.packageManager
+            var appVersion = ""
+            var appInstallDate = ""
+            var appName = ""
+
+            mainActivity?.let { val packageInfo = packageManager?.getPackageInfo(it.packageName, 0)
+
+                // contains the version of the App
+                appVersion = packageInfo?.versionName.toString()
+
+                val applicationInfo = packageInfo?.applicationInfo
+                val lastUpdateTime = packageInfo?.lastUpdateTime
+
+                val timeZoneDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+                appInstallDate = timeZoneDate.format(lastUpdateTime)
+
+                // collect name of the app
+                val labelRes = applicationInfo?.labelRes
+
+                // contains the appName
+                appName = labelRes?.let { it1 -> application?.applicationContext?.getString(it1) }.toString()
+
+            }
+
+            // collect version of Breinify SDK
+            val breinifySdkVersion = BreinConfig.VERSION
+
+            val tagsDic = mapOf(
+                "appInstallation" to appInstallDate,
+                "appVersion" to appVersion,
+                "appName" to appName,
+                "Breinify-SDK" to breinifySdkVersion
+            ) as HashMap<String, Any>
+
+            return tagsDic
+        } catch (e: Exception) {
+            return hashMapOf<String, Any>()
+        }
+
     }
 
     /**

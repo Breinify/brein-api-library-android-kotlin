@@ -275,13 +275,13 @@ class Breinify {
         }
 
         /**
-         * Sends an activity
+         * Sends an activity for a dedicated activityType with additional map information.
          *
-         * @param activityType Contains the activity type
-         * @param tagsMap Contains a map that should be part of the tag section
+         * @param activityType  contains the activity type
+         * @param tagsMap       contains a map that should be part of the tag section
 
          */
-        private fun sendActivity(activityType: String, tagsMap: HashMap<String, Any>?) {
+        fun sendActivity(activityType: String, tagsMap: HashMap<String, Any>?) {
 
             try {
                 // clone the activity
