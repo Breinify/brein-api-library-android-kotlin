@@ -134,14 +134,7 @@ class BreinNotificationListener : BroadcastReceiver() {
                     Log.d(TAG, "starting with url = $openUrl")
                     val playStoreIntent = Intent(Intent.ACTION_VIEW, Uri.parse(openUrl))
                     playStoreIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-
-                    val application = BreinifyManager.getApplication()
-//                     application?.startActivity(playStoreIntent)
-
-//                    application?.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(openUrl)))
-
                     val mainActivity = BreinifyManager.getMainActivity()
-//                    mainActivity?.applicationContext
                     mainActivity?.startActivity(playStoreIntent)
                 } catch (e: ActivityNotFoundException) {
                     Log.d(TAG, "Breinify - exception could not invoke activity url = $openUrl - exception is $e")
