@@ -83,6 +83,8 @@ class BreinNotificationListener : BroadcastReceiver() {
 
     private fun handleActionPayload(breinPayload: String?, context: Context?) {
 
+        var invokeApp = false
+
         val action = try {
             val jsonObject = JSONTokener(breinPayload).nextValue() as JSONObject
             val action = jsonObject.getString("action")
@@ -94,15 +96,26 @@ class BreinNotificationListener : BroadcastReceiver() {
                 handleSendActivityFromPushNotification(actionJson, context)
 
                 // handle openUrl
-                handleOpenUrlFromPushNotification(actionJson, context)
+                val couldInvoke = handleOpenUrlFromPushNotification(actionJson, context)
+                invokeApp = !couldInvoke
             } else {
                 Log.d(TAG, "Breinify - empty action element detected")
+                invokeApp = true
             }
 
-
-
         } catch (e: Exception) {
-            Log.d(TAG, "no action payload provided - exception is: $e")
+            invokeApp = true
+            Log.d(TAG, "no action payload provided - info: $e")
+        }
+
+        if (invokeApp) {
+            Log.d(TAG, "Breinify launching the app")
+            val application = BreinifyManager.getApplication()
+            val packageManager = application?.packageManager
+            val packageInfo = packageManager?.getPackageInfo(application.packageName, 0)
+            val launchIntentForPackage =
+                packageManager?.getLaunchIntentForPackage(application.packageName)
+            context?.startActivity(launchIntentForPackage)
         }
 
     }
@@ -113,41 +126,64 @@ class BreinNotificationListener : BroadcastReceiver() {
 
         try {
             Log.d(TAG, "starting market playstore with storeId = $storeId")
-            val playStoreIntent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$storeId"))
+            val playStoreIntent =
+                Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$storeId"))
             playStoreIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             context?.startActivity(playStoreIntent)
         } catch (e: ActivityNotFoundException) {
             Log.d(TAG, "starting https playstore with storeId = $storeId")
 
-            val playStoreIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?$storeId"))
+            val playStoreIntent = Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("https://play.google.com/store/apps/details?$storeId")
+            )
             playStoreIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             context?.startActivity(playStoreIntent)
         }
 
     }
 
-    private fun handleOpenUrlFromPushNotification(jsonObject: JSONObject, context: Context?) {
+    private fun handleOpenUrlFromPushNotification(
+        jsonObject: JSONObject,
+        context: Context?
+    ): Boolean {
         try {
-            val openUrl = "market://details?id=com.babbel.mobile.android.en" // jsonObject.getString("openUrl")
-            if (openUrl.isNotEmpty()) {
+            val openUrlCore = jsonObject.getString("openUrl")
+            if (openUrlCore.isNotEmpty()) {
+                val hashMapType: Type = object : TypeToken<HashMap<String, Any>>() {}.type
+                val map: HashMap<String, Any> = Gson().fromJson(openUrlCore, hashMapType)
+                val openUrlElement = map.get("url") as String
+                val openUrl = openUrlElement.replace("\\", "")
+
                 try {
                     Log.d(TAG, "starting with url = $openUrl")
                     val playStoreIntent = Intent(Intent.ACTION_VIEW, Uri.parse(openUrl))
                     playStoreIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                    val mainActivity = BreinifyManager.getMainActivity()
-                    mainActivity?.startActivity(playStoreIntent)
+
+                    val application = BreinifyManager.getApplication()
+                    application?.startActivity(playStoreIntent)
+
+                    return true
+
                 } catch (e: ActivityNotFoundException) {
-                    Log.d(TAG, "Breinify - exception could not invoke activity url = $openUrl - exception is $e")
+                    Log.d(
+                        TAG,
+                        "Breinify - could not invoke activity url = $openUrl - exception is $e"
+                    )
+
                 }
             } else {
                 Log.d(TAG, "Breinify - empty openUrl value")
+
             }
         } catch (e: Exception) {
             Log.d(
                 TAG,
-                "Breinify exception in method handleOpenUrlFromPushNotification - exception is: $e"
+                "Breinify response in method handleOpenUrlFromPushNotification is: $e"
             )
         }
+
+        return false
     }
 
     private fun handleSendActivityFromPushNotification(jsonObject: JSONObject, context: Context?) {
