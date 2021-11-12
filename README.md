@@ -47,7 +47,7 @@ gradle configuration within the *app/build.gradle* like this:
 ```gradle
 dependencies {
     ...
-    implementation 'com.brein.brein-api-library-android-kotlin:1.0.2'
+    implementation 'com.brein.brein-api-library-android-kotlin:1.0.17'
     ...
 }
 ```
@@ -96,14 +96,8 @@ Do this on the *Main Activity*.
 ```kotlin
 override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        setSupportActionBar(findViewById(R.id.toolbar))
-
-        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-        }
-
+        ...
+  
         initBreinify()
         initToken()
     }
@@ -144,8 +138,10 @@ Whenever the library is not used anymore, it is recommended to clean-up and rele
 method is used. A typical framework may look like that:
 
 ```kotlin
-// whenever the application utilizing the library is destroyed/released
-Breinify.shutdown()
+override fun onDestroy() {
+    super.onDestroy()
+    Breinify.shutdown()
+}
 ```
 
 
@@ -284,14 +280,8 @@ The Breinify SDK integrates smoothly within the Android Application Lifecycle. A
 ```kotlin
 override fun onCreate(savedInstanceState: Bundle?) {
      super.onCreate(savedInstanceState)
-     setContentView(R.layout.activity_main)
-     setSupportActionBar(findViewById(R.id.toolbar))
-
-     findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
-         Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                 .setAction("Action", null).show()
-     }
- 			
+     
+     ...
      initBreinify()
      initToken()
 }
@@ -301,6 +291,11 @@ private fun initBreinify() {
      val kValidSecret = "**utakxp7sm6weo5gvk7cytw==**"
 
      Breinify.initialize(this.application, this, kValidApiKey, kValidSecret)
+  
+  	 // add this for handling with pushNotifications 
+     val channelId = R.string.default_notification_channel_id
+     val channelName = R.string.default_notification_channel_name
+     Breinify.configureNotificationDefaultChannel(channelId, channelName)
 }
 
 private fun initToken() {
@@ -318,7 +313,7 @@ private fun initToken() {
      userInfoMap["firstName"] = "Elvis"
      userInfoMap["lastName"] = "Presley"
      userInfoMap["phone"] = "0123456789"
-     userInfoMap["email"] = "elvis.presly@mail.com"
+     userInfoMap["email"] = "elvis.presly@mail.com" // mandatory
 
      Breinify.initWithDeviceToken(token, userInfoMap)                                                                          
      })
@@ -328,20 +323,79 @@ private fun initToken() {
 
 
 
-### 2. Notification Configuration
+### 2. PushNotification Configuration
 
-Add notification message event handling to  `AndroidManifest.xml` like this:
+Enhance  `AndroidManifest.xml` like this:
 
 ```xml
-   ...
+<!-- This permission is required to allow the application to send requests to Breinify -->
+<uses-permission android:name="android.permission.INTERNET" />
 
-   <service android:name="com.brein.api.BreinNotficationService">
-         <intent-filter>
-             <action android:name="com.google.firebase.MESSAGING_EVENT" />
-         </intent-filter>
-   </service>
+<application
    ...
+   <!-- Configures the Default Notification Channel for Push Notifications -->  
+   <meta-data     
+       android:name="com.google.firebase.messaging.default_notification_channel_id"
+       android:value="@string/default_notification_channel_id" />
+       ...
+    <!-- Configures the Service Class handling incoming remote messages (e.g. FirebaseMessagingService) -->  
+    <service
+        android:name=".FirebaseMessagingService"
+        android:exported="false">
+    <intent-filter>
+        <action android:name="com.google.firebase.MESSAGING_EVENT" />
+    </intent-filter>
+</service>
+    ...
+</application>
+
 ```
+
+
+
+Provide Default Channel Resource Names in File `strings.xml` like this:
+
+```XML
+<resources> 
+...
+<string name="default_notification_channel_id" 
+              translatable="false">Your Default Channel</string>
+<string name="default_notification_channel_name" 
+              translatable="false">Your Default Channel Name</string>
+   ...
+</resources>
+
+```
+
+
+
+Handle the PushNotifications in your service class e.g. FirebaseMessagingService() like this:
+
+```kotlin
+class YourMessageService : FirebaseMessagingService() {
+
+   override fun onMessageReceived(remoteMessage: RemoteMessage) {
+     if (Breinify.isBreinifyPushNotificationMessage(remoteMessage)) {
+         // handling Breinify related messages
+         val kApiKey = "938D-3120-64DD-413F-BB55-6573-90CE-473A"
+         val kSecret = "**utakxp7sm6weo5gvk7cytw==**"
+
+         Breinify.initialize(this.application, null, kApiKey, kSecret)
+         Breinify.onMessageReceived(applicationContext, remoteMessage)
+     } else {
+         super.onMessageReceived(remoteMessage)
+     }
+  }
+  
+  override fun onNewToken(token: String) {
+     // send the new fcm token to the Breinify Engine
+     Breinify.configureDeviceToken(token)
+  }   
+}
+
+```
+
+
 
 
 
@@ -357,5 +411,4 @@ When sending a Push Notification it will appear like this:
 To understand all the capabilities of Breinify's APIs, have a look at:
 
 * [Breinify's Website](https://www.breinify.com).
-
 
