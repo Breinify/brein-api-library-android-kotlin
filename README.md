@@ -47,7 +47,7 @@ gradle configuration within the *app/build.gradle* like this:
 ```gradle
 dependencies {
     ...
-    implementation 'com.brein.brein-api-library-android-kotlin:1.0.17'
+    implementation 'com.breinify:brein-api-library-android-kotlin:1.0.17'
     ...
 }
 ```
