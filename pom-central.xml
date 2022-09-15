@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.breinify</groupId>
+    <artifactId>brein-api-library-android-kotlin</artifactId>
+    <version>1.0.17</version>
+
+    <name>brein-api-library-android-kotlin</name>
+    <description>Brein API Library Android Kotlin</description>
+    <packaging>aar</packaging>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/Breinify/brein-api-library-android-kotlin.git</url>
+        <connection>scm:git:git://github.com/Breinify/brein-api-library-android-kotlin.git</connection>
+        <developerConnection>scm:git:git@github.com:Breinify/brein-api-library-android-kotlin.git</developerConnection>
+    </scm>
+
+    <developers>
+        <developer>
+            <id>marco.recchioni</id>
+            <name>Marco Recchioni</name>
+            <email>marco.recchioni@breinify.com</email>
+            <organization>Breinify</organization>
+        </developer>
+        <developer>
+            <id>philipp.meisen</id>
+            <name>Philipp Meisen</name>
+            <email>philipp.meisen@breinify.com</email>
+            <organization>Breinify</organization>
+        </developer>
+    </developers>
+
+    <url>https://www.breinify.com</url>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
+            <version>1.4.10</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.6</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.firebase</groupId>
+            <artifactId>firebase-messaging</artifactId>
+            <version>21.0.0</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>androidx.core</groupId>
+            <artifactId>core-ktx</artifactId>
+            <version>1.3.2</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>androidx.appcompat</groupId>
+            <artifactId>appcompat</artifactId>
+            <version>1.2.0</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.android.material</groupId>
+            <artifactId>material</artifactId>
+            <version>1.2.1</version>
+            <scope>runtime</scope>
+        </dependency>
+    </dependencies>
+</project>
