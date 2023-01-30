@@ -4,6 +4,10 @@
 
     <!-- for Inet access -->
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- for PushNotification -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
     <application>
         <receiver
             android:name="com.brein.api.BreinNotificationListener"
